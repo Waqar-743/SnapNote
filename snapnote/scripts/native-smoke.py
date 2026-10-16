@@ -5,6 +5,7 @@ Requires tauri-driver, WebKitWebDriver, xclip, xdotool, Tesseract and a built ap
 Linux uses a temporary profile and virtual clipboard. Windows runs only in CI with the separate test application identifier.
 """
 import base64
+import http.client
 import json
 import os
 from pathlib import Path
@@ -57,8 +58,13 @@ def invoke(name, args=None):
 def wait(script, expected=True, timeout=15):
     end = time.monotonic() + timeout
     while time.monotonic() < end:
-        if js(script) == expected:
-            return
+        try:
+            if js(script) == expected:
+                return
+        except (http.client.RemoteDisconnected, ConnectionResetError):
+            # Retry read-only polling after a transient native-driver disconnect.
+            # Never repeat a mutating UI action or an IPC command automatically.
+            pass
         time.sleep(.15)
     raise AssertionError(f'Timed out: {script}; page: {js("return document.body.innerText")[:1500]}')
 
@@ -365,6 +371,20 @@ try:
     assert backup_path.exists()
     assert json.loads(backup_path.read_text())['format'] == 'snapnote-encrypted-v1'
     record('Live workspace encryption and encrypted native backup export')
+    invoke('pin_image', {'data': image})
+    wait('return document.body.textContent.includes("Saved on this device")')
+    js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Lock workspace now")).click();')
+    wait('return Boolean(document.querySelector(".unlock-input"))')
+    assert len(command('window/handles', method='GET')) == 1, 'Locked workspace left a private image visible'
+    clipboard('PRIVATE WHILE LOCKED')
+    hotkey('ctrl+alt+c', '^%c')
+    time.sleep(.5)
+    assert js('return Boolean(document.querySelector(".unlock-input"))')
+    fill('[aria-label="Workspace password"]', 'native test password 12345')
+    click('button[type="submit"]')
+    wait('return Boolean(document.querySelector(".workspace-shell"))')
+    assert 'PRIVATE WHILE LOCKED' not in js('return document.body.textContent')
+    record('Manual lock closes private image pins and ignores capture shortcuts until unlock')
     wait('return document.body.textContent.includes("Saved on this device")')
     end_session()
     new_session()
@@ -392,6 +412,73 @@ try:
     click('[aria-label="Close dialog"]')
     wait('return document.querySelectorAll(".clip-card").length', 5)
     record('Encrypted import restores cleared clips without duplicating organized content')
+
+    if os.environ.get('SNAPNOTE_PRODUCT_SHOTS') == '1':
+        # Deliberate demonstration data, created through the real clipboard/UI in
+        # this isolated test profile only. Never substitute a drawn app mockup.
+        js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
+        fill('[aria-label="Search clips"]', '')
+        remaining = js('return document.querySelectorAll(".clip-card").length')
+        while remaining:
+            click('.clip-card .clip-preview')
+            js('Array.from(document.querySelectorAll(".detail-pane button")).find(b=>b.textContent.includes("Delete clip")).click();')
+            command('alert/accept', {})
+            remaining -= 1
+            wait('return document.querySelectorAll(".clip-card").length', remaining)
+        if js('return document.documentElement.classList.contains("dark")'):
+            click('[aria-label="Toggle theme"]')
+
+        def product_clip(data, title, tags, favorite=False, snippet=False):
+            count = js('return document.querySelectorAll(".clip-card").length')
+            clipboard(base64.b64decode(data.split(',')[1]) if data.startswith('data:image/') else data,
+                      image=data.startswith('data:image/'))
+            click('.heading-actions .button.primary')
+            wait('return document.querySelectorAll(".clip-card").length', count + 1)
+            if favorite:
+                click('.clip-card [aria-label="Add favorite"]')
+            click('.clip-card .clip-preview')
+            fill('.detail-pane .field-label input', title)
+            fill('input[placeholder="work, research, useful"]', tags)
+            click('.detail-heading')
+            if snippet:
+                click('.detail-pane .check-label input')
+            click('[aria-label="Close details"]')
+
+        product_clip('A few things worth keeping\n\nCollect references for the new project.\nKeep useful details close.\nMake room for the next idea.',
+                     'A few things worth keeping', 'ideas, this week', favorite=True)
+        product_clip('https://v2.tauri.app/start/\n\nA useful reference for the next build.',
+                     'A reference for later', 'development, reference')
+        product_clip('Hi {{name}},\n\nHere are the notes from our {{project}} review.\nLet me know what you think.\n\nThanks!',
+                     'A thoughtful follow-up', 'writing, reusable', snippet=True)
+        palette = js('''const c=document.createElement("canvas");c.width=960;c.height=520;
+            const x=c.getContext("2d");x.fillStyle="#f2f4fa";x.fillRect(0,0,960,520);
+            x.fillStyle="#26334b";x.font="500 28px sans-serif";x.fillText("A little direction",52,72);
+            const colors=["#4264e7","#99aaf0","#e0e6fa","#26334b","#f9fafc"];
+            colors.forEach((color,i)=>{x.fillStyle=color;x.fillRect(52+i*173,120,156,245);
+              x.fillStyle="#68748b";x.font="18px monospace";x.fillText(color,55+i*173,410);});
+            return c.toDataURL("image/png");''')
+        product_clip(palette, 'Palette exploration', 'design, inspiration', favorite=True)
+        product_clip('function keepWhatMatters(clips) {\n  return clips.filter(clip => clip.favorite);\n}\n\n// Small tools. A clearer workspace.',
+                     'Keep what matters', 'code, useful')
+        agenda = js('''const c=document.createElement("canvas");c.width=960;c.height=520;
+            const x=c.getContext("2d");x.fillStyle="#fffdf6";x.fillRect(0,0,960,520);
+            x.fillStyle="#cbbf9d";for(let y=135;y<500;y+=55){x.fillRect(52,y,856,1);}
+            x.fillStyle="#303c50";x.font="500 30px sans-serif";x.fillText("MONDAY / PROJECT NOTES",60,84);
+            x.font="25px sans-serif";["01   Gather the useful bits.","02   Give them a place.","03   Come back with a clear mind."].forEach((s,i)=>x.fillText(s,62,190+i*110));
+            return c.toDataURL("image/png");''')
+        product_clip(agenda, 'From the project notebook', 'research, notes')
+        # Remove the capture status notice without changing any product state.
+        time.sleep(5.2)
+        wait('return document.body.textContent.includes("Saved on this device")')
+        (ARTIFACTS / 'product-workspace-light.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))
+        click('[aria-label="Toggle theme"]')
+        (ARTIFACTS / 'product-workspace-dark.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))
+        hotkey('alt+s', '%s')
+        wait('return document.querySelector(".workspace-shell").classList.contains("quick-mode")')
+        (ARTIFACTS / 'product-quick-access.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))
+        js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
+        wait('return !document.querySelector(".workspace-shell").classList.contains("quick-mode")')
+        print('Captured real desktop product screenshots with illustrative clipboard data.', flush=True)
 
     (ARTIFACTS / 'native-smoke-results.json').write_text(json.dumps({'platform': 'Windows / WebView2' if WINDOWS else 'Linux / WebKitGTK', 'profile': str(PROFILE), 'passed': RESULTS}, indent=2) + '\n')
     print(f'Artifacts: {ARTIFACTS}', flush=True)

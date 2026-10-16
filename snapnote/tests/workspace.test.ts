@@ -103,3 +103,18 @@ test("plain backup is validated and preserves every entity", async () => {
   assert.deepEqual(await readBackup(await createBackup(w, ""), ""), w);
   await assert.rejects(readBackup("{ broken", ""), /valid JSON/);
 });
+
+test("an import that exceeds workspace capacity leaves the current workspace unchanged", () => {
+  const current = freshWorkspace();
+  current.notes = Array.from({ length: 2000 }, (_, i) => ({
+    id: `note-${i}`,
+    title: `Note ${i}`,
+    content: `<p>Keep ${i}</p>`,
+  }));
+  current.activeNoteId = current.notes[0].id;
+  const incoming = freshWorkspace();
+  const before = JSON.stringify(current);
+  assert.throws(() => mergeWorkspace(current, incoming), /capacity/);
+  assert.equal(JSON.stringify(current), before);
+  assert.doesNotThrow(() => validateWorkspace(current));
+});

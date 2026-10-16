@@ -88,6 +88,10 @@ fn fingerprint<T: Hash + ?Sized>(kind: &str, data: &T) -> u64 {
     hasher.finish()
 }
 
+fn image_fingerprint(width: u32, height: u32, rgba: &[u8]) -> u64 {
+    fingerprint("image", &(width, height, rgba))
+}
+
 fn capture_clipboard_payload(
     app: &tauri::AppHandle,
     known: Option<u64>,
@@ -96,7 +100,7 @@ fn capture_clipboard_payload(
         if image.rgba().len() > 64_000_000 {
             return Err("Clipboard image is too large (maximum 16 megapixels).".into());
         }
-        let hash = fingerprint("image", image.rgba());
+        let hash = image_fingerprint(image.width(), image.height(), image.rgba());
         if known == Some(hash) {
             *app.state::<WorkspaceState>()
                 .sequence
@@ -205,7 +209,7 @@ async fn write_clipboard(app: tauri::AppHandle, payload: ClipboardCaptured) -> R
             "image" => {
                 let decoded = decode_image(&payload.data)?;
                 let rgba = decoded.to_rgba8();
-                hash = fingerprint("image", rgba.as_raw());
+                hash = image_fingerprint(rgba.width(), rgba.height(), rgba.as_raw());
                 app.clipboard()
                     .write_image(&tauri::image::Image::new_owned(
                         rgba.as_raw().clone(),
@@ -321,6 +325,30 @@ fn pinned_image(window: tauri::WebviewWindow, app: tauri::AppHandle) -> Result<S
         .get(window.label())
         .cloned()
         .ok_or_else(|| "Pinned image is no longer available.".into())
+}
+
+#[tauri::command]
+fn close_pinned_images(app: tauri::AppHandle) -> Result<(), String> {
+    // Window destruction also updates the map, so release its mutex before closing.
+    let labels: Vec<String> = app
+        .state::<WorkspaceState>()
+        .pinned
+        .lock()
+        .map_err(|_| "Pinned image state unavailable")?
+        .keys()
+        .cloned()
+        .collect();
+    for label in labels {
+        if let Some(window) = app.get_webview_window(&label) {
+            window.close().map_err(|e| e.to_string())?;
+        }
+    }
+    app.state::<WorkspaceState>()
+        .pinned
+        .lock()
+        .map_err(|_| "Pinned image state unavailable")?
+        .clear();
+    Ok(())
 }
 
 #[tauri::command]
@@ -498,6 +526,7 @@ fn main() {
             set_floating,
             pin_image,
             pinned_image,
+            close_pinned_images,
             finish_close,
             export_backup
         ])
@@ -513,6 +542,19 @@ mod tests {
     fn exact_clipboard_identity_preserves_whitespace_and_format() {
         assert_ne!(fingerprint("text", "  code\n"), fingerprint("text", "code"));
         assert_ne!(fingerprint("text", b"same"), fingerprint("image", b"same"));
+    }
+
+    #[test]
+    fn image_identity_includes_dimensions() {
+        let pixels = [255_u8; 16];
+        assert_ne!(
+            image_fingerprint(1, 4, &pixels),
+            image_fingerprint(2, 2, &pixels)
+        );
+        assert_eq!(
+            image_fingerprint(2, 2, &pixels),
+            image_fingerprint(2, 2, &pixels)
+        );
     }
 
     #[test]

@@ -1458,10 +1458,12 @@ function DesktopWorkspace() {
                         void run(async () => {
                           locking.current = true;
                           try {
-                            if (native)
+                            if (native) {
                               await invoke("configure_capture", {
                                 enabled: false,
                               });
+                              await invoke("close_pinned_images");
+                            }
                             await saveWorkspace(latest.current!);
                             await lockWorkspace();
                             setWorkspace(null);
@@ -1470,6 +1472,7 @@ function DesktopWorkspace() {
                             setSelectedId(null);
                             setChecked([]);
                             setCapture(null);
+                            setEditingImage(null);
                             setError("");
                             setPassword("");
                           } catch (e) {
@@ -1610,7 +1613,13 @@ function DesktopWorkspace() {
                             await file.text(),
                             password,
                           );
-                          mutate((w) => mergeWorkspace(w, incoming));
+                          // Validate the merged result inside this error boundary, before
+                          // scheduling a React update or writing any imported data.
+                          const merged = mergeWorkspace(
+                            latest.current!,
+                            incoming,
+                          );
+                          setWorkspace(merged);
                           setNotice(
                             "Backup merged. Existing notes were preserved.",
                           );

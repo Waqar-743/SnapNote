@@ -222,11 +222,18 @@ export function mergeWorkspace(
         sessionId: sessions.mapping.get(clip.sessionId) ?? "",
       });
   }
-  return {
+  const merged = {
     ...current,
     notes,
     clips,
     folders: folders.merged,
     sessions: sessions.merged,
   };
+  try {
+    return validateWorkspace(merged);
+  } catch {
+    throw new Error(
+      "This import would exceed the workspace capacity. Export a backup and remove unused items before importing. Your current data has not been changed.",
+    );
+  }
 }
