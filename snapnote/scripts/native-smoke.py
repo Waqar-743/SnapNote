@@ -11,7 +11,6 @@ import os
 from pathlib import Path
 import shutil
 import signal
-import socket
 import subprocess
 import tempfile
 import time
@@ -30,6 +29,7 @@ ENV = dict(os.environ, XDG_DATA_HOME=str(PROFILE / 'data'), XDG_CONFIG_HOME=str(
 (PROFILE / 'config' / 'user-dirs.dirs').write_text(f'XDG_DOWNLOAD_DIR="{PROFILE / "downloads"}"\n')
 DRIVER = os.environ.get('TAURI_DRIVER') or shutil.which('tauri-driver') or '/tmp/snapnote-cargo/bin/tauri-driver'
 BASE = 'http://127.0.0.1:4444'
+LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 SESSION = None
 APP_PROCESS = None
 APP_LOG = None
@@ -38,7 +38,7 @@ RESULTS = []
 def request(method, path, body=None, timeout=45):
     req = urllib.request.Request(BASE + path, data=json.dumps(body).encode() if body is not None else None, method=method, headers={'Content-Type': 'application/json'})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with LOCAL_HTTP.open(req, timeout=timeout) as response:
             value = json.load(response).get('value')
     except urllib.error.HTTPError as error:
         raise RuntimeError(error.read().decode()) from error
@@ -159,9 +159,7 @@ def new_session():
     if WINDOWS:
         # Use Microsoft's documented attach mode. EdgeDriver's launch mode can
         # wait for DevToolsActivePort in a profile different from Tauri's profile.
-        with socket.socket() as listener:
-            listener.bind(('127.0.0.1', 0))
-            port = listener.getsockname()[1]
+        port = 9222  # Explicitly configured in the isolated Windows test build.
         app_env = dict(ENV, TAURI_WEBVIEW_AUTOMATION='true',
                        WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f'--remote-debugging-port={port}')
         APP_LOG = open(PROFILE / 'app.log', 'a')
@@ -172,7 +170,7 @@ def new_session():
                 APP_LOG.flush()
                 raise RuntimeError('Desktop app exited during startup: ' + (PROFILE / 'app.log').read_text(errors='replace'))
             try:
-                with urllib.request.urlopen(f'http://127.0.0.1:{port}/json/version', timeout=2) as response:
+                with LOCAL_HTTP.open(f'http://127.0.0.1:{port}/json/version', timeout=2) as response:
                     json.load(response)
                 break
             except (OSError, urllib.error.URLError):
@@ -593,6 +591,8 @@ except Exception:
                        '$b.Save(' + target + ',[Drawing.Imaging.ImageFormat]::Png); $g.Dispose(); $b.Dispose();')
             processes = powershell('Get-Process snapnote,msedgewebview2,msedgedriver -ErrorAction SilentlyContinue | Format-List Name,Id,Responding,MainWindowTitle,Path | Out-String; exit 0')
             (ARTIFACTS / 'windows-processes.txt').write_bytes(processes)
+            commands = powershell('Get-CimInstance Win32_Process | Where-Object { $_.Name -in @("snapnote.exe","msedgewebview2.exe","msedgedriver.exe") } | Format-List Name,ProcessId,CommandLine | Out-String; Get-NetTCPConnection -State Listen | Where-Object LocalPort -eq 9222 | Out-String; exit 0')
+            (ARTIFACTS / 'windows-command-lines.txt').write_bytes(commands)
         except Exception as diagnostic_error:
             print(f'Windows diagnostics unavailable: {diagnostic_error}', flush=True)
     try:
