@@ -5,6 +5,9 @@ The native suite passed **21 checks on Linux**, rerun on 2026-10-16 with the reb
 - [Light workspace screenshot](native-workspace.png)
 - [Dark workspace screenshot](native-workspace-dark.png)
 - [Native test script](../../snapnote/scripts/native-smoke.py)
+- [Clean product screenshots and reproduction](../product/README.md)
+
+The Tauri CLI debug build also passes after aligning `@tauri-apps/api` 2.10.x with the locked Rust core 2.10.2. The final rebuilt binary passed all 21 native checks, with the optional product screenshot phase enabled.
 
 Screenshots contain deliberate test fixtures, including literal HTML-looking text used to check that capture does not execute or interpret markup. They are actual screenshots of the running app, not UI mockups.
 

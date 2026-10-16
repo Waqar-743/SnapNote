@@ -23,10 +23,12 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 
 - Replace shell-dependent test glob with explicit files through Node's test runner and the existing tsx loader. All nine assertions pass locally.
 - Preserve LF source line endings on Windows so formatting checks are consistent.
+- Align the JavaScript Tauri API with the locked Rust core; the Tauri CLI desktop build now passes. Windows native helper compilation passed, then exposed this packaging version check in [run 38851439605](https://github.com/Waqar-743/SnapNote/actions/runs/38851439605). The corrected workflow is running on [35e866b](https://github.com/Waqar-743/SnapNote/actions/runs/38851950555).
 - Put Windows native artifacts in `docs/testing/windows/` so stale committed Linux evidence cannot be uploaded as a Windows result.
 - Reject over-capacity backup merges before changing state, close private image pins on lock, and include image dimensions in duplicate identity. Regression checks pass.
 - Rebuilt and ran the actual desktop suite successfully. Check the Windows workflow and record the exact result before beginning website implementation.
 - Prepared the selected Mentor's transparent teaching cutout and a desktop user guide.
+- Captured [clean real desktop screenshots](product/README.md) after rebuilding with the aligned Tauri API; the 21 native checks passed again.
 
 ## Product limits to keep visible
 
