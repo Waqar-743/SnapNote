@@ -1,6 +1,6 @@
 # SnapNote recovery and delivery status
 
-Last checked: 2026-10-16. Desktop branch: `desktop/smart-workspace`; existing review: [PR #3](https://github.com/Waqar-743/SnapNote/pull/3).
+Last checked: 2026-10-16. Desktop branch: `desktop/smart-workspace`, [PR #3](https://github.com/Waqar-743/SnapNote/pull/3). Website branch: `website/product-site`, [PR #4](https://github.com/Waqar-743/SnapNote/pull/4). Both reviews are saved as drafts; neither was merged.
 
 ## Recovered work
 
@@ -15,7 +15,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+S, retained note capture/show shortcuts |
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
-| Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Successful Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38856921850), commit `20a3214`; [saved evidence](testing/windows/README.md) |
+| Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Final Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546), commit `224687e`; [saved evidence](testing/windows/README.md); site downloads retain the validated `20a3214` app artifacts |
 | Website from scratch | Complete on `website/product-site`, after the successful desktop gate | [Live private preview](https://snapnote-workspace.grittybloom257.chatgpt.site); [source and validation](../website/README.md); [deployment record](WEBSITE-DELIVERY.md) |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
@@ -35,7 +35,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 - Fix a real Windows deadlock by creating pinned WebView windows in an async Tauri command. Match the main window's additional browser arguments for WebViews sharing its profile; this also fixes blank pins in the isolated automation build.
 - Use real keyboard events to clear Windows search fields so the test drives React state as well as the DOM.
 - Website: selected Mentor cutout, real app screenshots, light/dark gallery, quick-access walkthrough, privacy details, FAQs, responsive navigation and exact validated Windows preview downloads. Eight Chromium workflow checks and seven supplementary WebKit checks pass; the private deployment succeeded.
-- A later documentation-only Windows run exposed a test race while observing pin teardown. The harness now waits for window creation and removal with fixed deadlines; the app and preview installers are unchanged. Follow-up run: [38858824546](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546).
+- A later documentation-only Windows run exposed a test race while observing pin teardown. The harness now waits for window creation and removal with fixed deadlines; the app and preview installers are unchanged. All 24 native checks pass again on Linux and in Windows [follow-up run 38858824546](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546).
 
 ## Product limits to keep visible
 

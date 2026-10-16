@@ -4,6 +4,8 @@
 
 Created from scratch on `website/product-site`, following the existing desktop redesign and the green primary-platform gate: [Windows run 38856921850](https://github.com/Waqar-743/SnapNote/actions/runs/38856921850). Existing desktop code was reused and improved; the website is a separate buildless project under `website/`.
 
+Review: [website draft PR #4](https://github.com/Waqar-743/SnapNote/pull/4), based on the [desktop draft PR #3](https://github.com/Waqar-743/SnapNote/pull/3). After the desktop PR is merged, retarget the website PR to `main`.
+
 ## Delivered
 
 - A calm slate/blue visual direction, editorial typography, the owner-selected A Mentor teaching illustration and matching clipboard mark.
