@@ -29,6 +29,7 @@ ENV = dict(os.environ, XDG_DATA_HOME=str(PROFILE / 'data'), XDG_CONFIG_HOME=str(
 (PROFILE / 'config' / 'user-dirs.dirs').write_text(f'XDG_DOWNLOAD_DIR="{PROFILE / "downloads"}"\n')
 DRIVER = os.environ.get('TAURI_DRIVER') or shutil.which('tauri-driver') or '/tmp/snapnote-cargo/bin/tauri-driver'
 BASE = 'http://127.0.0.1:4444'
+NATIVE_BASE = 'http://127.0.0.1:4445'
 LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 SESSION = None
 APP_PROCESS = None
@@ -36,7 +37,10 @@ APP_LOG = None
 RESULTS = []
 
 def request(method, path, body=None, timeout=45):
-    req = urllib.request.Request(BASE + path, data=json.dumps(body).encode() if body is not None else None, method=method, headers={'Content-Type': 'application/json'})
+    # tauri-driver translates new-session capabilities. Subsequent commands use
+    # the native WebDriver endpoint directly, avoiding intermediary HTTP resets.
+    endpoint = BASE if method == 'POST' and path == '/session' else NATIVE_BASE
+    req = urllib.request.Request(endpoint + path, data=json.dumps(body).encode() if body is not None else None, method=method, headers={'Content-Type': 'application/json'})
     try:
         with LOCAL_HTTP.open(req, timeout=timeout) as response:
             value = json.load(response).get('value')
@@ -94,7 +98,9 @@ def fill(selector, text):
         subprocess.run(['xdotool', 'windowfocus', windows[0]], check=True)
     command(f'element/{key}/click', {})
     if WINDOWS:
-        command(f'element/{key}/clear', {})
+        # Native key input fires React's input handler when clearing to empty;
+        # EdgeDriver's clear command can change only the DOM value.
+        command(f'element/{key}/value', {'text': '\ue009a\ue000\ue003'})
         if text:
             command(f'element/{key}/value', {'text': text})
     else:
@@ -205,7 +211,7 @@ def end_session():
             APP_LOG = None
 
 log = open(PROFILE / 'driver.log', 'w')
-driver_args = [DRIVER, '--port', '4444']
+driver_args = [DRIVER, '--port', '4444', '--native-port', '4445']
 if WINDOWS and os.environ.get('EDGEWEBDRIVER'):
     driver_args += ['--native-driver', str(Path(os.environ['EDGEWEBDRIVER']) / 'msedgedriver.exe')]
 driver = subprocess.Popen(driver_args, env=ENV, stdout=log, stderr=log, start_new_session=not WINDOWS)
