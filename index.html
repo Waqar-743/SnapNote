@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8f9fc" />
+    <title>SnapNote — A little more space to think</title>
+    <meta
+      name="description"
+      content="Keep copied text, images, references and ideas in a calm, local desktop workspace. Meet SnapNote, your smart clipboard and visual workspace."
+    />
+    <meta
+      property="og:title"
+      content="SnapNote — A little more space to think"
+    />
+    <meta
+      property="og:description"
+      content="A calm home for the useful things you copy. Text, images, notes and ideas, together on your device."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://snapnote-workspace.grittybloom257.chatgpt.site"
+    />
+    <meta
+      property="og:image"
+      content="https://snapnote-workspace.grittybloom257.chatgpt.site/assets/workspace-light.png"
+    />
+    <link
+      rel="canonical"
+      href="https://snapnote-workspace.grittybloom257.chatgpt.site"
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <svg
+      class="icon-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <symbol id="icon-clipboard" viewBox="0 0 24 24">
+        <rect x="8" y="2" width="8" height="4" rx="1" />
+        <path
+          d="M16 4h3a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3M8 11h8M8 16h8"
+        />
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14m-6-6 6 6-6 6" />
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4" />
+      </symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="10.5" cy="10.5" r="6.5" />
+        <path d="m16 16 5 5" />
+      </symbol>
+      <symbol id="icon-folder" viewBox="0 0 24 24">
+        <path
+          d="M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"
+        />
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24">
+        <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
+        <path d="m8 12 3 3 5-6" />
+      </symbol>
+      <symbol id="icon-lock" viewBox="0 0 24 24">
+        <rect x="5" y="10" width="14" height="11" rx="2" />
+        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2" />
+      </symbol>
+      <symbol id="icon-pause" viewBox="0 0 24 24">
+        <path d="M8 5v14M16 5v14" />
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M6 18 18 6" />
+      </symbol>
+      <symbol id="icon-expand" viewBox="0 0 24 24">
+        <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" />
+      </symbol>
+      <symbol id="icon-windows" viewBox="0 0 24 24">
+        <path
+          d="m3 5 8-1v8H3Zm10-1 8-1v9h-8ZM3 14h8v7l-8-1Zm10 0h8v9l-8-1Z"
+          fill="currentColor"
+          stroke="none"
+        />
+      </symbol>
+    </svg>
+
+    <header class="site-header">
+      <div class="header-inner wrap">
+        <a class="brand" href="#" aria-label="SnapNote home"
+          ><span class="brand-mark"
+            ><svg><use href="#icon-clipboard" /></svg></span
+          >SnapNote<span class="brand-period">.</span></a
+        >
+        <button
+          class="menu-toggle"
+          aria-controls="main-navigation"
+          aria-expanded="false"
+          hidden
+        >
+          Menu <span aria-hidden="true">+</span>
+        </button>
+        <nav id="main-navigation" aria-label="Main navigation">
+          <a href="#workspace">The workspace</a
+          ><a href="#privacy">Your privacy</a
+          ><a href="#questions">Good to know</a>
+        </nav>
+        <a class="button small header-download" href="#download"
+          >Get SnapNote <svg><use href="#icon-arrow" /></svg
+        ></a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <a class="release-note" href="#download"
+            ><span class="release-dot" aria-hidden="true"></span>Meet your new
+            clipboard workspace <span aria-hidden="true">↗</span></a
+          >
+          <h1 id="hero-title">
+            Keep the useful.<br />Make room for<br /><em>what’s next.</em>
+          </h1>
+          <p class="hero-description">
+            That perfect quote. A useful screenshot. The idea you’ll need later.
+            Give everything you copy a calm place to come back to.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#download"
+              ><svg><use href="#icon-windows" /></svg>Download for Windows<svg>
+                <use href="#icon-download" /></svg></a
+            ><a class="text-link" href="#workspace"
+              >Take a look inside <span aria-hidden="true">↓</span></a
+            >
+          </div>
+          <p class="hero-note">
+            Works offline. No account needed. Yours to organize.
+          </p>
+        </div>
+        <figure class="mentor">
+          <div class="mentor-orbit" aria-hidden="true"></div>
+          <img
+            src="./assets/mentor-teaching.png"
+            width="1024"
+            height="1536"
+            alt="The Mentor: a friendly snowy white wolf wearing glasses and a charcoal suit, guiding you with a wooden pointer."
+            fetchpriority="high"
+          />
+          <figcaption>
+            <span class="mentor-line" aria-hidden="true"></span>A little
+            guidance.<br />A clearer workspace.
+          </figcaption>
+          <span class="mentor-name"
+            >MEET THE MENTOR <span aria-hidden="true">↗</span></span
+          >
+        </figure>
+      </section>
+
+      <section
+        class="workspace-section wrap"
+        id="workspace"
+        aria-labelledby="workspace-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">A PLACE FOR THE GOOD STUFF</p>
+            <h2 id="workspace-title">
+              Everything you saved.<br />Finally, in view.
+            </h2>
+          </div>
+          <p>
+            More than a clipboard history.<br />A workspace for the way you
+            think.
+          </p>
+        </div>
+        <div class="workspace-preview">
+          <div class="preview-toolbar">
+            <span
+              ><span class="status-dot" aria-hidden="true"></span>Your visual
+              workspace</span
+            >
+            <div
+              class="theme-switch"
+              role="tablist"
+              aria-label="Screenshot appearance"
+            >
+              <button
+                id="light-tab"
+                role="tab"
+                aria-selected="true"
+                aria-controls="screenshot-panel"
+                data-theme="light"
+              >
+                Light</button
+              ><button
+                id="dark-tab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="screenshot-panel"
+                tabindex="-1"
+                data-theme="dark"
+              >
+                Dark
+              </button>
+            </div>
+          </div>
+          <div
+            id="screenshot-panel"
+            role="tabpanel"
+            aria-labelledby="light-tab"
+          >
+            <button
+              class="screenshot-button"
+              aria-label="Enlarge the light workspace screenshot"
+            >
+              <img
+                id="workspace-image"
+                src="./assets/workspace-light.png"
+                width="1180"
+                height="800"
+                alt="SnapNote’s light desktop workspace with text, image and snippet cards, search, favorites, folders and sessions."
+                loading="lazy"
+              /><span class="enlarge-label"
+                ><svg><use href="#icon-expand" /></svg>Take a closer look</span
+              >
+            </button>
+          </div>
+        </div>
+        <p class="image-caption">
+          <span
+            >Actual desktop app, with illustrative content. Shown on
+            Linux.</span
+          ><span>Light or dark. Make yourself at home.</span>
+        </p>
+        <div class="workflow-grid">
+          <article>
+            <div class="step-heading">
+              <span>01 / COLLECT</span><svg><use href="#icon-clipboard" /></svg>
+            </div>
+            <h3>Catch the useful bits.</h3>
+            <p>
+              Keep copied text and images together. Enable automatic history
+              when you need it, or capture one thing at a time. Repeated copies
+              stay tidy.
+            </p>
+            <p class="feature-footnote">
+              Text & images <span>·</span> Duplicate prevention
+            </p>
+          </article>
+          <article>
+            <div class="step-heading">
+              <span>02 / FIND</span><svg><use href="#icon-search" /></svg>
+            </div>
+            <h3>Less looking. More finding.</h3>
+            <p>
+              Search words, titles and tags. Extract text from an image with
+              local OCR, then find it by the words inside. The useful detail is
+              closer than you think.
+            </p>
+            <p class="feature-footnote">
+              Fast search <span>·</span> Local OCR<sup>*</sup>
+            </p>
+          </article>
+          <article>
+            <div class="step-heading">
+              <span>03 / CONNECT</span><svg><use href="#icon-folder" /></svg>
+            </div>
+            <h3>Give ideas some context.</h3>
+            <p>
+              Favorite the keepers. Add folders and tags, group a project into a
+              session, or turn a good reply into a reusable template with
+              placeholders.
+            </p>
+            <p class="feature-footnote">
+              Folders & sessions <span>·</span> Snippets
+            </p>
+          </article>
+        </div>
+        <p class="ocr-note">
+          * OCR runs on your device and requires a separate Tesseract
+          installation.
+          <a href="#ocr-question"
+            >See how it works <span aria-hidden="true">↗</span></a
+          >
+        </p>
+      </section>
+
+      <section class="quick-section" aria-labelledby="quick-title">
+        <div class="quick-inner wrap">
+          <div class="quick-copy">
+            <p class="eyebrow">RIGHT THERE WHEN YOU NEED IT</p>
+            <h2 id="quick-title">A small shortcut.<br />A smoother day.</h2>
+            <p class="section-description">
+              Stay with your train of thought. Bring up quick access, find the
+              clip, copy it, and paste it into the app you’re already using.
+            </p>
+            <div class="shortcut" aria-label="Alt plus S">
+              <kbd>Alt</kbd><span>+</span><kbd>S</kbd
+              ><span class="shortcut-caption"
+                >Your workspace, within reach.</span
+              >
+            </div>
+            <div class="quick-detail">
+              <h3>Good with pictures. Great with ideas.</h3>
+              <p>
+                Crop a screenshot, draw on an image, or pin a visual reference
+                above your other windows. Keep writing in rich notes, or copy
+                selected text clips together.
+              </p>
+            </div>
+            <a
+              class="text-link"
+              href="https://github.com/Waqar-743/SnapNote/blob/desktop/smart-workspace/docs/DESKTOP-GUIDE.md"
+              target="_blank"
+              rel="noopener"
+              >Read the desktop guide <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <figure class="quick-visual">
+            <div class="quick-window">
+              <img
+                src="./assets/quick-access.png"
+                width="560"
+                height="640"
+                alt="The actual SnapNote floating quick-access panel in dark mode, with searchable image and text clips."
+                loading="lazy"
+              />
+            </div>
+            <figcaption>
+              The actual floating panel. A little less switching.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section
+        class="privacy-section"
+        id="privacy"
+        aria-labelledby="privacy-title"
+      >
+        <div class="privacy-inner wrap">
+          <div>
+            <span class="privacy-icon"
+              ><svg><use href="#icon-shield" /></svg
+            ></span>
+            <p class="eyebrow">YOUR DEVICE. YOUR CALL.</p>
+            <h2 id="privacy-title">
+              A private place<br />for everyday things.
+            </h2>
+            <p class="section-description">
+              Your clipboard can be personal. SnapNote’s core works locally,
+              without an account, a cloud connection, or telemetry.
+            </p>
+            <span class="privacy-label"
+              ><span class="status-dot" aria-hidden="true"></span>Offline by
+              design</span
+            >
+          </div>
+          <div class="privacy-points">
+            <article>
+              <svg><use href="#icon-pause" /></svg>
+              <div>
+                <h3>Capture on your terms.</h3>
+                <p>
+                  New workspaces start paused. Turn history on when it helps,
+                  and pause before copying sensitive information.
+                </p>
+              </div>
+            </article>
+            <article>
+              <svg><use href="#icon-lock" /></svg>
+              <div>
+                <h3>An extra layer, when you choose.</h3>
+                <p>
+                  Enable password encryption for your stored workspace. Locking
+                  pauses capture and closes pinned images.
+                </p>
+              </div>
+            </article>
+            <article>
+              <svg><use href="#icon-download" /></svg>
+              <div>
+                <h3>Keep a copy of your own.</h3>
+                <p>
+                  Export a backup, optionally password encrypted. Import it
+                  later to merge saved content into your workspace.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="faq-section wrap"
+        id="questions"
+        aria-labelledby="faq-title"
+      >
+        <div class="faq-intro">
+          <p class="eyebrow">A FEW USEFUL DETAILS</p>
+          <h2 id="faq-title">Good to know<br />before you begin.</h2>
+          <p>A clear picture of what’s here,<br />and what comes next.</p>
+          <a
+            class="text-link"
+            href="https://github.com/Waqar-743/SnapNote/pull/3"
+            target="_blank"
+            rel="noopener"
+            >See what changed <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>
+              Which computers can run SnapNote?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              This preview download is for Windows 10/11 on x64 computers. The
+              desktop workflow has been tested on Windows and Linux. A macOS
+              version has not been validated for this preview.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I use it without an internet connection?<span
+                aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              Yes. Clipboard history, search, notes, image tools and backups
+              work locally. You don’t need an account. The installer may need an
+              internet connection to install Microsoft WebView2 if it is
+              missing.
+            </p>
+          </details>
+          <details id="ocr-question">
+            <summary>
+              How does text extraction from images work?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              SnapNote uses Tesseract on your computer. Install Tesseract and
+              its language data separately, make it available on your system
+              PATH, and restart SnapNote. Then choose an image and select
+              Extract text. The current installer does not bundle Tesseract.
+              <a
+                href="https://github.com/tesseract-ocr/tesseract#installing-tesseract"
+                target="_blank"
+                rel="noopener"
+                >Tesseract installation information ↗</a
+              >
+            </p>
+          </details>
+          <details>
+            <summary>
+              Is my workspace encrypted automatically?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              Encryption is optional. Enable it in Settings & privacy and choose
+              a password. Backups have their own optional password. There is no
+              password recovery, so keep your passwords safe. Locking hides the
+              workspace and closes pins; it does not erase your operating
+              system’s clipboard.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Will it keep my existing SnapNote notes?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              The redesign reuses the existing app and migrates legacy notes
+              into the new workspace. Rich formatting, image paste and original
+              capture shortcuts remain available. Export a backup before trying
+              a preview on important data.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Does it sync between devices?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Sync is not available in this preview. Your workspace stays on
+              this device. You can export and import backups to move saved
+              content yourself. Optional sync is a possible later phase.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section
+        class="download-section wrap"
+        id="download"
+        aria-labelledby="download-title"
+      >
+        <div class="download-panel">
+          <span class="download-kicker">A LITTLE MORE SPACE TO THINK</span>
+          <h2 id="download-title">Your next good idea<br />can start here.</h2>
+          <p>
+            Bring the useful things together.<br />Leave a little room for
+            what’s next.
+          </p>
+          <a
+            class="button primary"
+            href="https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64-setup.exe"
+            download
+            ><svg><use href="#icon-windows" /></svg>Download SnapNote<svg>
+              <use href="#icon-download" /></svg
+          ></a>
+          <p class="download-meta">
+            Windows x64 <span>·</span> v1.2.0 preview <span>·</span> 4.9 MB
+          </p>
+          <p class="download-secondary">
+            Prefer an MSI?
+            <a
+              href="https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64_en-US.msi"
+              download
+              >Download Windows MSI (7.1 MB)
+              <span aria-hidden="true">↗</span></a
+            >
+          </p>
+          <p class="preview-note">
+            Unsigned preview build.
+            <a
+              href="https://github.com/Waqar-743/SnapNote/actions/runs/38858824546"
+              target="_blank"
+              rel="noopener"
+              >View validation & build details</a
+            ><br />Keep a backup before upgrading an existing workspace.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer wrap">
+      <div>
+        <a class="brand" href="#"
+          ><span class="brand-mark"
+            ><svg><use href="#icon-clipboard" /></svg></span
+          >SnapNote<span class="brand-period">.</span></a
+        >
+        <p>Your ideas, within reach.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a
+          href="https://github.com/Waqar-743/SnapNote"
+          target="_blank"
+          rel="noopener"
+          >GitHub <span aria-hidden="true">↗</span></a
+        ><a
+          href="https://github.com/Waqar-743/SnapNote/blob/desktop/smart-workspace/docs/DESKTOP-GUIDE.md"
+          target="_blank"
+          rel="noopener"
+          >Desktop guide <span aria-hidden="true">↗</span></a
+        ><a href="#privacy">Privacy</a>
+      </nav>
+      <p class="footer-note">Built for a clearer everyday.</p>
+    </footer>
+
+    <dialog
+      class="screenshot-dialog"
+      aria-label="Full desktop workspace screenshot"
+    >
+      <button class="dialog-close" aria-label="Close screenshot">
+        <svg><use href="#icon-close" /></svg></button
+      ><img
+        id="zoom-image"
+        src="./assets/workspace-light.png"
+        width="1180"
+        height="800"
+        alt="Enlarged SnapNote light workspace screenshot"
+      />
+      <p>Actual SnapNote desktop app · Illustrative content</p>
+    </dialog>
+  </body>
+</html>
