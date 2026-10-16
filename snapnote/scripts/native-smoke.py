@@ -155,6 +155,17 @@ def wait_clipboard(expected):
         time.sleep(.1)
     raise AssertionError('System clipboard did not reach the expected content')
 
+def wait_window_count(expected, timeout=10):
+    # Native window creation/destruction and WebDriver's target list settle
+    # asynchronously. Observe the result without repeating a mutating command.
+    end = time.monotonic() + timeout
+    while time.monotonic() < end:
+        handles = command('window/handles', method='GET')
+        if len(handles) == expected:
+            return handles
+        time.sleep(.1)
+    raise AssertionError(f'Expected {expected} native windows, observed {len(handles)}')
+
 def record(name):
     RESULTS.append(name)
     print('PASS:', name, flush=True)
@@ -455,10 +466,11 @@ try:
     assert json.loads(backup_path.read_text())['format'] == 'snapnote-encrypted-v1'
     record('Live workspace encryption and encrypted native backup export')
     invoke('pin_image', {'data': image})
+    wait_window_count(2)
     wait('return document.body.textContent.includes("Saved on this device")')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Lock workspace now")).click();')
     wait('return Boolean(document.querySelector(".unlock-input"))')
-    assert len(command('window/handles', method='GET')) == 1, 'Locked workspace left a private image visible'
+    wait_window_count(1, timeout=5)
     clipboard('PRIVATE WHILE LOCKED')
     hotkey('ctrl+alt+c', '^%c')
     time.sleep(.5)
