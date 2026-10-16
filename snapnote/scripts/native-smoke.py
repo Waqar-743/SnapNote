@@ -495,6 +495,8 @@ try:
     assert js('return document.querySelectorAll(".clip-card").length') >= 3
     assert js('return document.documentElement.classList.contains("dark")')
     record('Native relaunch stays locked; wrong password fails; correct password restores clips and theme')
+    js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
+    wait('return document.querySelector(".workspace-shell.quick-mode") === null')
     js('document.querySelector(".rail-button[aria-label=Notes]").click();')
     wait('return Boolean(document.querySelector(".tiptap-editor"))')
     content = js('return document.querySelector(".tiptap-editor").textContent')
