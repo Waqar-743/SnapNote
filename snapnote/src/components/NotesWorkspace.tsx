@@ -169,7 +169,7 @@ function NoteEditor({
     shouldRerenderOnTransaction: true,
     editorProps: {
       attributes: { class: "tiptap-editor note-content" },
-      handlePaste: (_view, event) => {
+      handlePaste: (_view, event, slice) => {
         const image = Array.from(event.clipboardData?.items ?? [])
           .find((item) => item.type.startsWith("image/"))
           ?.getAsFile();
@@ -181,7 +181,17 @@ function NoteEditor({
           pastedDocument?.querySelector("img") &&
           !pastedDocument.body.textContent?.trim(),
         );
-        if (!image && !(imageOnlyHtml && isTauri())) return false;
+        // WebKit can expose a bitmap only in ProseMirror's parsed paste slice,
+        // with a temporary blob URL and no HTML/File in clipboardData.
+        let parsedImage = false;
+        slice.content.descendants((node) => {
+          if (node.type.name === "image") parsedImage = true;
+        });
+        const imageOnlySlice =
+          parsedImage &&
+          !slice.content.textBetween(0, slice.content.size).trim();
+        if (!image && !((imageOnlyHtml || imageOnlySlice) && isTauri()))
+          return false;
         event.preventDefault();
         if (image && image.size > 8_000_000) {
           window.alert("Choose an image smaller than 8 MB.");

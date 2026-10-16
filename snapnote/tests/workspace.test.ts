@@ -118,3 +118,32 @@ test("an import that exceeds workspace capacity leaves the current workspace unc
   assert.equal(JSON.stringify(current), before);
   assert.doesNotThrow(() => validateWorkspace(current));
 });
+
+test("merging a duplicate restores missing organization and extracted image text", () => {
+  const payload = {
+    type: "image" as const,
+    data: "data:image/png;base64,AAAA",
+  };
+  const current = addClip(freshWorkspace(), payload);
+  const incoming = addClip(freshWorkspace(), payload);
+  incoming.folders = [{ id: "research", name: "Research" }];
+  incoming.sessions = [{ id: "project", name: "Project" }];
+  incoming.clips[0] = {
+    ...incoming.clips[0],
+    folderId: "research",
+    sessionId: "project",
+    ocr: "Recovered scan text",
+  };
+  const merged = mergeWorkspace(current, incoming);
+  assert.equal(merged.clips.length, 1);
+  assert.equal(merged.clips[0].id, current.clips[0].id);
+  assert.equal(merged.clips[0].folderId, "research");
+  assert.equal(merged.clips[0].sessionId, "project");
+  assert.equal(searchClips(merged.clips, "Recovered scan").length, 1);
+  assert.equal(current.clips[0].ocr, "");
+  merged.clips[0].ocr = "A newer extraction";
+  assert.equal(
+    mergeWorkspace(merged, incoming).clips[0].ocr,
+    "A newer extraction",
+  );
+});

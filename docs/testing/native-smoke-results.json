@@ -1,6 +1,6 @@
 {
   "platform": "Linux / WebKitGTK",
-  "profile": "/tmp/snapnote-native-t18063ap",
+  "profile": "/tmp/snapnote-native-9h2k6zd1",
   "passed": [
     "Native app opens with capture paused and no sample data",
     "Real text clipboard capture, whitespace preservation, and duplicate suppression",
@@ -14,6 +14,7 @@
     "Switching views does not reinsert an already consumed capture",
     "Retained rich editor supports formatting, undo, and redo",
     "Original image paste and inline OCR still work in notes",
+    "Notes can be created, renamed, formatted with headings and tasks, searched and safely closed",
     "Alt+S opens the real floating quick-access window and restores workspace size",
     "Folder assignment, tags, and reusable template substitution",
     "Multi-item copying and grouping selected content in a session",
@@ -21,7 +22,9 @@
     "Live workspace encryption and encrypted native backup export",
     "Manual lock closes private image pins and ignores capture shortcuts until unlock",
     "Native relaunch stays locked; wrong password fails; correct password restores clips and theme",
+    "Rich note text, formatting and embedded images survive encrypted desktop relaunch",
     "Clear history preserves favorites, snippets, grouped clips, and notes",
-    "Encrypted import restores cleared clips without duplicating organized content"
+    "Encrypted import restores cleared clips without duplicating organized content",
+    "Malformed backup reports a recoverable error and preserves the current workspace"
   ]
 }

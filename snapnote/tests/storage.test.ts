@@ -65,7 +65,10 @@ test("legacy migration, transactional edits, relaunch, encrypted storage, and lo
   const committed = w;
   w = {
     ...w,
-    notes: w.notes.map((note) => ({ ...note, content: "<p>Recovered edit</p>" })),
+    notes: w.notes.map((note) => ({
+      ...note,
+      content: "<p>Recovered edit</p>",
+    })),
   };
   const transaction = IDBDatabase.prototype.transaction;
   IDBDatabase.prototype.transaction = function (...args) {

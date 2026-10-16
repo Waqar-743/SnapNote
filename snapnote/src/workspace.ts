@@ -213,6 +213,11 @@ export function mergeWorkspace(
         favorite: clips[index].favorite || clip.favorite,
         snippet: clips[index].snippet || clip.snippet,
         tags: [...new Set([...clips[index].tags, ...clip.tags])],
+        folderId:
+          clips[index].folderId || folders.mapping.get(clip.folderId) || "",
+        sessionId:
+          clips[index].sessionId || sessions.mapping.get(clip.sessionId) || "",
+        ocr: clips[index].ocr || clip.ocr,
       };
     } else
       clips.push({
