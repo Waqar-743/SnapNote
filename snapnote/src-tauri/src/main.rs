@@ -288,12 +288,24 @@ async fn pin_image(app: tauri::AppHandle, data: String) -> Result<(), String> {
     );
     pinned.insert(label.clone(), data);
     drop(pinned);
-    let result =
+    let builder =
         WebviewWindowBuilder::new(&app, &label, WebviewUrl::App("index.html?pin=1".into()))
             .title("SnapNote · Pinned image")
             .inner_size(480.0, 360.0)
-            .always_on_top(true)
-            .build();
+            .always_on_top(true);
+    // WebView2 windows sharing a profile need identical browser arguments.
+    #[cfg(target_os = "windows")]
+    let builder = match app
+        .config()
+        .app
+        .windows
+        .first()
+        .and_then(|window| window.additional_browser_args.as_deref())
+    {
+        Some(arguments) => builder.additional_browser_args(arguments),
+        None => builder,
+    };
+    let result = builder.build();
     match result {
         Ok(window) => {
             let handle = app.clone();
