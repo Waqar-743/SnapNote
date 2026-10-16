@@ -15,8 +15,8 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+S, retained note capture/show shortcuts |
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
-| Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Final Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546), commit `224687e`; [saved evidence](testing/windows/README.md); completed installers and SHA-256 checksums now attached to the existing latest release |
-| Website from scratch | Complete and public on `website/product-site`, after the successful desktop gate | [Public website](https://snapnote-workspace.grittybloom257.chatgpt.site); [source and validation](../website/README.md); [deployment record](WEBSITE-DELIVERY.md) |
+| Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Final Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546), commit `224687e`; [saved evidence](testing/windows/README.md); v1.2.0 installers and SHA-256 checksums published on the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0) |
+| Website from scratch | Complete, redesigned and public on GitHub Pages from `main` | [Public website](https://waqar-743.github.io/SnapNote/); [source and validation](../website/README.md); [deployment record](WEBSITE-DELIVERY.md) |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
 ## Current recovery changes
@@ -39,9 +39,9 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 
 ## Public access and release update, 2026-10-16
 
-The owner reported a website 404 and explicitly chose public access. Before the change, authenticated page/CSS requests returned 200 while anonymous requests hit the sign-in gate. Site access is now `public` (policy revision 2). A fresh Chromium session without authentication successfully loaded the home page, CSS, JavaScript and Mentor image, with no script errors; the 390px layout also fits. [Live verification evidence](testing/public-website/results.json).
+The owner reported a website 404 and explicitly chose public access. Site publication moved to GitHub Pages at [https://waqar-743.github.io/SnapNote/](https://waqar-743.github.io/SnapNote/), deployed from `main` by the Deploy product website workflow; the previous external host was retired after returning 404s. [Live verification evidence](testing/public-website/results.json).
 
-The completed EXE, MSI and checksum file from run `38858824546` were uploaded to the owner's [existing latest release, v1.1.0](https://github.com/Waqar-743/SnapNote/releases/tag/v1.1.0). New Windows files contain v1.2.0; older platform assets and the existing tag are retained. Uploaded sizes and server SHA-256 digests match the build outputs. [Release receipt](releases/windows-1.2.0.json). Website download buttons now link directly to those verified release assets.
+The `v1.2.0` tag was released with the CI-built EXE, MSI and checksum file from run `38879682636`, published to the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0), marked latest. The v0.1.0 release remains available. [Release receipt](releases/windows-1.2.0.json). Website download buttons link directly to those verified release assets.
 
 ## Product limits to keep visible
 

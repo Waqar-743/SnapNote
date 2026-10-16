@@ -1,27 +1,25 @@
 {
-  "release_url": "https://github.com/Waqar-743/SnapNote/releases/tag/v1.1.0",
-  "release_tag": "v1.1.0",
-  "added_windows_version": "1.2.0",
-  "desktop_commit": "224687e61e5034051a6dc4c59b4be1dda28c599c",
-  "validated_workflow": "https://github.com/Waqar-743/SnapNote/actions/runs/38858824546",
-  "assets": [
-    {
-      "name": "SnapNote_1.2.0_SHA256SUMS.txt",
-      "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_SHA256SUMS.txt",
-      "size": 190,
-      "digest": "sha256:372606c665500cd33466e14c128609c0beb6d671ba7b300032ccc7cec9877918"
-    },
-    {
-      "name": "SnapNote_1.2.0_x64-setup.exe",
-      "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64-setup.exe",
-      "size": 4900801,
-      "digest": "sha256:13c84a4b61a442b4fbaff8083079749d7176048ee9ca87f50a3ffde06d33fd46"
-    },
-    {
-      "name": "SnapNote_1.2.0_x64_en-US.msi",
-      "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64_en-US.msi",
-      "size": 7081984,
-      "digest": "sha256:179b841d4ce2912a780883403241be46bf241d0340de39126e78900c5ac53a61"
-    }
-  ]
+    "release_url": "https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0",
+    "release_tag": "v1.2.0",
+    "windows_version": "1.2.0",
+    "source_commit": "57e9b8ee90fa916f07a18d55ba1100f2d2b8a947",
+    "validated_workflow": "https://github.com/Waqar-743/SnapNote/actions/runs/38879682636",
+    "assets": [
+        {
+            "name": "SnapNote_1.2.0_SHA256SUMS.txt",
+            "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.2.0/SnapNote_1.2.0_SHA256SUMS.txt"
+        },
+        {
+            "name": "SnapNote_1.2.0_x64-setup.exe",
+            "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.2.0/SnapNote_1.2.0_x64-setup.exe",
+            "size": 4902498,
+            "digest": "sha256:2a6aa5f8ad673db0d5c000cf76eea2f8af58141399258a5a45d85a128a761a9c"
+        },
+        {
+            "name": "SnapNote_1.2.0_x64_en-US.msi",
+            "url": "https://github.com/Waqar-743/SnapNote/releases/download/v1.2.0/SnapNote_1.2.0_x64_en-US.msi",
+            "size": 7081984,
+            "digest": "sha256:e51d1e42794743105a6d5b2d6453246158987941c0f5dd0cb8d9231d18072138"
+        }
+    ]
 }

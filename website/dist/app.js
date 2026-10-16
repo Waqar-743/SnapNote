@@ -1,7 +1,7 @@
 document.documentElement.classList.add("js");
 
 const menuButton = document.querySelector(".menu-toggle");
-const navigation = document.querySelector("#main-navigation");
+const navigation = document.querySelector(".site-nav");
 menuButton.hidden = false;
 function closeMenu() {
   menuButton.setAttribute("aria-expanded", "false");
@@ -16,14 +16,16 @@ navigation.addEventListener("click", (event) => {
   if (event.target.closest("a")) closeMenu();
 });
 document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "Escape" &&
-    menuButton.getAttribute("aria-expanded") === "true"
-  ) {
+  if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
     closeMenu();
     menuButton.focus();
   }
 });
+
+const header = document.querySelector(".site-header");
+const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 8);
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
 
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 const image = document.querySelector("#workspace-image");
@@ -38,13 +40,10 @@ function setTheme(tab, focus = false) {
     item.setAttribute("aria-selected", String(selected));
     item.tabIndex = selected ? 0 : -1;
   });
-  image.src = `/assets/workspace-${theme}.png`;
+  image.src = `assets/workspace-${theme}.png`;
   image.alt = `SnapNote’s ${theme} desktop workspace with text, image and snippet cards, search, favorites, folders and sessions.`;
   panel.setAttribute("aria-labelledby", tab.id);
-  screenshotButton.setAttribute(
-    "aria-label",
-    `Enlarge the ${theme} workspace screenshot`,
-  );
+  screenshotButton.setAttribute("aria-label", `Enlarge the ${theme} workspace screenshot`);
   if (focus) tab.focus();
 }
 tabs.forEach((tab) => {
@@ -57,10 +56,7 @@ tabs.forEach((tab) => {
         ? 0
         : event.key === "End"
           ? tabs.length - 1
-          : (tabs.indexOf(tab) +
-              (event.key === "ArrowRight" ? 1 : -1) +
-              tabs.length) %
-            tabs.length;
+          : (tabs.indexOf(tab) + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
     setTheme(tabs[index], true);
   });
 });
@@ -69,25 +65,17 @@ screenshotButton.addEventListener("click", () => {
   zoomImage.alt = `Enlarged ${image.alt}`;
   dialog.showModal();
 });
-document
-  .querySelector(".dialog-close")
-  .addEventListener("click", () => dialog.close());
+document.querySelector(".dialog-close").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", (event) => {
   if (event.target !== dialog) return;
   const rect = dialog.getBoundingClientRect();
-  if (
-    event.clientX < rect.left ||
-    event.clientX > rect.right ||
-    event.clientY < rect.top ||
-    event.clientY > rect.bottom
-  )
+  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)
     dialog.close();
 });
 dialog.addEventListener("close", () => screenshotButton.focus());
 
 function revealLinkedAnswer() {
-  if (location.hash === "#ocr-question")
-    document.querySelector("#ocr-question").open = true;
+  if (location.hash === "#ocr-question") document.querySelector("#ocr-question").open = true;
 }
 window.addEventListener("hashchange", revealLinkedAnswer);
 document.querySelectorAll('a[href="#ocr-question"]').forEach((link) => {
