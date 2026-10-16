@@ -1,0 +1,6 @@
+# Keep formatter and source behavior identical in Windows and Unix checkouts.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.icns binary

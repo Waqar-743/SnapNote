@@ -1,77 +1,35 @@
-<p align="center">
-  <img src="../SnapNote-App.png" alt="SnapNote" width="150" />
-</p>
+# SnapNote desktop development
 
-<h1 align="center">SnapNote</h1>
+See the [project README](../README.md) for capabilities, data compatibility, privacy behavior, and the architecture audit.
 
-<p align="center">
-  A modern desktop note-taking app with clipboard capture, OCR, and dark mode.<br/>
-  Built with <strong>Tauri v2 + React + TypeScript + TipTap</strong>.
-</p>
-
----
-
-## Features
-
-- **Multi-Tab Editor** — Work on multiple notes with tabs (rename, close, create new)
-- **Global Clipboard Capture** — Press `Ctrl+Alt+C` (or `⌘+Alt+C` on macOS) anywhere to auto-insert copied text/images into the active tab
-- **Show / Focus App** — Press `Ctrl+Alt+O` (or `⌘+Alt+O` on macOS) to bring the app to the foreground
-- **Dark / Light Mode** — Toggle with one click; remembers your preference
-- **Rich Text Editor** — Bold, italic, underline, strikethrough, highlight, headings, lists, task lists, blockquotes, code, and more
-- **Image Paste + OCR** — Paste images directly; hover to extract text via Tesseract OCR
-- **Cross-platform** — Windows, macOS, and Linux
-
-## Run the app
-
-> **Important:** Run commands from the `snapnote/` folder, not the parent workspace folder.
+All commands below run from this directory.
 
 ```bash
-cd snapnote
-npm install
+npm ci
 npm run tauri dev
 ```
 
-### Headless / Dev Container
+A browser preview (`npm run dev`) can display the interface and local storage. Native clipboard, OCR, global shortcuts, pinning, and file export require the desktop app.
 
 ```bash
-cd snapnote
-npm run tauri:dev:headless
-```
-
-## Build installers
-
-```bash
-cd snapnote
+npm test
+npm run format:check
+npm run build
+cargo test --manifest-path src-tauri/Cargo.toml --locked
 npm run tauri build
 ```
 
-Outputs are in `src-tauri/target/release/bundle/` (`.msi`, `.exe`, `.deb`, `.AppImage`, `.dmg`).
+On Linux, build an embedded-assets debug binary and run the real native suite in an isolated virtual desktop:
 
-## Keyboard Shortcuts
+```bash
+cargo build --manifest-path src-tauri/Cargo.toml --features tauri/custom-protocol
+xvfb-run -a dbus-run-session -- python3 scripts/native-smoke.py
+```
 
-| Shortcut | Action |
-|---|---|
-| `Ctrl+Alt+C` | Capture clipboard into active tab |
-| `Ctrl+Alt+O` | Show / focus the app window |
-| `Ctrl+B` | Bold |
-| `Ctrl+I` | Italic |
-| `Ctrl+U` | Underline |
-| `Ctrl+Shift+X` | Strikethrough |
-| `Ctrl+Shift+H` | Highlight |
-| `Ctrl+Z` | Undo |
-| `Ctrl+Shift+Z` | Redo |
+The suite needs `tauri-driver`, WebKitWebDriver, Xvfb, xauth, xclip, xdotool, and Tesseract. Install the driver with `cargo install tauri-driver --locked`. It uses a temporary Linux profile and virtual clipboard. Windows CI uses `scripts/tauri.test.conf.json` to create the separate application identifier `come.codespace.snapnote.tests`; the normal application identifier is unchanged.
 
-> On macOS, replace `Ctrl` with `⌘`.
+Do not run the Windows smoke script against a normal user profile. It requires the dedicated CI opt-in and checks the application identifier before using the clipboard.
 
-## Troubleshooting
+If OCR is unavailable, install Tesseract and its English language data, add its directory to `PATH`, and restart the app. OCR runs in a background task and shows its error in the app.
 
-- **`ENOENT ... package.json`** — You are in the wrong directory. Use `cd snapnote`.
-- **Port 1420 in use** — Run `npm run ports:clean` then `npm run tauri dev`.
-- **OCR not working** — Install Tesseract:
-  - Linux: `sudo apt install tesseract-ocr`
-  - macOS: `brew install tesseract`
-  - Windows: Install from [UB-Mannheim builds](https://github.com/UB-Mannheim/tesseract/wiki) and add to `PATH`.
-
-## License
-
-MIT
+Build outputs live under `src-tauri/target/release/bundle/`. Headless development also remains available through `npm run tauri:dev:headless`.

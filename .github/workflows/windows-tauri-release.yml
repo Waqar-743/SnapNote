@@ -1,6 +1,8 @@
 name: Windows Tauri Build
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     tags:
@@ -24,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: snapnote/package-lock.json
 
@@ -35,9 +37,45 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: snapnote/src-tauri -> target
+          cache-on-failure: true
 
       - name: Install frontend dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
+
+      - name: Validate workspace storage and backups
+        run: npm test
+
+      - name: Check frontend formatting
+        run: npm run format:check
+
+      - name: Validate native helpers
+        run: cargo test --manifest-path src-tauri/Cargo.toml --locked
+
+      - name: Install native test runner and OCR
+        run: |
+          cargo install tauri-driver --locked
+          choco install tesseract -y --no-progress
+          "C:\Program Files\Tesseract-OCR" >> $env:GITHUB_PATH
+
+      - name: Build isolated native test application
+        run: npm run tauri build -- --debug --no-bundle --config scripts/tauri.test.conf.json
+
+      - name: Match WebView2 runtime and native driver
+        run: ./scripts/setup-windows-webdriver.ps1
+
+      - name: Test real Windows clipboard and workspace
+        env:
+          SNAPNOTE_WINDOWS_CI: "1"
+          SNAPNOTE_TEST_ARTIFACTS: ${{ runner.temp }}/snapnote-windows-validation
+        run: python scripts/native-smoke.py
+
+      - name: Upload desktop validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapnote-windows-validation
+          path: ${{ runner.temp }}/snapnote-windows-validation/
+          if-no-files-found: warn
 
       - name: Build Tauri app (Windows bundles)
         run: npm run tauri build

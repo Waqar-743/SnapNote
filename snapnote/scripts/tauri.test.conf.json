@@ -1,0 +1,17 @@
+{
+  "identifier": "come.codespace.snapnote.tests",
+  "app": {
+    "windows": [
+      {
+        "title": "SnapNote",
+        "width": 1180,
+        "height": 800,
+        "minWidth": 380,
+        "minHeight": 400,
+        "center": true,
+        "additionalBrowserArgs": "--remote-debugging-port=9222"
+      }
+    ]
+  },
+  "bundle": { "active": false }
+}
