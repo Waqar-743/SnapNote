@@ -1,0 +1,16 @@
+[
+  {
+    "file": "SnapNote-1.2.0-x64-setup.exe",
+    "bytes": 4902316,
+    "sha256": "cfbc20f6c5bca466a1de700e946c97220a0e03a6b6b1c4aa3751f2c70422179c",
+    "desktop_commit": "20a321463b2a91d376bc51e9dd9ef048a2bc05cf",
+    "workflow": "https://github.com/Waqar-743/SnapNote/actions/runs/38856921850"
+  },
+  {
+    "file": "SnapNote-1.2.0-x64.msi",
+    "bytes": 7081984,
+    "sha256": "e15c2a8df1de342fd051dac6ebee89f6982c82d4055e40f3bdf986c92423a82a",
+    "desktop_commit": "20a321463b2a91d376bc51e9dd9ef048a2bc05cf",
+    "workflow": "https://github.com/Waqar-743/SnapNote/actions/runs/38856921850"
+  }
+]

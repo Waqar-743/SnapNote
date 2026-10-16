@@ -1,0 +1,14 @@
+{
+  "browser": "Chromium 156.0.8078.4",
+  "passed": [
+    "Desktop page and selected Mentor render with no JavaScript or resource errors",
+    "Screenshot tabs support mouse, arrow keys and End, with correct focus and ARIA state",
+    "Native image dialog shows the selected theme and closes with Escape, returning focus",
+    "Native FAQs and linked OCR disclosure work, including repeated links to the same hash",
+    "EXE and MSI download buttons deliver the exact validated installer files",
+    "Responsive layouts fit 1024, 768, 620, 390 and 320px without horizontal overflow",
+    "Mobile navigation opens, follows anchors and closes correctly",
+    "All product images decode and desktop/mobile screenshots are captured"
+  ],
+  "errors": []
+}

@@ -16,7 +16,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
 | Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Successful Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38856921850), commit `20a3214`; [saved evidence](testing/windows/README.md) |
-| Website from scratch | Not started | Start on a separate branch after the desktop release gate; use A and verified features/screenshots |
+| Website from scratch | In progress on `website/product-site`, after the successful desktop gate | Private Site ID `appgprj_6ad1ba34b9148191841f6f5129c84c5f`; source manifest `website/.openai/hosting.json`; use A and verified features/screenshots |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
 ## Current recovery changes
