@@ -269,7 +269,7 @@ fn set_floating(app: tauri::AppHandle, enabled: bool) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn pin_image(app: tauri::AppHandle, data: String) -> Result<(), String> {
+async fn pin_image(app: tauri::AppHandle, data: String) -> Result<(), String> {
     decode_image(&data)?;
     let state = app.state::<WorkspaceState>();
     let mut pinned = state
