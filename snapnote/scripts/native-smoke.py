@@ -234,20 +234,22 @@ try:
         except Exception:
             time.sleep(.1)
     new_session()
-    assert js('return document.querySelector("h1").textContent') == 'Clipboard'
-    record('Native app opens with capture paused and no sample data')
+    assert js('return document.querySelector("h1").textContent') == 'Quick access'
+    record('Native app opens in quick access with capture paused and no sample data')
 
     exact = '  <b>Literal clipboard text</b>\n    keep indentation\n'
     clipboard(exact)
     assert invoke('read_clipboard') == {'type': 'text', 'data': exact}
-    click('[aria-label="Enable capture"]')
+    js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("automatic capture")).click();')
     wait('return document.querySelectorAll(".clip-card").length', 1)
     assert js('return document.querySelector(".clip-preview pre").textContent') == exact
+    js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
+    wait('return document.querySelector(".workspace-shell.quick-mode") === null')
     time.sleep(1.2)
     assert js('return document.querySelectorAll(".clip-card").length') == 1
     record('Real text clipboard capture, whitespace preservation, and duplicate suppression')
 
-    click('[aria-label="Pause capture"]')
+    js('document.querySelector("[aria-label=\'Pause capture\']").click();')
     clipboard('Must remain private while paused')
     time.sleep(1.3)
     assert js('return document.querySelectorAll(".clip-card").length') == 1
@@ -331,8 +333,8 @@ try:
     wait('return document.querySelector(".tiptap-editor").textContent.includes("literal only")')
     assert js('return document.querySelector(".tiptap-editor script") === null')
     record('Global capture shortcut inserts literal text into the active rich note')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Notes")).click();')
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
+    js('document.querySelector(".rail-button[aria-label=Notes]").click();')
     wait('return Boolean(document.querySelector(".tiptap-editor"))')
     assert js('return document.querySelector(".tiptap-editor").textContent.split("literal only").length - 1') == 1
     record('Switching views does not reinsert an already consumed capture')
@@ -403,11 +405,11 @@ try:
     record('Alt+X opens the real floating quick-access window and restores workspace size')
 
 
-    click('[aria-label="New folder"]')
+    js('document.querySelector("[aria-label=\'New folder\']").click();')
     command('alert/text', {'text': 'Research'})
     command('alert/accept', {})
     wait('return document.querySelector("h1").textContent', 'Research')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
     fill('[aria-label="Search clips"]', 'literal only')
     wait('return document.querySelectorAll(".clip-card").length', 1)
     click('.clip-preview')
@@ -441,7 +443,7 @@ try:
     wait('return document.querySelector("h1").textContent', 'Research session')
     wait('return document.querySelectorAll(".clip-card").length', 2)
     record('Multi-item copying and grouping selected content in a session')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
     wait('return document.body.textContent.includes("Saved on this device")')
 
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
@@ -452,7 +454,7 @@ try:
     (ARTIFACTS / 'native-workspace-dark.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))
     record('Light and dark native workspace screenshots captured')
 
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Settings")).click();')
+    js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
     fill('input[placeholder="At least 10 characters"]', 'native test password 12345')
     fill('input[placeholder="Repeat the workspace password"]', 'native test password 12345')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Enable workspace encryption")).click();')
@@ -493,20 +495,20 @@ try:
     assert js('return document.querySelectorAll(".clip-card").length') >= 3
     assert js('return document.documentElement.classList.contains("dark")')
     record('Native relaunch stays locked; wrong password fails; correct password restores clips and theme')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Notes")).click();')
+    js('document.querySelector(".rail-button[aria-label=Notes]").click();')
     wait('return Boolean(document.querySelector(".tiptap-editor"))')
     content = js('return document.querySelector(".tiptap-editor").textContent')
     assert all(value in content for value in ['literal only', 'BOLD', 'SNAPNOTE'])
     assert js('return document.querySelector(".tiptap-editor img").getAttribute("src").startsWith("data:image/")')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
     record('Rich note text, formatting and embedded images survive encrypted desktop relaunch')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Settings")).click();')
+    js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Clear recent history")).click();')
     command('alert/accept', {})
     click('[aria-label="Close dialog"]')
     wait('return document.querySelectorAll(".clip-card").length', 2)
     record('Clear history preserves favorites, snippets, grouped clips, and notes')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Settings")).click();')
+    js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
     fill('input[placeholder*="10+ characters"]', 'backup test password 12345')
     file_input = command('element', {'using': 'css selector', 'value': 'input[type=file]'})['element-6066-11e4-a52e-4f735466cecf']
     command(f'element/{file_input}/value', {'text': str(backup_path)})
@@ -517,7 +519,7 @@ try:
 
     invalid_backup = PROFILE / 'invalid-backup.json'
     invalid_backup.write_text('{ not valid JSON')
-    js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Settings")).click();')
+    js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
     file_input = command('element', {'using': 'css selector', 'value': 'input[type=file]'})['element-6066-11e4-a52e-4f735466cecf']
     command(f'element/{file_input}/value', {'text': str(invalid_backup)})
     wait('return document.body.textContent.includes("This file is not valid JSON.")')
@@ -529,7 +531,7 @@ try:
     if os.environ.get('SNAPNOTE_PRODUCT_SHOTS') == '1':
         # Deliberate demonstration data, created through the real clipboard/UI in
         # this isolated test profile only. Never substitute a drawn app mockup.
-        js('Array.from(document.querySelectorAll(".nav-item")).find(b=>b.textContent.includes("Clipboard")).click();')
+        js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
         fill('[aria-label="Search clips"]', '')
         remaining = js('return document.querySelectorAll(".clip-card").length')
         while remaining:
