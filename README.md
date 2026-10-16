@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="SnapNote-logo-white.png">
-    <img src="SnapNote-logo-Dark.png" alt="SnapNote" width="180">
+    <img src="SnapNote-logo-Dark.png" alt="SnapNote" width="80">
   </picture>
 </p>
 
