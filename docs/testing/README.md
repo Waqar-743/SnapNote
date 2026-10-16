@@ -15,7 +15,9 @@ Ten TypeScript tests cover legacy migration, transactional persistence and encry
 
 Windows is the primary target. The Windows workflow builds MSI/EXE installers and has a native WebView2 test stage using a separate app identifier. Windows results are pending. Recovery found and repaired the original shell-glob failure and a Windows checkout line-ending failure. Windows artifacts now go to `docs/testing/windows/`, so committed Linux evidence cannot masquerade as a successful Windows run. Linux evidence does not by itself establish Windows behavior. macOS runtime testing is not part of this validation pass.
 
-The Linux driver intermittently closed a connection during two earlier attempts. Read-only polling tolerates a transient disconnect; mutating UI actions and IPC commands are never automatically retried. The final run completed all checks.
+The Linux driver intermittently closed a connection in earlier attempts. Read-only polling tolerates a transient disconnect; mutating UI actions and IPC commands are never automatically retried. The final run completed all checks.
+
+Windows MSI and EXE packaging succeeded in [run 38851950555](https://github.com/Waqar-743/SnapNote/actions/runs/38851950555), but the initial native automation session timed out before any feature checks. A subsequent workflow explicitly installs WebView2, matches the driver to its runtime build and captures startup diagnostics. Runtime validation is still a release gate.
 
 ## Test data isolation
 

@@ -34,7 +34,14 @@ if ($driverVersion -notmatch [regex]::Escape($build + '.')) {
         Invoke-WebRequest "https://msedgedriver.microsoft.com/$runtimeVersion/edgedriver_win64.zip" -OutFile $archive
     } catch {
         $major = $runtimeVersion.Split('.')[0]
-        $version = (Invoke-RestMethod "https://msedgedriver.microsoft.com/LATEST_RELEASE_${major}_WINDOWS").Trim()
+        $release = Invoke-WebRequest "https://msedgedriver.microsoft.com/LATEST_RELEASE_${major}_WINDOWS"
+        $text = if ($release.Content -is [string]) {
+            $release.Content
+        } else {
+            [Text.Encoding]::Unicode.GetString($release.Content)
+        }
+        $version = [regex]::Match($text.Replace("`0", ''), '\d+\.\d+\.\d+\.\d+').Value
+        if (-not $version) { throw 'Microsoft did not return a valid driver version.' }
         Invoke-WebRequest "https://msedgedriver.microsoft.com/$version/edgedriver_win64.zip" -OutFile $archive
     }
     Expand-Archive $archive -DestinationPath $directory -Force

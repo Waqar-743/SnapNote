@@ -15,7 +15,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+S, retained note capture/show shortcuts |
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
-| Windows release gate | Repair and rerun underway | Previous [run](https://github.com/Waqar-743/SnapNote/actions/runs/38806741719) failed before compilation because Windows did not expand `tests/*.test.ts` |
+| Windows release gate | MSI/EXE build passes; native runtime validation underway | [Installer build](https://github.com/Waqar-743/SnapNote/actions/runs/38851950555) succeeded but WebView2 attachment timed out before feature checks; [runtime setup repair](https://github.com/Waqar-743/SnapNote/actions/runs/38853427038) is running |
 | Website from scratch | Not started | Start on a separate branch after the desktop release gate; use A and verified features/screenshots |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
@@ -23,7 +23,8 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 
 - Replace shell-dependent test glob with explicit files through Node's test runner and the existing tsx loader. All ten assertions pass locally.
 - Preserve LF source line endings on Windows so formatting checks are consistent.
-- Align the JavaScript Tauri API with the locked Rust core; the Tauri CLI desktop build now passes. Windows native helper compilation passed, then exposed this packaging version check in [run 38851439605](https://github.com/Waqar-743/SnapNote/actions/runs/38851439605). The corrected workflow is running on [35e866b](https://github.com/Waqar-743/SnapNote/actions/runs/38851950555).
+- Align the JavaScript Tauri API with the locked Rust core; the Tauri CLI desktop build now passes. Windows native helper compilation passed, then exposed this packaging version check in [run 38851439605](https://github.com/Waqar-743/SnapNote/actions/runs/38851439605). After correction, MSI and EXE installers were produced in [run 38851950555](https://github.com/Waqar-743/SnapNote/actions/runs/38851950555).
+- Make the Windows test runtime explicit: install Evergreen WebView2, verify the driver's matching browser build, allow bounded first-launch startup time and capture desktop/process diagnostics on failure. No Windows feature-test pass is claimed yet.
 - Put Windows native artifacts in `docs/testing/windows/` so stale committed Linux evidence cannot be uploaded as a Windows result.
 - Reject over-capacity backup merges before changing state, close private image pins on lock, and include image dimensions in duplicate identity. Regression checks pass.
 - Rebuilt and ran the actual desktop suite successfully. Check the Windows workflow and record the exact result before beginning website implementation.
