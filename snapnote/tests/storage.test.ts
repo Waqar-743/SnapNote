@@ -61,5 +61,25 @@ test("legacy migration, transactional edits, relaunch, encrypted storage, and lo
   await saveWorkspace(w);
   await lockWorkspace();
   assert.deepEqual(await unlockWorkspace("this is my workspace password"), w);
+
+  const committed = w;
+  w = {
+    ...w,
+    notes: w.notes.map((note) => ({ ...note, content: "<p>Recovered edit</p>" })),
+  };
+  const transaction = IDBDatabase.prototype.transaction;
+  IDBDatabase.prototype.transaction = function (...args) {
+    const tx = transaction.apply(this, args);
+    if (args[1] === "readwrite") queueMicrotask(() => tx.abort());
+    return tx;
+  };
+  try {
+    await assert.rejects(saveWorkspace(w), /storage|disk/i);
+  } finally {
+    IDBDatabase.prototype.transaction = transaction;
+  }
+  assert.deepEqual(await loadWorkspace(), committed);
+  await saveWorkspace(w);
+  assert.deepEqual(await loadWorkspace(), w);
   database.close();
 });
