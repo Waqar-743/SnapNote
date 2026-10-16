@@ -10,7 +10,7 @@ Windows is the primary target. The existing application identity and rich-text n
 - Search across clip titles, content, tags, and extracted image text; separate note search.
 - Favorites, folders, tags, reusable snippets with `{{variables}}`, and grouped sessions.
 - Multi-select text clips for combined copying or session grouping.
-- Alt+S floating quick access, optional always-on-top workspace, and image-only pinned windows.
+- Alt+X floating quick access (opens in quick-access mode), optional always-on-top workspace, and image-only pinned windows.
 - Image crop and drawing annotation, saved as a new clip so the original is kept.
 - Local OCR through Tesseract, both in image details and in the retained rich note editor.
 - Multiple notes, rename/close, rich formatting, headings, lists, task lists, code blocks, undo/redo, and image paste.
@@ -44,7 +44,7 @@ The Windows workflow builds installers and runs storage/native helper checks, th
 
 | Shortcut | Action |
 | --- | --- |
-| Alt+S | Open floating quick access |
+| Alt+X | Open floating quick access |
 | Ctrl+Alt+C | Capture clipboard into the active rich note |
 | Ctrl+Alt+O | Show/focus SnapNote |
 | Ctrl+K | Search clips |
@@ -71,4 +71,4 @@ Clear recent history preserves notes, favorites, snippets, and organized clips. 
 - [Selected snowy wolf mascot and alternatives](docs/brand/README.md)
 - [Validation evidence](docs/testing/README.md)
 
-The owner selected **A — The Mentor**. Website work follows desktop completion and will be created from scratch on a separate branch, as requested.
+The owner selected **A — The Mentor**. The product website is published from `website/dist` through a GitHub Pages workflow and lives at [https://waqar-743.github.io/SnapNote/](https://waqar-743.github.io/SnapNote/), or see [website source and local preview instructions](website/README.md) and [delivery details](docs/WEBSITE-DELIVERY.md). The validated v1.2.0 Windows installers (MSI + EXE) with SHA-256 checksums are attached to the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0).

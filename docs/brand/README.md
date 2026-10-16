@@ -14,4 +14,4 @@ Keep A's snow-white fur, upright ears, cheek ruff, bushy tail, dark glasses, cha
 
 Use the wolf for product guidance and selected website sections. Keep everyday desktop controls clear and functional. A production cutout or individual pose should be generated from the selected model sheet as a reference, rather than recreating the character from memory.
 
-The owner confirmed that the website will be new and built on a separate branch **after the desktop implementation and validation**. No website work has started yet.
+The website was built on `website/product-site` **after desktop implementation and Windows validation**, and now uses the selected Mentor teaching cutout in its FAQ section, alongside actual app screenshots. [Public product website](https://waqar-743.github.io/SnapNote/); [delivery record](../WEBSITE-DELIVERY.md).

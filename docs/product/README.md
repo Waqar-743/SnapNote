@@ -4,7 +4,7 @@ Captured from the rebuilt Tauri desktop app on Linux/WebKitGTK on 2026-10-16. Cl
 
 - [Light workspace](workspace-light.png)
 - [Dark workspace](workspace-dark.png)
-- [Alt+S quick access](quick-access.png)
+- [Alt+X quick access](quick-access.png)
 
 To reproduce after building the desktop binary:
 

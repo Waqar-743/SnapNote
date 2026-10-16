@@ -1,0 +1,30 @@
+{
+  "platform": "Windows / WebView2",
+  "profile": "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\snapnote-native-aiin_7qq",
+  "passed": [
+    "Native app opens with capture paused and no sample data",
+    "Real text clipboard capture, whitespace preservation, and duplicate suppression",
+    "Pause stops automatic capture; native copy-back preserves exact text",
+    "Real image clipboard round-trip and offline OCR",
+    "OCR results persist as searchable clip metadata",
+    "Image annotation creates a new clip while preserving the original",
+    "Crop uses the selected image region and keeps the original clip",
+    "Pin creates an image-only native window; show-app shortcut returns focus",
+    "Global capture shortcut inserts literal text into the active rich note",
+    "Switching views does not reinsert an already consumed capture",
+    "Retained rich editor supports formatting, undo, and redo",
+    "Original image paste and inline OCR still work in notes",
+    "Notes can be created, renamed, formatted with headings and tasks, searched and safely closed",
+    "Alt+S opens the real floating quick-access window and restores workspace size",
+    "Folder assignment, tags, and reusable template substitution",
+    "Multi-item copying and grouping selected content in a session",
+    "Light and dark native workspace screenshots captured",
+    "Live workspace encryption and encrypted native backup export",
+    "Manual lock closes private image pins and ignores capture shortcuts until unlock",
+    "Native relaunch stays locked; wrong password fails; correct password restores clips and theme",
+    "Rich note text, formatting and embedded images survive encrypted desktop relaunch",
+    "Clear history preserves favorites, snippets, grouped clips, and notes",
+    "Encrypted import restores cleared clips without duplicating organized content",
+    "Malformed backup reports a recoverable error and preserves the current workspace"
+  ]
+}

@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#191d14" />
+    <title>SnapNote — A quiet place for everything you copy.</title>
+    <meta
+      name="description"
+      content="SnapNote keeps your clipboard history, notes, snippets and images together in one private Windows workspace. No account, no cloud, no noise."
+    />
+    <meta
+      property="og:title"
+      content="SnapNote — A quiet place for everything you copy."
+    />
+    <meta
+      property="og:description"
+      content="Clipboard history, quick access, snippets, image tools and encrypted backups — private by default, on your device."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <header class="site-header" id="top">
+      <div class="wrap header-inner">
+        <a class="brand" href="#top" aria-label="SnapNote home">
+          <span class="logo-tile"
+            ><img
+              src="assets/logo-original.png"
+              width="803"
+              height="873"
+              alt=""
+          /></span>
+          <span class="brand-word">Snap<em>Note</em></span>
+        </a>
+        <button
+          class="menu-toggle"
+          aria-controls="site-nav"
+          aria-expanded="false"
+          hidden
+        >
+          Menu <span class="menu-mark" aria-hidden="true">≡</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <a href="#story">A day with SnapNote</a
+          ><a href="#workspace">Inside the workspace</a
+          ><a href="#privacy">Private by default</a
+          ><a href="#faq">Questions</a>
+        </nav>
+        <a class="header-cta" href="#download">Get the app</a>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div class="hero-topline">
+            <p class="eyebrow"><span class="dot"></span> SNAPNOTE FOR WINDOWS</p>
+            <span class="edition">V1.2.0 · FREE PREVIEW · X64</span>
+          </div>
+          <div class="hero-stage">
+            <h1 id="hero-title">
+              A quiet place for<br />
+              everything <em>you copy.</em>
+            </h1>
+            <p class="hero-lead">
+              The line you liked. The link for later. The address, the command,
+              the word on the tip of your tongue. SnapNote keeps them close and
+              gives them back the moment you need them.
+            </p>
+            <div class="hero-actions">
+              <a class="button ember" href="#download">Download free</a>
+              <a class="quiet-link" href="#story"
+                >See a day with SnapNote <span aria-hidden="true">→</span></a
+              >
+            </div>
+            <p class="micro">
+              Windows 10 &amp; 11 · No account · Stays on your device
+            </p>
+            <div class="hero-card" aria-hidden="true">
+              <div class="card-rule">
+                <span>QUICK ACCESS</span><span class="dot live"></span>
+              </div>
+              <div class="card-body">
+                <p class="card-kicker">TEXT · SAVED 09:14</p>
+                <p class="card-quote">
+                  “Pay attention.<br />The ordinary things<br />are where ideas
+                  begin.”
+                </p>
+              </div>
+              <div class="card-rule foot">
+                <span>#inspiration</span><span>COPY AGAIN ↵</span>
+              </div>
+            </div>
+            <div class="hero-chip chip-1" aria-hidden="true">Alt + X</div>
+            <div class="hero-chip chip-2" aria-hidden="true">Private ✓</div>
+          </div>
+        </div>
+        <div class="ticker" aria-hidden="true">
+          <div class="ticker-track">
+            <span>KEEP THE GOOD LINES</span><i>✳</i><span>FIND THEM AGAIN FAST</span
+            ><i>✳</i><span>NOTES, SNIPPETS, SCREENSHOTS</span><i>✳</i
+            ><span>PRIVATE BY DEFAULT</span><i>✳</i
+            ><span>KEEP THE GOOD LINES</span><i>✳</i
+            ><span>FIND THEM AGAIN FAST</span><i>✳</i
+            ><span>NOTES, SNIPPETS, SCREENSHOTS</span><i>✳</i
+            ><span>PRIVATE BY DEFAULT</span><i>✳</i>
+          </div>
+        </div>
+      </section>
+      <div class="paper-start">
+        <section
+          class="story section-pad wrap"
+          id="story"
+          aria-labelledby="story-title"
+        >
+          <div class="chapter">
+            <span>01</span><span>·</span><span>A DAY WITH SNAPNOTE</span>
+            <span class="chapter-end">AN EVERYDAY STORY · ILLUSTRATIVE</span>
+          </div>
+          <div class="section-intro">
+            <h2 id="story-title">
+              You had it.<br />
+              You copied<br />
+              <em>something else.</em>
+            </h2>
+            <div class="intro-copy">
+              <p>
+                That perfect sentence. The reference you needed. The reply you
+                didn’t want to write twice. Your day moves quickly, and your
+                clipboard moves on.
+              </p>
+              <p>
+                Choose a moment below to see how SnapNote keeps the useful bits
+                close, so you can keep moving, too.
+              </p>
+            </div>
+          </div>
+          <div class="day-tabs" role="tablist" aria-label="A day with SnapNote">
+            <button
+              id="morning-tab"
+              role="tab"
+              aria-controls="day-panel"
+              aria-selected="true"
+              data-moment="morning"
+            >
+              <span>09:14 AM</span>The spark</button
+            ><button
+              id="afternoon-tab"
+              role="tab"
+              aria-controls="day-panel"
+              aria-selected="false"
+              tabindex="-1"
+              data-moment="afternoon"
+            >
+              <span>02:36 PM</span>The messy middle</button
+            ><button
+              id="evening-tab"
+              role="tab"
+              aria-controls="day-panel"
+              aria-selected="false"
+              tabindex="-1"
+              data-moment="evening"
+            >
+              <span>05:42 PM</span>The way back</button>
+          </div>
+          <div
+            class="day-panel"
+            id="day-panel"
+            role="tabpanel"
+            aria-labelledby="morning-tab"
+            tabindex="0"
+          >
+            <div class="day-copy">
+              <span class="eyebrow" id="moment-kicker"
+                >A LINE WORTH A SECOND LOOK</span
+              >
+              <h3 id="moment-title">Follow the thought.<br />Keep the spark.</h3>
+              <p id="moment-description">
+                You’re reading, something resonates, and you copy it. Turn on
+                clipboard history and let SnapNote hold the line while you
+                follow the next idea.
+              </p>
+            </div>
+            <div class="clip-demo">
+              <div class="demo-top">
+                <span><span class="dot"></span> Your little collection</span
+                ><span aria-hidden="true">✳</span>
+              </div>
+              <div class="sample-note">
+                <span id="note-type">TEXT CLIP / JUST NOW</span>
+                <p id="note-content">
+                  “Pay attention.<br />The ordinary things<br />are where ideas
+                  begin.”
+                </p>
+                <div class="note-meta">
+                  <span id="note-tag">a little inspiration</span
+                  ><span aria-hidden="true">↗</span>
+                </div>
+              </div>
+              <div class="demo-bottom">
+                <span>Saved here. Ready when you are.</span
+                ><span aria-hidden="true">✓</span>
+              </div>
+              <span class="demo-caption"
+                >ILLUSTRATIVE CONTENT · NOT A REAL CAPTURE</span
+              >
+            </div>
+          </div>
+        </section>
+        <section
+          class="workspace section-pad"
+          id="workspace"
+          aria-labelledby="workspace-title"
+        >
+          <div class="wrap">
+            <div class="chapter chapter-dark">
+              <span>02</span><span>·</span><span>INSIDE THE WORKSPACE</span>
+              <span class="chapter-end">LESS SEARCHING. MORE DOING.</span>
+            </div>
+            <div class="workspace-heading">
+              <h2 id="workspace-title">
+                A home for your<br /><em>beautifully busy mind.</em>
+              </h2>
+              <p>
+                Not another system to keep up with. A few thoughtful tools that
+                fit the way you already work.
+              </p>
+            </div>
+            <div class="tools-grid">
+              <article class="tool span-2">
+                <div class="tool-top"><span>01</span><span>⌕</span></div>
+                <h3>“Where did I put<em>that?</em>” Right here.</h3>
+                <p>
+                  Search every clip by text, title, tag — even the words inside
+                  screenshots. Keep favorites one press away.
+                </p>
+                <div class="search-example">
+                  <span aria-hidden="true">⌕</span
+                  ><span>that idea from this morning</span
+                  ><span class="search-return" aria-hidden="true">↵</span>
+                </div>
+                <div class="tag-row">
+                  <span>Folders</span><span>Sessions</span><span>Tags</span
+                  ><span>Favorites</span>
+                </div>
+              </article>
+              <article class="tool tool-green span-3">
+                <div class="tool-top"><span>02</span><span>⚡</span></div>
+                <h3>Your flow, <em>uninterrupted.</em></h3>
+                <p>
+                  Quick access opens above your work: one small window with your
+                  latest clips. Grab, copy, done.
+                </p>
+                <div class="shortcut">
+                  <kbd>Alt</kbd><b>+</b><kbd>X</kbd>
+                </div>
+                <span class="tool-foot"
+                  >A GLOBAL SHORTCUT. A SMALLER MOMENT OF FRICTION.</span
+                >
+              </article>
+              <article class="tool tool-olive span-3">
+                <div class="tool-top"><span>03</span><span>❝</span></div>
+                <h3>Some words deserve <em>an encore.</em></h3>
+                <p>
+                  Save replies as reusable snippets with {{variables}}. Give a
+                  growing thought more room in a rich-text note.
+                </p>
+                <div class="snippet-example">
+                  Hello <span>{{name}}</span>, lovely to hear from you.
+                </div>
+              </article>
+              <article class="tool span-2">
+                <div class="tool-top"><span>04</span><span>⌖</span></div>
+                <h3>See it. Save it. <em>Make something of it.</em></h3>
+                <p>
+                  Crop and annotate screenshots. Pin a reference above your
+                  windows. Extract the words inside an image with on-device OCR.
+                </p>
+                <div class="image-tools">
+                  <span>Crop</span><span>Annotate</span><span>Pin</span
+                  ><a href="#ocr-question">Extract text</a>
+                </div>
+                <span class="tool-foot"
+                  >OCR NEEDS A SEPARATE TESSERACT INSTALLATION.</span
+                >
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section
+        class="privacy section-pad"
+        id="privacy"
+        aria-labelledby="privacy-title"
+      >
+        <div class="wrap">
+          <div class="chapter chapter-dark">
+            <span>03</span><span>·</span><span>PRIVATE BY DEFAULT</span>
+            <span class="chapter-end">NO ACCOUNT. NO CLOUD. NO TELEMETRY.</span>
+          </div>
+          <div class="privacy-grid">
+            <div class="privacy-lede">
+              <div class="privacy-mark" aria-hidden="true">❡</div>
+              <h2 id="privacy-title">
+                Your thoughts.<br />
+                Your space.<br />
+                <em>Yours to keep.</em>
+              </h2>
+              <p>
+                Some things don’t need an audience. Your workspace lives on your
+                device and works offline.
+              </p>
+            </div>
+            <div class="privacy-points">
+              <article>
+                <span>01</span>
+                <div>
+                  <h3>You decide what stays.</h3>
+                  <p>
+                    Workspaces start with capture paused. Turn history on when
+                    it helps, and pause before copying anything sensitive.
+                  </p>
+                </div>
+              </article>
+              <article>
+                <span>02</span>
+                <div>
+                  <h3>A lock, when you want one.</h3>
+                  <p>
+                    Optional AES-256 encryption with a password only you know.
+                    There is no password recovery, by design.
+                  </p>
+                </div>
+              </article>
+              <article>
+                <span>03</span>
+                <div>
+                  <h3>Take your collection with you.</h3>
+                  <p>
+                    Export a plain or password-encrypted backup. Import it later
+                    to bring your content into another workspace.
+                  </p>
+                </div>
+              </article>
+              <p class="local-note">
+                <span class="dot live"></span> WORKS OFFLINE · NO SYNC
+                CONNECTIONS
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="paper-start">
+        <section class="faq section-pad wrap" id="faq" aria-labelledby="faq-title">
+          <div class="faq-intro">
+            <p class="eyebrow">BEFORE YOU SETTLE IN</p>
+            <h2 id="faq-title">A little<br /><em>peace of mind.</em></h2>
+            <a
+              class="quiet-link"
+              href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md"
+              target="_blank"
+              rel="noopener"
+              >The desktop guide <span aria-hidden="true">→</span></a
+            >
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>
+                Which computers can run SnapNote?<span aria-hidden="true">+</span>
+              </summary>
+              <p>
+                The v1.2.0 download is for Windows 10 and 11 on x64. The build
+                pipeline is validated on Windows and Linux. A macOS build has
+                not been validated for this preview.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Can I use it without an internet connection?<span
+                  aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p>
+                Yes. Clipboard history, search, notes, image tools and backups
+                all work locally, and the app never phones home. The only online
+                step may be the installer fetching Microsoft WebView2 if your PC
+                is missing it.
+              </p>
+            </details>
+            <details id="ocr-question">
+              <summary>
+                How does text extraction from images work?<span aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p>
+                SnapNote uses Tesseract on your device. Install Tesseract and
+                its language data, add it to your PATH, and restart SnapNote —
+                then pick an image and choose Extract text. The installer does
+                not bundle Tesseract.
+                <a
+                  href="https://github.com/tesseract-ocr/tesseract#installing-tesseract"
+                  target="_blank"
+                  rel="noopener"
+                  >Tesseract installation guide ↗</a
+                >
+              </p>
+            </details>
+            <details>
+              <summary>
+                Is my workspace encrypted automatically?<span aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p>
+                No — it is an opt-in feature under Settings &amp; privacy.
+                Backups have their own optional password. Locking hides the
+                workspace and pins; it does not erase your operating system
+                clipboard.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Will it keep my existing SnapNote notes?<span aria-hidden="true"
+                  >+</span
+                >
+              </summary>
+              <p>
+                The app reuses the original identity and migrates legacy notes
+                into the new workspace, keeping a recovery copy. Rich
+                formatting, image paste and the old shortcuts still work. Export
+                a backup before a big upgrade anyway — it is one click.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Does it sync between devices?<span aria-hidden="true">+</span>
+              </summary>
+              <p>
+                Sync is not available in this preview. Everything stays on this
+                device; export and import backups to move content yourself.
+                Optional sync is a possible later step.
+              </p>
+            </details>
+          </div>
+        </section>
+      </div>
+      <section
+        class="download section-pad"
+        id="download"
+        aria-labelledby="download-title"
+      >
+        <div class="wrap download-content">
+          <p class="eyebrow centered">MAKE A LITTLE ROOM</p>
+          <h2 id="download-title">
+            Good things are<br />worth <em>keeping.</em>
+          </h2>
+          <p class="download-sub">
+            Start with a clean workspace. Fill it with things that mean
+            something to you.
+          </p>
+          <a
+            class="button ink"
+            href="https://github.com/Waqar-743/SnapNote/releases/download/v1.2.0/SnapNote_1.2.0_x64_en-US.msi"
+            download
+            >Download SnapNote for Windows <span aria-hidden="true">↓</span></a
+          >
+          <p class="download-meta">
+            FREE PREVIEW · V1.2.0 · WINDOWS 10 / 11 · X64
+          </p>
+          <div class="download-links">
+            <a
+              href="https://github.com/Waqar-743/SnapNote/releases/download/v1.2.0/SnapNote_1.2.0_x64-setup.exe"
+              download
+              >Prefer the EXE installer? ↗</a
+            ><a
+              href="https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0"
+              target="_blank"
+              rel="noopener"
+              >Release notes ↗</a
+            >
+          </div>
+          <p class="preview-note">
+            Unsigned preview: Windows may show a SmartScreen prompt.<br />Keep a
+            backup before upgrading an existing workspace.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap footer-top">
+        <a class="logo-tile big" href="#top" aria-label="Back to top"
+          ><img
+            src="assets/logo-original.png"
+            width="803"
+            height="873"
+            alt="SnapNote original pencil and note logo"
+            loading="lazy"
+        /></a>
+        <p class="footer-line">
+          For the things you copy.<br /><em>And the things you’ll create.</em>
+        </p>
+        <nav class="footer-nav" aria-label="Footer">
+          <a
+            href="https://github.com/Waqar-743/SnapNote"
+            target="_blank"
+            rel="noopener"
+            >GitHub ↗</a
+          ><a href="#privacy">Privacy ↗</a><a href="#faq">Questions ↗</a>
+        </nav>
+      </div>
+      <div class="wrap footer-bottom">
+        <span>© 2026 SNAPNOTE</span><span>A LITTLE MORE SPACE TO THINK.</span
+        ><a href="#top">BACK TO TOP ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>

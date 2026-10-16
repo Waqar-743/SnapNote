@@ -17,10 +17,10 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 6px;
-  background: #c1c9d7;
+  background: #cfc5b3;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #46536a;
+  background: #4a4336;
 }
 .tiptap-editor {
   line-height: 1.8;
@@ -60,7 +60,7 @@ body {
   list-style-type: decimal;
 }
 .tiptap-editor blockquote {
-  border-left: 3px solid var(--blue);
+  border-left: 3px solid var(--accent);
   padding-left: 16px;
   color: var(--muted);
   font-style: italic;
@@ -68,15 +68,15 @@ body {
 }
 .tiptap-editor code {
   background: var(--subtle);
-  color: #ba5f93;
+  color: #a0522d;
   padding: 2px 6px;
   border-radius: 4px;
   font-family: Consolas, monospace;
   font-size: 0.9em;
 }
 .tiptap-editor pre {
-  background: #172033;
-  color: #e5ebf6;
+  background: #241d15;
+  color: #efe7da;
   padding: 16px;
   border-radius: 8px;
   overflow-x: auto;
@@ -109,7 +109,7 @@ body {
   color: #fff0b3;
 }
 .tiptap-editor a {
-  color: var(--blue);
+  color: var(--accent);
   text-decoration: underline;
 }
 .tiptap-editor ul[data-type="taskList"] {

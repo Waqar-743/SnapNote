@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" role="img" aria-label="SnapNote">
+  <rect width="40" height="44" rx="10" fill="#e5b04f" />
+  <path d="M12 9h16" stroke="#262b1e" stroke-width="3" stroke-linecap="round" />
+  <path d="M12 16h16" stroke="#262b1e" stroke-width="3" stroke-linecap="round" />
+  <path d="M12 23h16" stroke="#262b1e" stroke-width="3" stroke-linecap="round" />
+  <path d="M12 30h9" stroke="#262b1e" stroke-width="3" stroke-linecap="round" />
+  <path d="M31 29 24 36l-2 5 5-2 7-7-3-3z" fill="#191d14" />
+  <path d="M22 40l1-4 3 3-4 1z" fill="#c05a2b" />
+</svg>

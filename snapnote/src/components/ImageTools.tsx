@@ -15,7 +15,7 @@ export default function ImageTools({
   const start = useRef<{ x: number; y: number } | null>(null);
   const last = useRef<{ x: number; y: number } | null>(null);
   const [mode, setMode] = useState<"draw" | "crop">("draw");
-  const [color, setColor] = useState("#ef4444");
+  const [color, setColor] = useState("#a44426");
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
   const [cropRect, setCropRect] = useState<{
