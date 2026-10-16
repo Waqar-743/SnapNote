@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import socket
 import subprocess
 import tempfile
 import time
@@ -30,6 +31,8 @@ ENV = dict(os.environ, XDG_DATA_HOME=str(PROFILE / 'data'), XDG_CONFIG_HOME=str(
 DRIVER = os.environ.get('TAURI_DRIVER') or shutil.which('tauri-driver') or '/tmp/snapnote-cargo/bin/tauri-driver'
 BASE = 'http://127.0.0.1:4444'
 SESSION = None
+APP_PROCESS = None
+APP_LOG = None
 RESULTS = []
 
 def request(method, path, body=None, timeout=45):
@@ -151,8 +154,36 @@ def record(name):
     print('PASS:', name, flush=True)
 
 def new_session():
-    global SESSION
-    value = request('POST', '/session', {'capabilities': {'alwaysMatch': {'tauri:options': {'application': str(ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote'))}}}}, timeout=120 if WINDOWS else 45)
+    global SESSION, APP_PROCESS, APP_LOG
+    application = ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote')
+    if WINDOWS:
+        # Use Microsoft's documented attach mode. EdgeDriver's launch mode can
+        # wait for DevToolsActivePort in a profile different from Tauri's profile.
+        with socket.socket() as listener:
+            listener.bind(('127.0.0.1', 0))
+            port = listener.getsockname()[1]
+        app_env = dict(ENV, TAURI_WEBVIEW_AUTOMATION='true',
+                       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f'--remote-debugging-port={port}')
+        APP_LOG = open(PROFILE / 'app.log', 'a')
+        APP_PROCESS = subprocess.Popen([str(application)], env=app_env, stdout=APP_LOG, stderr=APP_LOG)
+        deadline = time.monotonic() + 45
+        while True:
+            if APP_PROCESS.poll() is not None:
+                APP_LOG.flush()
+                raise RuntimeError('Desktop app exited during startup: ' + (PROFILE / 'app.log').read_text(errors='replace'))
+            try:
+                with urllib.request.urlopen(f'http://127.0.0.1:{port}/json/version', timeout=2) as response:
+                    json.load(response)
+                break
+            except (OSError, urllib.error.URLError):
+                if time.monotonic() >= deadline:
+                    raise RuntimeError('The desktop app did not open its isolated WebView2 automation port.')
+                time.sleep(.2)
+        capabilities = {'browserName': 'webview2', 'ms:edgeChromium': True,
+                        'ms:edgeOptions': {'debuggerAddress': f'127.0.0.1:{port}'}}
+    else:
+        capabilities = {'tauri:options': {'application': str(application)}}
+    value = request('POST', '/session', {'capabilities': {'alwaysMatch': capabilities}}, timeout=120 if WINDOWS else 45)
     SESSION = value['sessionId']
     command('timeouts', {'script': 30000, 'pageLoad': 30000})
     if WINDOWS:
@@ -160,10 +191,20 @@ def new_session():
     wait('return Boolean(document.querySelector(".workspace-shell, .unlock-input"))', timeout=25)
 
 def end_session():
-    global SESSION
-    if SESSION:
-        request('DELETE', f'/session/{SESSION}')
+    global SESSION, APP_PROCESS, APP_LOG
+    try:
+        if SESSION:
+            request('DELETE', f'/session/{SESSION}')
+    finally:
         SESSION = None
+        if APP_PROCESS:
+            if APP_PROCESS.poll() is None:
+                APP_PROCESS.terminate()
+                APP_PROCESS.wait(timeout=10)
+            APP_PROCESS = None
+        if APP_LOG:
+            APP_LOG.close()
+            APP_LOG = None
 
 log = open(PROFILE / 'driver.log', 'w')
 driver_args = [DRIVER, '--port', '4444']
@@ -550,7 +591,7 @@ except Exception:
                        '$r=[Windows.Forms.Screen]::PrimaryScreen.Bounds; $b=[Drawing.Bitmap]::new($r.Width,$r.Height); '
                        '$g=[Drawing.Graphics]::FromImage($b); $g.CopyFromScreen($r.Location,[Drawing.Point]::Empty,$r.Size); '
                        '$b.Save(' + target + ',[Drawing.Imaging.ImageFormat]::Png); $g.Dispose(); $b.Dispose();')
-            processes = powershell('Get-Process snapnote,msedgewebview2,msedgedriver -ErrorAction SilentlyContinue | Format-List Name,Id,Responding,MainWindowTitle,Path | Out-String')
+            processes = powershell('Get-Process snapnote,msedgewebview2,msedgedriver -ErrorAction SilentlyContinue | Format-List Name,Id,Responding,MainWindowTitle,Path | Out-String; exit 0')
             (ARTIFACTS / 'windows-processes.txt').write_bytes(processes)
         except Exception as diagnostic_error:
             print(f'Windows diagnostics unavailable: {diagnostic_error}', flush=True)
@@ -578,4 +619,6 @@ finally:
     log.close()
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(PROFILE / 'driver.log', ARTIFACTS / 'native-driver.log')
+    if (PROFILE / 'app.log').exists():
+        shutil.copyfile(PROFILE / 'app.log', ARTIFACTS / 'native-app.log')
     print(f'Isolated native test profile and driver log: {PROFILE}', flush=True)
