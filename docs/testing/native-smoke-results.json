@@ -1,6 +1,6 @@
 {
   "platform": "Linux / WebKitGTK",
-  "profile": "/tmp/snapnote-native-9h2k6zd1",
+  "profile": "/tmp/snapnote-native-zdw3z62u",
   "passed": [
     "Native app opens with capture paused and no sample data",
     "Real text clipboard capture, whitespace preservation, and duplicate suppression",
