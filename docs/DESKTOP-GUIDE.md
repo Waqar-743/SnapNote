@@ -2,7 +2,7 @@
 
 ## Start with a clip
 
-Launch the desktop app. Capture starts paused on a new workspace. Copy text or an image in another app, return to SnapNote, and select **Capture now**. Enable automatic capture if you want SnapNote to keep supported clipboard changes while it is running. Pause before copying private material.
+Launch the desktop app. Capture starts paused on a new workspace. SnapNote opens as a small **quick-access** window with every navigation icon in the header, so a compact window is enough for everyday borrowing and copying. Use **Open workspace** whenever you want the full room; the window grows with you. Copy text or an image in another app, return to SnapNote, and select **Capture now**. Enable automatic capture if you want SnapNote to keep supported clipboard changes while it is running. Pause before copying private material.
 
 Select a clip to inspect or edit it, then use **Copy clip**. Paste normally in your destination app. SnapNote preserves text indentation and line breaks. Copying the same content again reuses its clip rather than creating another entry.
 
@@ -31,7 +31,7 @@ Your existing rich-text notes remain in **Notes**. Create, rename, switch and cl
 - **Ctrl+Alt+O:** show and focus SnapNote.
 - **Escape:** close the current dialog, detail pane or quick panel.
 
-Use Command in place of Ctrl on macOS. Shortcut conflicts appear in the app and do not prevent startup. Clipboard capture and global shortcuts require SnapNote to remain running; closing the main window saves and exits.
+Use Command in place of Ctrl on macOS. Shortcut conflicts appear in the app and do not prevent startup. Closing the main window saves your work and keeps SnapNote in the system tray, so **Alt+X brings the quick window back at any time** — even if you have not looked at SnapNote in a while. Choose **Quit SnapNote** in the tray menu to exit completely; shortcuts and capture rest until you start the app again.
 
 ## Privacy, passwords and backups
 
@@ -41,4 +41,4 @@ Optional workspace encryption protects the stored notes and clips with a passwor
 
 **Export backup** saves a new file to Downloads. Enter a separate backup password for an encrypted export, or leave it blank for readable JSON. Test a restore and keep copies outside this device. To restore, provide the backup password if needed, then select **Import backup**. Imports merge content, preserve conflicting notes as separate notes and reject invalid or over-capacity results before changing your data.
 
-The offline core makes no account, cloud or telemetry requests. Sync is not implemented. The app currently has no per-app exclusions, automatic lock or tray mode.
+The offline core makes no account, cloud or telemetry requests. Sync is not implemented. The app currently has no per-app exclusions or automatic lock; the tray keeps it reachable without a visible window.

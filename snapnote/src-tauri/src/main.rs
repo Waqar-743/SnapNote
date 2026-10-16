@@ -20,6 +20,8 @@ use image::{DynamicImage, ImageBuffer, ImageFormat, Rgba};
 use rusty_tesseract::{image_to_string, Args, Image};
 use serde::{Deserialize, Serialize};
 use tauri::{Emitter, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::menu::{Menu, MenuItem};
+use tauri::tray::TrayIconBuilder;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 
@@ -83,6 +85,18 @@ fn show_app_shortcut_for_platform() -> Shortcut {
 
 fn quick_access_shortcut() -> Shortcut {
     Shortcut::new(Some(Modifiers::ALT), Code::KeyX)
+}
+
+/// Surface the main window on demand, even if it was hidden from the tray or never shown.
+fn show_main_window(app: &tauri::AppHandle, open_quick_access: bool) {
+    if let Some(window) = app.get_webview_window("main") {
+        let _ = window.unminimize();
+        let _ = window.show();
+        let _ = window.set_focus();
+        if open_quick_access {
+            let _ = window.emit("quick-access", ());
+        }
+    }
 }
 
 fn fingerprint<T: Hash + ?Sized>(kind: &str, data: &T) -> u64 {
@@ -343,8 +357,7 @@ fn pinned_image(window: tauri::WebviewWindow, app: tauri::AppHandle) -> Result<S
         .ok_or_else(|| "Pinned image is no longer available.".into())
 }
 
-#[tauri::command]
-fn close_pinned_images(app: tauri::AppHandle) -> Result<(), String> {
+fn close_all_pinned_images(app: &tauri::AppHandle) -> Result<(), String> {
     // Window destruction also updates the map, so release its mutex before closing.
     let labels: Vec<String> = app
         .state::<WorkspaceState>()
@@ -368,8 +381,18 @@ fn close_pinned_images(app: tauri::AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn finish_close(app: tauri::AppHandle) {
-    app.exit(0);
+fn close_pinned_images(app: tauri::AppHandle) -> Result<(), String> {
+    close_all_pinned_images(&app)
+}
+
+/// Closing the main window keeps SnapNote resident so Alt+X reopens it at any time.
+#[tauri::command]
+fn finish_close(app: tauri::AppHandle) -> Result<(), String> {
+    close_all_pinned_images(&app)?;
+    let window = app
+        .get_webview_window("main")
+        .ok_or("Main window unavailable")?;
+    window.hide().map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -459,21 +482,12 @@ fn main() {
                     }
 
                     if *triggered_shortcut == quick_handler_shortcut {
-                        if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.unminimize();
-                            let _ = window.show();
-                            let _ = window.set_focus();
-                            let _ = window.emit("quick-access", ());
-                        }
+                        show_main_window(app, true);
                         return;
                     }
 
                     if *triggered_shortcut == show_handler_shortcut {
-                        if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.unminimize();
-                            let _ = window.show();
-                            let _ = window.set_focus();
-                        }
+                        show_main_window(app, false);
                     }
                 })
                 .build(),
@@ -493,6 +507,33 @@ fn main() {
                         .unwrap_or_else(|e| e.into_inner())
                         .push(format!("{name} shortcut unavailable: {error}"));
                 }
+            }
+            // A resident tray keeps Alt+X alive after the window is closed.
+            let quick_item =
+                MenuItem::with_id(app, "quick", "Open quick access (Alt+X)", true, None::<&str>)?;
+            let show_item = MenuItem::with_id(app, "show", "Show SnapNote", true, None::<&str>)?;
+            let quit_item = MenuItem::with_id(app, "quit", "Quit SnapNote", true, None::<&str>)?;
+            let tray_menu = Menu::with_items(app, &[&quick_item, &show_item, &quit_item])?;
+            let tray_builder = TrayIconBuilder::with_id("snapnote-tray")
+                .tooltip("SnapNote — Alt+X opens quick access")
+                .menu(&tray_menu)
+                .show_menu_on_left_click(true)
+                .on_menu_event(|app, event| match event.id.as_ref() {
+                    "quick" => show_main_window(app, true),
+                    "show" => show_main_window(app, false),
+                    "quit" => app.exit(0),
+                    _ => {}
+                });
+            let tray_builder = match app.default_window_icon() {
+                Some(icon) => tray_builder.icon(icon.clone()),
+                None => tray_builder,
+            };
+            if let Err(error) = tray_builder.build(app) {
+                app.state::<WorkspaceState>()
+                    .warnings
+                    .lock()
+                    .unwrap_or_else(|e| e.into_inner())
+                    .push(format!("Tray icon unavailable: {error}"));
             }
             let handle = app.handle().clone();
             let mut last_warning = String::new();

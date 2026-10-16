@@ -202,14 +202,19 @@ function DesktopWorkspace() {
                 height: size.height / scale,
               };
             await win.setSize(new LogicalSize(560, 640));
-          } else if (quickBounds.current) {
+          } else {
+            const saved = quickBounds.current;
+            quickBounds.current = null;
+            // A fresh launch already lives in the small quick window; widen to
+            // the standard workspace instead of restoring a quick-sized bound.
+            const wasQuickish =
+              !saved || saved.width <= 600 || saved.height <= 680;
             await win.setSize(
               new LogicalSize(
-                quickBounds.current.width,
-                quickBounds.current.height,
+                wasQuickish ? 1180 : saved.width,
+                wasQuickish ? 800 : saved.height,
               ),
             );
-            quickBounds.current = null;
           }
           await invoke("set_floating", { enabled: enabled || floating });
         }
@@ -663,42 +668,38 @@ function DesktopWorkspace() {
               width={34}
               height={37}
             />
-            {!quick && (
-              <>
-                <span className="launchpad-title">SnapNote</span>
-                <span className="rail-divider" aria-hidden="true" />
-                {(
-                  [
-                    ["all", "Clipboard", ClipboardList],
-                    ["favorites", "Favorites", Star],
-                    ["text", "Text clips", FileText],
-                    ["image", "Images", ImageIcon],
-                    ["notes", "Notes", Pencil],
-                    ["snippets", "Snippets", Braces],
-                  ] as const
-                ).map(([key, label, Icon]) => (
-                  <button
-                    key={key}
-                    className={`rail-button ${view === key ? "selected" : ""}`}
-                    aria-label={label}
-                    aria-pressed={view === key}
-                    title={label}
-                    onClick={() => navigate(key)}
-                  >
-                    <Icon size={17} />
-                  </button>
-                ))}
-                <button
-                  className={`rail-button ${sidebar ? "selected" : ""}`}
-                  aria-label="Folders and sessions"
-                  aria-expanded={sidebar}
-                  title="Folders & sessions"
-                  onClick={() => setSidebar(!sidebar)}
-                >
-                  <Folder size={17} />
-                </button>
-              </>
-            )}
+            <span className="launchpad-title">SnapNote</span>
+            <span className="rail-divider" aria-hidden="true" />
+            {(
+              [
+                ["all", "Clipboard", ClipboardList],
+                ["favorites", "Favorites", Star],
+                ["text", "Text clips", FileText],
+                ["image", "Images", ImageIcon],
+                ["notes", "Notes", Pencil],
+                ["snippets", "Snippets", Braces],
+              ] as const
+            ).map(([key, label, Icon]) => (
+              <button
+                key={key}
+                className={`rail-button ${view === key ? "selected" : ""}`}
+                aria-label={label}
+                aria-pressed={view === key}
+                title={label}
+                onClick={() => navigate(key)}
+              >
+                <Icon size={17} />
+              </button>
+            ))}
+            <button
+              className={`rail-button ${sidebar ? "selected" : ""}`}
+              aria-label="Folders and sessions"
+              aria-expanded={sidebar}
+              title="Folders & sessions"
+              onClick={() => setSidebar(!sidebar)}
+            >
+              <Folder size={17} />
+            </button>
           </div>
           <div className="header-actions">
             <span className="local-badge">
@@ -1676,6 +1677,16 @@ function DesktopWorkspace() {
                   >
                     <Trash2 size={15} /> Clear recent history
                   </button>
+                </div>
+                <div className="settings-section">
+                  <h3>Window & tray</h3>
+                  <p className="muted">
+                    SnapNote opens as a small quick-access window; use the icons
+                    in the header or "Open workspace" to spread out. Closing the
+                    window keeps SnapNote running in the system tray so Alt+X
+                    always works. Choose "Quit SnapNote" in the tray menu to
+                    exit completely.
+                  </p>
                 </div>
               </>
             )}

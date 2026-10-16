@@ -40,10 +40,10 @@ Windows 10/11, x64 — installers are built and validated by the [Windows build 
 
 | File | Type |
 | --- | --- |
-| [`SnapNote_1.3.0_x64_en-US.msi`](https://github.com/Waqar-743/SnapNote/releases/download/v1.3.0/SnapNote_1.3.0_x64_en-US.msi) | MSI installer (recommended) |
-| [`SnapNote_1.3.0_x64-setup.exe`](https://github.com/Waqar-743/SnapNote/releases/download/v1.3.0/SnapNote_1.3.0_x64-setup.exe) | NSIS setup executable |
+| [`SnapNote_1.4.0_x64_en-US.msi`](https://github.com/Waqar-743/SnapNote/releases/download/v1.4.0/SnapNote_1.4.0_x64_en-US.msi) | MSI installer (recommended) |
+| [`SnapNote_1.4.0_x64-setup.exe`](https://github.com/Waqar-743/SnapNote/releases/download/v1.4.0/SnapNote_1.4.0_x64-setup.exe) | NSIS setup executable |
 
-SHA-256 checksums are in [`SnapNote_1.3.0_SHA256SUMS.txt`](https://github.com/Waqar-743/SnapNote/releases/download/v1.3.0/SnapNote_1.3.0_SHA256SUMS.txt) on the [v1.3.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.3.0). Builds are unsigned, so SmartScreen may show a prompt — verify the checksum if that helps you sleep at night.
+SHA-256 checksums are in [`SnapNote_1.4.0_SHA256SUMS.txt`](https://github.com/Waqar-743/SnapNote/releases/download/v1.4.0/SnapNote_1.4.0_SHA256SUMS.txt) on the [v1.4.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.4.0). Builds are unsigned, so SmartScreen may show a prompt — verify the checksum if that helps you sleep at night.
 
 ## Shortcuts
 

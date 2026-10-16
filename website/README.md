@@ -1,6 +1,6 @@
 # SnapNote product website
 
-A buildless product website using semantic HTML, CSS and progressive JavaScript. No installation or build step is required. The 2026-10-16 redesign uses a dark forest-and-amber editorial theme — near-black green, warm cream, amber, ember and olive — with system sans-serif, serif and monospace typography. The palette contains no blue or pink anywhere, including the favicon.
+A buildless product website using semantic HTML, CSS and progressive JavaScript. No installation or build step is required. The 2026-10-16 mentor redesign is professional, story-driven and personal: a warm paper-and-espresso world with terracotta, olive and amber accents, serif headlines and real product imagery. The palette contains no blue or pink anywhere.
 
 ## Preview
 
@@ -12,21 +12,16 @@ Open `http://127.0.0.1:4173`. References are relative, including assets, so the 
 
 ## Design and behavior
 
-- `dist/index.html`: dark hero with a quick-access demo card and floating shortcut chips, a marquee ticker strip, a three-part everyday story with tabs, a rounded bento workspace panel, a dark privacy chapter, FAQs, an amber download band and footer.
-- `dist/styles.css`: the full design system — light/dark section rhythm, responsive layout down to 320px, visible focus styles, reduced-motion support (ticker, progress bar and transitions disabled).
-- `dist/app.js`: scroll-progress bar, section-aware navigation highlighting, mobile navigation, accessible story tabs with arrow/Home/End keyboard navigation, and linked OCR answer disclosure.
-- `dist/assets/logo-original.png`: unchanged copy of the repository’s original `SnapNote-logo-white.png`, shown on cream tiles in the header and footer.
-- `dist/assets/favicon.svg`: an amber notebook-and-pencil mark drawn for this redesign; it replaces the earlier blue rounded-square icon.
-
-The interactive story uses explicitly labeled illustrative content. Product screenshots and mascot art from earlier designs remain archived in assets but are not displayed.
+- `dist/index.html`: sticky paper header with the brand mark, a storytelling hero (“A quiet place for everything you copy.”), an Alt+X quick-access chapter beside the real 560×640 quick window screenshot, a dark Meet-the-Mentor chapter with the teaching wolf, a three-chapter “day you’ll recognise” story, a bento feature grid with both workspace themes, a plain-words privacy pledge with a ledger, an amber-on-night v1.4.0 download band with first steps, and five honest FAQ disclosures.
+- `dist/styles.css`: the full design system — paper/espresso/terracotta palette, serif running heads, framed screenshot cards with captions and soft shadows, responsive layout down to 320px, visible focus styles and reduced-motion support.
+- `dist/app.js`: progressive enhancement only — footer year, mobile navigation and a gentle IntersectionObserver reveal. The page is fully readable with JavaScript disabled.
+- `dist/assets/logo-dark.png`: the brand mark for light backgrounds (header, footer variant already covered by `logo-original.png`). The Mentor cutout (`mentor-teaching.png`) and the validated app screenshots (`quick-access.png`, `workspace-light.png`, `workspace-dark.png`) are shown in the page itself, not archived.
 
 ## Downloads and product details
 
-MSI and EXE links retain the validated v1.2.0 Windows release assets. The page retains the unsigned-preview notice and makes clear that capture starts paused, workspace encryption is optional, OCR needs a separate Tesseract installation, and sync is unavailable. No testimonials, usage statistics or personal founder claims are invented.
+MSI, EXE and SHA-256 links point at the v1.4.0 Windows release assets. The page retains the unsigned-build notice and makes clear that capture starts paused, workspace encryption is optional, OCR needs a separate Tesseract installation, sync is unavailable, Alt+X survives window close via the system tray, and quitting from the tray stops the shortcut. No testimonials, usage statistics or personal founder claims are invented.
 
 ## Publishing
 
 - GitHub Pages: `https://waqar-743.github.io/SnapNote/`, published from `website/dist/` on `main` via `.github/workflows/deploy-website.yml`.
-- Sites: `https://snapnote-workspace.grittybloom257.chatgpt.site`, retaining the project identity in `.openai/hosting.json` and its existing public audience.
-
-See `qa/redesign-results.json` for verification of this design.
+- See `qa/redesign-results.json` for verification of this design.
