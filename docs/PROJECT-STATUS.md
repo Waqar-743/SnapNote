@@ -16,7 +16,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
 | Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Successful Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38856921850), commit `20a3214`; [saved evidence](testing/windows/README.md) |
-| Website from scratch | In progress on `website/product-site`, after the successful desktop gate | Private Site ID `appgprj_6ad1ba34b9148191841f6f5129c84c5f`; source manifest `website/.openai/hosting.json`; use A and verified features/screenshots |
+| Website from scratch | Complete on `website/product-site`, after the successful desktop gate | [Live private preview](https://snapnote-workspace.grittybloom257.chatgpt.site); [source and validation](../website/README.md); [deployment record](WEBSITE-DELIVERY.md) |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
 ## Current recovery changes
@@ -34,6 +34,8 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 - Restore missing folder/session/OCR metadata when an imported clip matches an existing one, preserving newer local metadata.
 - Fix a real Windows deadlock by creating pinned WebView windows in an async Tauri command. Match the main window's additional browser arguments for WebViews sharing its profile; this also fixes blank pins in the isolated automation build.
 - Use real keyboard events to clear Windows search fields so the test drives React state as well as the DOM.
+- Website: selected Mentor cutout, real app screenshots, light/dark gallery, quick-access walkthrough, privacy details, FAQs, responsive navigation and exact validated Windows preview downloads. Eight Chromium workflow checks and seven supplementary WebKit checks pass; the private deployment succeeded.
+- A later documentation-only Windows run exposed a test race while observing pin teardown. The harness now waits for window creation and removal with fixed deadlines; the app and preview installers are unchanged. Follow-up run: [38858824546](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546).
 
 ## Product limits to keep visible
 

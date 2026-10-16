@@ -29,4 +29,4 @@ Windows CI builds `scripts/tauri.test.conf.json` with identifier `come.codespace
 
 Optional sync needs a real provider, authentication, encrypted transport/storage policy, and conflict handling; there is no sync backend or misleading enabled toggle. Tesseract is a runtime dependency and is not bundled. Platform installers are unsigned unless signing is separately configured. A tray/lifecycle policy, per-app exclusions, automatic locking, and richer annotation tools can be added in later iterations without changing the offline core.
 
-Website implementation follows desktop validation and will be on its own branch, using the selected A mascot and verified desktop behavior.
+The website was built after the successful Windows desktop gate on its own branch, using the selected A mascot and verified desktop behavior. See [website validation](../../website/qa/README.md) and the [private preview](https://snapnote-workspace.grittybloom257.chatgpt.site).
