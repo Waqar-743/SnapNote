@@ -395,12 +395,12 @@ try:
     record('Notes can be created, renamed, formatted with headings and tasks, searched and safely closed')
 
 
-    hotkey('alt+s', '%s')
+    hotkey('alt+x', '%x')
     wait('return document.querySelector(".workspace-shell").classList.contains("quick-mode")')
     assert js('return window.innerWidth') <= 600
     js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
     wait('return !document.querySelector(".workspace-shell").classList.contains("quick-mode")')
-    record('Alt+S opens the real floating quick-access window and restores workspace size')
+    record('Alt+X opens the real floating quick-access window and restores workspace size')
 
 
     click('[aria-label="New folder"]')
@@ -588,7 +588,7 @@ try:
         wait('return document.body.textContent.includes("Saved on this device")')
         time.sleep(.3)
         (ARTIFACTS / 'product-workspace-dark.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))
-        hotkey('alt+s', '%s')
+        hotkey('alt+x', '%x')
         wait('return document.querySelector(".workspace-shell").classList.contains("quick-mode")')
         time.sleep(.3)
         (ARTIFACTS / 'product-quick-access.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))

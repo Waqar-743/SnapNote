@@ -53,7 +53,7 @@ flowchart LR
 
 Entities: clips (text/image, title, tags, folder/session, favorite, timestamp, OCR text), notes (legacy HTML preserved), folders, sessions and privacy settings. Duplicate identity uses exact content and content type. Search covers title, text, tags, OCR and note text. Automatic history is separate from deliberate capture into a note. Favorites and organized items are protected from normal retention pruning.
 
-Native operations must run outside the UI thread, return actionable errors, cap input sizes and survive transient clipboard failures. Automatic capture starts only after preferences load and the user enables it. Pause capture immediately when locked. Preserve the existing shortcuts; add Alt+S quick access. Never claim successful copy/save/OCR until the operation succeeds.
+Native operations must run outside the UI thread, return actionable errors, cap input sizes and survive transient clipboard failures. Automatic capture starts only after preferences load and the user enables it. Pause capture immediately when locked. Preserve the existing shortcuts; add Alt+X quick access. Never claim successful copy/save/OCR until the operation succeeds.
 
 ## Interaction and visual design
 
@@ -67,7 +67,7 @@ Native operations must run outside the UI thread, return actionable errors, cap 
 
 1. **Foundation and compatibility:** migrate legacy notes without deleting the original; asynchronous persistence; safe literal text insertion; OCR and lifecycle fixes; error UI. Existing notes, formatting, themes and capture shortcuts must survive.
 2. **Clipboard workspace:** automatic opt-in text/image capture, deduplication, copy-back, search, favorites, tags/folders, sessions, reusable snippets and multi-item text copy. Retention must not discard protected items.
-3. **Native workflow and images:** Alt+S quick access, floating/always-on-top access, pin image, crop/annotation and OCR into searchable metadata. Verify text and image round-trips in the actual native app.
+3. **Native workflow and images:** Alt+X quick access, floating/always-on-top access, pin image, crop/annotation and OCR into searchable metadata. Verify text and image round-trips in the actual native app.
 4. **Privacy and recovery:** pause, limits, clear history, safe backups/import, storage failure recovery, at-rest protection where implemented. Keep sync optional and disabled; a real sync provider, account lifecycle and conflict policy need a separate implementation and must not be represented as shipping prematurely.
 5. **Desktop release gate:** build/run native app; test migration, relaunch persistence, native clipboard text/image, dedupe, hotkeys/conflicts, editor tools, image actions, OCR, backup restore, failures, theme and narrow layout. Record environment limits and untested target platforms explicitly.
 6. **Website:** only after the desktop gate; create it on a separate branch, use real tested screenshots/features and selected mascot assets. Completed on `website/product-site` after the successful Windows run; see `WEBSITE-DELIVERY.md`.
