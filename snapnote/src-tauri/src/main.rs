@@ -81,6 +81,10 @@ fn show_app_shortcut_for_platform() -> Shortcut {
     }
 }
 
+fn quick_access_shortcut() -> Shortcut {
+    Shortcut::new(Some(Modifiers::ALT), Code::KeyX)
+}
+
 fn fingerprint<T: Hash + ?Sized>(kind: &str, data: &T) -> u64 {
     let mut hasher = DefaultHasher::new();
     kind.hash(&mut hasher);
@@ -425,8 +429,10 @@ async fn extract_text_from_image(base64_data: String) -> Result<String, String> 
 fn main() {
     let capture_shortcut = capture_shortcut_for_platform();
     let show_app_shortcut = show_app_shortcut_for_platform();
+    let quick_access_shortcut = quick_access_shortcut();
     let capture_handler_shortcut = capture_shortcut.clone();
     let show_handler_shortcut = show_app_shortcut.clone();
+    let quick_handler_shortcut = quick_access_shortcut.clone();
 
     tauri::Builder::default()
         .manage(WorkspaceState::default())
@@ -452,7 +458,7 @@ fn main() {
                         return;
                     }
 
-                    if triggered_shortcut.matches(Modifiers::ALT, Code::KeyS) {
+                    if *triggered_shortcut == quick_handler_shortcut {
                         if let Some(window) = app.get_webview_window("main") {
                             let _ = window.unminimize();
                             let _ = window.show();
@@ -478,10 +484,7 @@ fn main() {
             for (name, shortcut) in [
                 ("Capture", capture_shortcut),
                 ("Show app", show_app_shortcut),
-                (
-                    "Quick access",
-                    Shortcut::new(Some(Modifiers::ALT), Code::KeyS),
-                ),
+                ("Quick access", quick_access_shortcut),
             ] {
                 if let Err(error) = app.global_shortcut().register(shortcut) {
                     app.state::<WorkspaceState>()

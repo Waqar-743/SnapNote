@@ -26,7 +26,7 @@ Your existing rich-text notes remain in **Notes**. Create, rename, switch and cl
 
 ## Reach the workspace quickly
 
-- **Alt+S:** floating quick access. **Open workspace** restores the full window.
+- **Alt+X:** floating quick access. **Open workspace** restores the full window.
 - **Ctrl+Alt+C:** deliberately capture the current clipboard into the active rich note.
 - **Ctrl+Alt+O:** show and focus SnapNote.
 - **Escape:** close the current dialog, detail pane or quick panel.

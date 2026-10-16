@@ -8,7 +8,7 @@ The site was created from scratch on `website/product-site` after the green Wind
 
 The previous external host returned 404s, and the first GitHub Pages attempt failed because the `github-pages` environment branch policy only allowed `main` while the deploy workflow ran from `gh-pages` ("Branch gh-pages is not allowed to deploy to github-pages due to environment protection rules"). Publishing from `main` through the existing `github-pages` environment resolves both problems; the old external host is retired.
 
-Redesign highlights: aurora-gradient hero with the real app screenshot, sticky glass header, capability ribbon, bento feature grid, dark screenshot showcase with light/dark tabs and zoom dialog, Alt+S quick-access section, privacy cards, FAQs with the Mentor illustration, and a gradient download band linking the release assets. All asset paths are relative so the site works under the `/SnapNote/` project path.
+Redesign highlights (2026-10-16 revision): a dark forest-and-amber editorial theme with no blue or pink anywhere — quick-access demo card hero with floating shortcut chips, a marquee ticker strip, an animated scroll-progress bar and section-aware navigation, an interactive "day with SnapNote" story tab set, a rounded bento workspace panel for the four core tools, a dark privacy chapter with numbered commitments, editorial FAQ, an amber download band linking the release assets, and an amber/ink SVG favicon. All asset paths are relative so the site works under the `/SnapNote/` project path.
 
 ## Delivered
 

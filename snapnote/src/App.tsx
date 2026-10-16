@@ -11,6 +11,8 @@ import { invoke, isTauri } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { LogicalSize } from "@tauri-apps/api/dpi";
+import logoDark from "./assets/logo-dark.png";
+import logoWhite from "./assets/logo-white.png";
 import {
   ClipboardList,
   Search,
@@ -40,8 +42,6 @@ import {
   Keyboard,
   LayoutGrid,
   List,
-  Menu,
-  ChevronRight,
 } from "lucide-react";
 import {
   addClip,
@@ -119,7 +119,7 @@ function DesktopWorkspace() {
   const [sidebar, setSidebar] = useState(false);
   const [settings, setSettings] = useState(false);
   const [help, setHelp] = useState(false);
-  const [quick, setQuick] = useState(false);
+  const [quick, setQuick] = useState(true);
   const [floating, setFloating] = useState(false);
   const [editingImage, setEditingImage] = useState<Clip | null>(null);
   const [ocrBusy, setOcrBusy] = useState(false);
@@ -297,8 +297,8 @@ function DesktopWorkspace() {
         if (editingImage) setEditingImage(null);
         else if (settings) setSettings(false);
         else if (help) setHelp(false);
+        else if (sidebar) setSidebar(false);
         else if (selectedId) setSelectedId(null);
-        else if (quick) void toggleQuick(false);
       }
       if (e.key === "Tab" && (settings || help || editingImage)) {
         const items = Array.from(
@@ -320,7 +320,7 @@ function DesktopWorkspace() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [settings, help, editingImage, selectedId, quick, toggleQuick]);
+  }, [settings, help, editingImage, sidebar, selectedId, toggleQuick]);
 
   const run = async (action: () => Promise<void>) => {
     setError("");
@@ -523,58 +523,37 @@ function DesktopWorkspace() {
 
   return (
     <div className={`workspace-shell ${quick ? "quick-mode" : ""}`}>
-      <aside className={`sidebar ${sidebar ? "open" : ""}`}>
-        <div className="brand">
-          <span className="brand-mark">
-            <ClipboardList size={24} />
-          </span>
-          <div>
-            SnapNote<small>Your visual workspace.</small>
+      <div
+        className={`drawer-backdrop ${sidebar ? "open" : ""}`}
+        aria-hidden="true"
+        onClick={() => setSidebar(false)}
+      />
+      <aside
+        className={`sidebar ${sidebar ? "open" : ""}`}
+        aria-label="Collections"
+        inert={!sidebar}
+      >
+        <div className="drawer-heading">
+          <div className="brand">
+            <img
+              className="brand-logo"
+              src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
+              alt="SnapNote"
+              width={34}
+              height={37}
+            />
+            <div>
+              SnapNote<small>Your visual workspace.</small>
+            </div>
           </div>
+          <button
+            className="icon-button"
+            aria-label="Close collections"
+            onClick={() => setSidebar(false)}
+          >
+            <X size={18} />
+          </button>
         </div>
-        <div className="workspace-label">WORKSPACE</div>
-        <nav aria-label="Workspace navigation">
-          {(
-            [
-              ["all", "Clipboard", ClipboardList, workspace.clips.length],
-              [
-                "favorites",
-                "Favorites",
-                Star,
-                workspace.clips.filter((c) => c.favorite).length,
-              ],
-              [
-                "text",
-                "Text clips",
-                FileText,
-                workspace.clips.filter((c) => c.type === "text").length,
-              ],
-              [
-                "image",
-                "Images",
-                ImageIcon,
-                workspace.clips.filter((c) => c.type === "image").length,
-              ],
-              ["notes", "Notes", Pencil, workspace.notes.length],
-              [
-                "snippets",
-                "Snippets",
-                Braces,
-                workspace.clips.filter((c) => c.snippet).length,
-              ],
-            ] as const
-          ).map(([key, label, Icon, count]) => (
-            <button
-              key={key}
-              className={`nav-item ${view === key ? "selected" : ""}`}
-              onClick={() => navigate(key)}
-            >
-              <Icon size={17} />
-              <span>{label}</span>
-              <small>{count}</small>
-            </button>
-          ))}
-        </nav>
         <div className="workspace-label group-heading">
           FOLDERS
           <button
@@ -594,6 +573,9 @@ function DesktopWorkspace() {
             >
               <Folder size={16} />
               <span>{g.name}</span>
+              <small>
+                {workspace.clips.filter((c) => c.folderId === g.id).length}
+              </small>
             </button>
           ))}
           {!workspace.folders.length && (
@@ -619,6 +601,9 @@ function DesktopWorkspace() {
             >
               <Layers size={16} />
               <span>{g.name}</span>
+              <small>
+                {workspace.clips.filter((c) => c.sessionId === g.id).length}
+              </small>
             </button>
           ))}
           {!workspace.sessions.length && (
@@ -670,16 +655,51 @@ function DesktopWorkspace() {
       </aside>
       <div className="workspace-main">
         <header className="app-header">
-          <button
-            className="icon-button mobile-menu"
-            aria-label="Toggle navigation"
-            onClick={() => setSidebar(!sidebar)}
-          >
-            <Menu size={19} />
-          </button>
-          <span className="breadcrumb">
-            Your workspace <ChevronRight size={13} /> <strong>{title}</strong>
-          </span>
+          <div className="launchpad">
+            <img
+              className="brand-logo"
+              src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
+              alt="SnapNote"
+              width={34}
+              height={37}
+            />
+            {!quick && (
+              <>
+                <span className="launchpad-title">SnapNote</span>
+                <span className="rail-divider" aria-hidden="true" />
+                {(
+                  [
+                    ["all", "Clipboard", ClipboardList],
+                    ["favorites", "Favorites", Star],
+                    ["text", "Text clips", FileText],
+                    ["image", "Images", ImageIcon],
+                    ["notes", "Notes", Pencil],
+                    ["snippets", "Snippets", Braces],
+                  ] as const
+                ).map(([key, label, Icon]) => (
+                  <button
+                    key={key}
+                    className={`rail-button ${view === key ? "selected" : ""}`}
+                    aria-label={label}
+                    aria-pressed={view === key}
+                    title={label}
+                    onClick={() => navigate(key)}
+                  >
+                    <Icon size={17} />
+                  </button>
+                ))}
+                <button
+                  className={`rail-button ${sidebar ? "selected" : ""}`}
+                  aria-label="Folders and sessions"
+                  aria-expanded={sidebar}
+                  title="Folders & sessions"
+                  onClick={() => setSidebar(!sidebar)}
+                >
+                  <Folder size={17} />
+                </button>
+              </>
+            )}
+          </div>
           <div className="header-actions">
             <span className="local-badge">
               <ShieldCheck size={14} />
@@ -790,7 +810,7 @@ function DesktopWorkspace() {
               </button>
             ) : (
               <button className="button" onClick={() => void toggleQuick(true)}>
-                <Keyboard size={15} /> Quick access <kbd>Alt S</kbd>
+                <Keyboard size={15} /> Quick access <kbd>Alt X</kbd>
               </button>
             )}
             <button
@@ -1339,7 +1359,7 @@ function DesktopWorkspace() {
             {help ? (
               <div className="shortcut-list">
                 {[
-                  ["Alt + S", "Open quick access"],
+                  ["Alt + X", "Open quick access"],
                   ["Ctrl + Alt + C", "Capture into the active note"],
                   ["Ctrl + Alt + O", "Show SnapNote"],
                   ["Ctrl + K", "Search clips"],

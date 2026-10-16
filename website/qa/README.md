@@ -1,6 +1,14 @@
+# Current website redesign verification — 2026-10-16
+
+The dark forest-and-amber redesign was checked in headless Chromium (Chrome-headless-shell 147 via Playwright) against a local static server. [Results](redesign-results.json) record 17 passing checks: no blue or pink in rendered computed styles or the stylesheet, the amber/ink SVG favicon loading with no blue inside it, both v1.2.0 installer links, story tab selection by mouse and keyboard (End), the linked OCR disclosure, FAQ disclosure, internal anchors and unique IDs, mobile menu navigation, and no horizontal overflow at 320, 390, 620, 768 and 1024 CSS pixels. No console or script errors and no failed resource requests were observed.
+
+`node --check dist/app.js` passes. The sole displayed bitmap asset is an unchanged copy of the original logo shown on cream tiles; the hero contains no image. Older verification artifacts below describe prior designs.
+
+---
+
 # Website verification — 2026-10-16
 
-Verification used Chromium 156 through Playwright and WebKitGTK MiniBrowser through native WebDriver against the local static server, originally for the first site build and repeated for the 2026-10-16 redesign. The site itself has no browser-testing dependency or build step. Checks are browser workflow observations, not an exhaustive accessibility or device certification.
+Verification used Chromium 156 through Playwright and WebKitGTK MiniBrowser through native WebDriver against the local static server, originally for the first site build and repeated for the 2026-10-16 redesigns. The site itself has no browser-testing dependency or build step. Checks are browser workflow observations, not an exhaustive accessibility or device certification.
 
 - [Chromium result list](chromium-results.json): eight workflow checks; no console errors, script errors or failed resource requests.
 - [WebKit result list](webkit-results.json): seven supplementary checks. Its GTK browser has a minimum outer window width, so 390px/320px checks use a same-origin iframe with that actual CSS viewport. Mobile screenshot evidence below comes from Chromium's direct viewport, because WebKit's iframe screenshots were unreliable.

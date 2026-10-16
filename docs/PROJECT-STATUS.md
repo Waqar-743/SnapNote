@@ -12,7 +12,7 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Architecture audit and strategy | Complete | [Audit and phased plan](DESKTOP-STRATEGY.md) |
 | Desktop redesign and offline core | Implemented | Existing Tauri/React app and legacy note migration retained |
 | Clipboard and organization | Implemented | Text/images, deduplication, search/OCR text, favorites, folders, tags, sessions, snippets, combined text copying |
-| Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+S, retained note capture/show shortcuts |
+| Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+X, retained note capture/show shortcuts |
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
 | Linux validation | Complete: 24 native, 10 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
 | Windows release gate | Complete: all 24 native checks and MSI/EXE builds pass | [Final Windows run](https://github.com/Waqar-743/SnapNote/actions/runs/38858824546), commit `224687e`; [saved evidence](testing/windows/README.md); v1.2.0 installers and SHA-256 checksums published on the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0) |

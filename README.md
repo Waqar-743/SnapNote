@@ -10,7 +10,7 @@ Windows is the primary target. The existing application identity and rich-text n
 - Search across clip titles, content, tags, and extracted image text; separate note search.
 - Favorites, folders, tags, reusable snippets with `{{variables}}`, and grouped sessions.
 - Multi-select text clips for combined copying or session grouping.
-- Alt+S floating quick access, optional always-on-top workspace, and image-only pinned windows.
+- Alt+X floating quick access (opens in quick-access mode), optional always-on-top workspace, and image-only pinned windows.
 - Image crop and drawing annotation, saved as a new clip so the original is kept.
 - Local OCR through Tesseract, both in image details and in the retained rich note editor.
 - Multiple notes, rename/close, rich formatting, headings, lists, task lists, code blocks, undo/redo, and image paste.
@@ -44,7 +44,7 @@ The Windows workflow builds installers and runs storage/native helper checks, th
 
 | Shortcut | Action |
 | --- | --- |
-| Alt+S | Open floating quick access |
+| Alt+X | Open floating quick access |
 | Ctrl+Alt+C | Capture clipboard into the active rich note |
 | Ctrl+Alt+O | Show/focus SnapNote |
 | Ctrl+K | Search clips |
