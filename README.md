@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="SnapNote-logo-white.png">
-    <img src="SnapNote-logo-Dark.png" alt="SnapNote" width="280">
+    <img src="SnapNote-logo-Dark.png" alt="SnapNote" width="180">
   </picture>
 </p>
 
@@ -16,10 +16,6 @@ You find the perfect sentence while reading. A command that took twenty minutes 
 SnapNote was built because that felt wrong. Those little pieces of your day deserve to stay with you, somewhere private, somewhere only you can reach. Not on someone's server. Not behind an account. Just on your own device, sorted well enough to hand things back the exact moment you need them.
 
 So this is SnapNote: a smart clipboard and visual workspace for Windows, made to remember the useful bits — and to keep them yours.
-
-<p align="center">
-  <img src="SnapNote-App.png" alt="The SnapNote workspace" width="720">
-</p>
 
 ## Meet the guide inside
 
