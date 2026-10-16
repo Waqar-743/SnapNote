@@ -71,4 +71,4 @@ Clear recent history preserves notes, favorites, snippets, and organized clips. 
 - [Selected snowy wolf mascot and alternatives](docs/brand/README.md)
 - [Validation evidence](docs/testing/README.md)
 
-The owner selected **A — The Mentor**. The new product website was built on `website/product-site` after the Windows desktop gate passed. [Open the private product preview](https://snapnote-workspace.grittybloom257.chatgpt.site), or see [website source and local preview instructions](website/README.md) and [delivery details](docs/WEBSITE-DELIVERY.md).
+The owner selected **A — The Mentor**. The new product website was built on `website/product-site` after the Windows desktop gate passed. [Open the public product website](https://snapnote-workspace.grittybloom257.chatgpt.site), or see [website source and local preview instructions](website/README.md) and [delivery details](docs/WEBSITE-DELIVERY.md). The completed v1.2.0 Windows installers and checksums are attached to the [existing latest release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.1.0); its older platform assets remain available.

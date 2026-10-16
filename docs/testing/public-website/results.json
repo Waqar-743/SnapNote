@@ -1,0 +1,18 @@
+{
+  "url": "https://snapnote-workspace.grittybloom257.chatgpt.site",
+  "authentication": "none; new browser context",
+  "status": 200,
+  "browser": "Chromium 156.0.8078.4",
+  "checked": [
+    "Anonymous home page",
+    "CSS, JavaScript and Mentor image load",
+    "Actual product heading and page title",
+    "Both latest-release download URLs",
+    "390px layout without overflow"
+  ],
+  "download_urls": [
+    "https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64-setup.exe",
+    "https://github.com/Waqar-743/SnapNote/releases/download/v1.1.0/SnapNote_1.2.0_x64_en-US.msi"
+  ],
+  "errors": []
+}
