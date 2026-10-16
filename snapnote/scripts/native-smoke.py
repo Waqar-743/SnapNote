@@ -32,10 +32,10 @@ BASE = 'http://127.0.0.1:4444'
 SESSION = None
 RESULTS = []
 
-def request(method, path, body=None):
+def request(method, path, body=None, timeout=45):
     req = urllib.request.Request(BASE + path, data=json.dumps(body).encode() if body is not None else None, method=method, headers={'Content-Type': 'application/json'})
     try:
-        with urllib.request.urlopen(req, timeout=45) as response:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
             value = json.load(response).get('value')
     except urllib.error.HTTPError as error:
         raise RuntimeError(error.read().decode()) from error
@@ -152,7 +152,7 @@ def record(name):
 
 def new_session():
     global SESSION
-    value = request('POST', '/session', {'capabilities': {'alwaysMatch': {'tauri:options': {'application': str(ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote'))}}}})
+    value = request('POST', '/session', {'capabilities': {'alwaysMatch': {'tauri:options': {'application': str(ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote'))}}}}, timeout=120 if WINDOWS else 45)
     SESSION = value['sessionId']
     command('timeouts', {'script': 30000, 'pageLoad': 30000})
     if WINDOWS:
@@ -542,6 +542,18 @@ try:
     (ARTIFACTS / 'native-smoke-results.json').write_text(json.dumps({'platform': 'Windows / WebView2' if WINDOWS else 'Linux / WebKitGTK', 'profile': str(PROFILE), 'passed': RESULTS}, indent=2) + '\n')
     print(f'Artifacts: {ARTIFACTS}', flush=True)
 except Exception:
+    if WINDOWS:
+        try:
+            ARTIFACTS.mkdir(parents=True, exist_ok=True)
+            target = "'" + str(ARTIFACTS / 'windows-startup.png').replace("'", "''") + "'"
+            powershell('Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; '
+                       '$r=[Windows.Forms.Screen]::PrimaryScreen.Bounds; $b=[Drawing.Bitmap]::new($r.Width,$r.Height); '
+                       '$g=[Drawing.Graphics]::FromImage($b); $g.CopyFromScreen($r.Location,[Drawing.Point]::Empty,$r.Size); '
+                       '$b.Save(' + target + ',[Drawing.Imaging.ImageFormat]::Png); $g.Dispose(); $b.Dispose();')
+            processes = powershell('Get-Process snapnote,msedgewebview2,msedgedriver -ErrorAction SilentlyContinue | Format-List Name,Id,Responding,MainWindowTitle,Path | Out-String')
+            (ARTIFACTS / 'windows-processes.txt').write_bytes(processes)
+        except Exception as diagnostic_error:
+            print(f'Windows diagnostics unavailable: {diagnostic_error}', flush=True)
     try:
         ARTIFACTS.mkdir(parents=True, exist_ok=True)
         (ARTIFACTS / 'native-failure.png').write_bytes(base64.b64decode(command('screenshot', method='GET')))

@@ -77,6 +77,9 @@ jobs:
       - name: Build isolated native test application
         run: npm run tauri build -- --debug --no-bundle --config scripts/tauri.test.conf.json
 
+      - name: Match WebView2 runtime and native driver
+        run: ./scripts/setup-windows-webdriver.ps1
+
       - name: Test real Windows clipboard and workspace
         env:
           SNAPNOTE_WINDOWS_CI: "1"
