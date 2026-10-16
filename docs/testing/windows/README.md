@@ -1,9 +1,16 @@
 # Windows validation evidence
 
-MSI/EXE packaging succeeds. [startup.png](startup.png) is a real capture of the running native app on the Windows CI desktop, from [run 38854172242](https://github.com/Waqar-743/SnapNote/actions/runs/38854172242). The app and WebView2 processes were responding, and the workspace rendered with capture paused.
+**24 of 24 native checks pass**, 2026-10-16, in [run 38856921850](https://github.com/Waqar-743/SnapNote/actions/runs/38856921850), commit `20a3214`.
 
-This is startup evidence, not a completed Windows feature-test result. The automation connection did not open with the environment-only debugging option. The next test configuration sets its debugging port explicitly in `scripts/tauri.test.conf.json`, which uses the separate `come.codespace.snapnote.tests` identifier. Normal production configuration has no debugging port.
+- [Complete result list](native-smoke-results.json)
+- [Actual light workspace](native-workspace.png)
+- [Actual dark workspace](native-workspace-dark.png)
+- [Native driver log](native-driver.log)
 
-The test workflow installs WebView2, matches EdgeDriver to the installed runtime, uses Microsoft's attach mode, and saves process/startup diagnostics on failure. Generated CI evidence lives in a fresh runner-temporary directory, separate from these committed snapshots.
+The suite exercises the real Windows clipboard, image round-trips, duplicate suppression, OCR/search, crop/draw, pinned native windows, global shortcuts, retained rich notes and image paste, folders/tags/templates, sessions and combined copying, local encryption, manual lock, encrypted relaunch and backup recovery. The same 24 checks pass on Linux. Screenshots use deliberate test fixtures rather than personal data.
 
-[Run 38854782395](https://github.com/Waqar-743/SnapNote/actions/runs/38854782395) attached successfully and passed startup, text capture/deduplication, pause/copy-back, image round-trip/OCR, and OCR search. Its next assertion exposed a test-input issue: EdgeDriver's clear command changed an input's DOM value without updating React's search state. The harness now clears fields through real key events. Full native feature validation remains pending.
+The workflow installs Evergreen WebView2 and matches EdgeDriver to the installed runtime (155.0.4283.60 in this run). Microsoft's attach mode connects to the actual app. Only the isolated `come.codespace.snapnote.tests` configuration enables the automation port; production retains `come.codespace.snapnote` and has no debugging port. CI evidence is generated in a fresh runner-temporary directory, separate from committed snapshots.
+
+Testing found a real Windows deadlock in synchronous pinned-window creation. The command is now async. Pinned WebViews inherit the main window's browser options so shared profiles initialize correctly. The harness clears inputs with real key events because EdgeDriver's clear command did not update React's state reliably.
+
+The final production MSI and EXE builds for this validated commit also **passed** in the linked workflow; both are available as workflow artifacts. Installers are unsigned previews. The older [startup capture](startup.png) is retained as recovery history, not used as the feature-test evidence.
