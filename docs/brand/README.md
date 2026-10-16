@@ -6,6 +6,7 @@ Selected by the owner: **A — The Mentor**, 2026-10-15.
 - [Alternative B — The Guide](concepts/b-the-guide.png)
 - [Alternative C — The Scholar](concepts/c-the-scholar.png)
 - [Exact generation prompts](concepts/PROMPTS.md)
+- [Transparent Mentor teaching pose](assets/mentor-teaching.png) and [its exact prompt](assets/PROMPT.md), prepared from the selected sheet on 2026-10-16
 
 Each concept includes front, side, three-quarter, teaching, standing, and explaining views. The concepts were generated with the built-in image generation tool, inspected, and saved in this repository. They are concept illustrations rather than vector logos or an animation rig.
 

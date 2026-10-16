@@ -1,6 +1,6 @@
 {
   "platform": "Linux / WebKitGTK",
-  "profile": "/tmp/snapnote-native-2xbfa06a",
+  "profile": "/tmp/snapnote-native-t1s9u7rn",
   "passed": [
     "Native app opens with capture paused and no sample data",
     "Real text clipboard capture, whitespace preservation, and duplicate suppression",
@@ -19,6 +19,7 @@
     "Multi-item copying and grouping selected content in a session",
     "Light and dark native workspace screenshots captured",
     "Live workspace encryption and encrypted native backup export",
+    "Manual lock closes private image pins and ignores capture shortcuts until unlock",
     "Native relaunch stays locked; wrong password fails; correct password restores clips and theme",
     "Clear history preserves favorites, snippets, grouped clips, and notes",
     "Encrypted import restores cleared clips without duplicating organized content"

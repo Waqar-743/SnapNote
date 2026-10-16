@@ -14,16 +14,19 @@ The previous implementation is preserved in commit `692f14e`, not lost. Use this
 | Clipboard and organization | Implemented | Text/images, deduplication, search/OCR text, favorites, folders, tags, sessions, snippets, combined text copying |
 | Images and shortcuts | Implemented | Crop/draw, original preservation, image pins, local OCR, Alt+S, retained note capture/show shortcuts |
 | Privacy and recovery | Implemented | Opt-in capture, pause, protected retention, transactional storage, optional local encryption, encrypted export/merge import |
-| Linux validation | 20 native checks previously passed | [Validation evidence](testing/README.md); rerun underway |
+| Linux validation | Complete: 21 native, 9 TypeScript and 4 Rust checks pass | [Validation evidence](testing/README.md), rerun 2026-10-16 |
 | Windows release gate | Repair and rerun underway | Previous [run](https://github.com/Waqar-743/SnapNote/actions/runs/38806741719) failed before compilation because Windows did not expand `tests/*.test.ts` |
 | Website from scratch | Not started | Start on a separate branch after the desktop release gate; use A and verified features/screenshots |
 | Optional sync | Deferred; no backend | Do not advertise cloud sync as available |
 
 ## Current recovery changes
 
-- Replace shell-dependent test glob with explicit files through Node's test runner and the existing tsx loader. All eight assertions pass locally.
+- Replace shell-dependent test glob with explicit files through Node's test runner and the existing tsx loader. All nine assertions pass locally.
+- Preserve LF source line endings on Windows so formatting checks are consistent.
 - Put Windows native artifacts in `docs/testing/windows/` so stale committed Linux evidence cannot be uploaded as a Windows result.
-- Rebuild and run the actual desktop suite, then check the Windows workflow. Record the exact result before beginning website implementation.
+- Reject over-capacity backup merges before changing state, close private image pins on lock, and include image dimensions in duplicate identity. Regression checks pass.
+- Rebuilt and ran the actual desktop suite successfully. Check the Windows workflow and record the exact result before beginning website implementation.
+- Prepared the selected Mentor's transparent teaching cutout and a desktop user guide.
 
 ## Product limits to keep visible
 

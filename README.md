@@ -66,6 +66,7 @@ Clear recent history preserves notes, favorites, snippets, and organized clips. 
 ## Design and validation
 
 - [Recovered progress and remaining work](docs/PROJECT-STATUS.md)
+- [Desktop user guide](docs/DESKTOP-GUIDE.md)
 - [Architecture audit and delivery strategy](docs/DESKTOP-STRATEGY.md)
 - [Selected snowy wolf mascot and alternatives](docs/brand/README.md)
 - [Validation evidence](docs/testing/README.md)
