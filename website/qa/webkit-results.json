@@ -1,0 +1,12 @@
+{
+  "browser": "WebKitGTK MiniBrowser",
+  "passed": [
+    "Desktop page, selected mascot and semantic page title render without horizontal overflow",
+    "Light/dark screenshot tabs work by mouse and arrow keys, with accessible selection and focus",
+    "Screenshot zoom opens, Escape closes it and restores focus",
+    "FAQs expand and the OCR detail link opens its linked answer",
+    "Every in-page navigation link resolves to a real section",
+    "Mobile layout at 390px fits; navigation opens, follows a link and closes",
+    "Narrow 320px layout has no horizontal overflow"
+  ]
+}

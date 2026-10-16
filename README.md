@@ -71,4 +71,4 @@ Clear recent history preserves notes, favorites, snippets, and organized clips. 
 - [Selected snowy wolf mascot and alternatives](docs/brand/README.md)
 - [Validation evidence](docs/testing/README.md)
 
-The owner selected **A — The Mentor**. Website work follows desktop completion and will be created from scratch on a separate branch, as requested.
+The owner selected **A — The Mentor**. The product website is published from `website/dist` through a GitHub Pages workflow and lives at [https://waqar-743.github.io/SnapNote/](https://waqar-743.github.io/SnapNote/), or see [website source and local preview instructions](website/README.md) and [delivery details](docs/WEBSITE-DELIVERY.md). The validated v1.2.0 Windows installers (MSI + EXE) with SHA-256 checksums are attached to the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0).
