@@ -11,7 +11,7 @@
     "tauri:dev": "tauri dev",
     "tauri:dev:headless": "xvfb-run -a tauri dev",
     "ports:clean": "lsof -i :1420 -t | xargs -r kill -9 && lsof -i :1421 -t | xargs -r kill -9",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "node --import tsx --test tests/storage.test.ts tests/workspace.test.ts",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/*.ts\" package.json postcss.config.js",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/*.ts\" package.json postcss.config.js"
   },

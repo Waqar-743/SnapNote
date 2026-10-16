@@ -20,7 +20,7 @@ WINDOWS = os.name == 'nt'
 if WINDOWS and os.environ.get('SNAPNOTE_WINDOWS_CI') != '1':
     raise SystemExit('Windows native smoke tests require the isolated CI test build.')
 ROOT = Path(__file__).resolve().parents[1]
-ARTIFACTS = ROOT.parent / 'docs' / 'testing'
+ARTIFACTS = Path(os.environ.get('SNAPNOTE_TEST_ARTIFACTS', ROOT.parent / 'docs' / 'testing'))
 PROFILE = Path(tempfile.mkdtemp(prefix='snapnote-native-'))
 ENV = dict(os.environ, XDG_DATA_HOME=str(PROFILE / 'data'), XDG_CONFIG_HOME=str(PROFILE / 'config'), WEBKIT_DISABLE_COMPOSITING_MODE='1')
 (PROFILE / 'config').mkdir()

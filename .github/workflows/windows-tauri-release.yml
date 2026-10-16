@@ -79,6 +79,7 @@ jobs:
       - name: Test real Windows clipboard and workspace
         env:
           SNAPNOTE_WINDOWS_CI: "1"
+          SNAPNOTE_TEST_ARTIFACTS: ${{ github.workspace }}/docs/testing/windows
         run: python scripts/native-smoke.py
 
       - name: Upload desktop validation evidence
@@ -86,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: snapnote-windows-validation
-          path: docs/testing/
+          path: docs/testing/windows/
           if-no-files-found: warn
 
       - name: Publish Release assets (tags only)
