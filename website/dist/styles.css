@@ -450,6 +450,11 @@ kbd {
   padding: clamp(3.4rem, 7vw, 6rem) 0;
 }
 
+.story-lead {
+  max-width: 760px;
+  margin: 0 auto 2.8rem;
+}
+
 .story-grid {
   list-style: none;
   margin: 0;
@@ -465,8 +470,17 @@ kbd {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 1.7rem 1.6rem;
+  padding: 0 1.6rem 1.7rem;
   counter-increment: rescue;
+  overflow: hidden;
+}
+
+.chapter-art {
+  display: block;
+  width: calc(100% + 3.2rem);
+  margin: 0 -1.6rem 1.2rem;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .chapter::before {
@@ -498,11 +512,23 @@ kbd {
 
 .story-close {
   text-align: center;
+  margin-top: 2.6rem;
+}
+
+.story-close img {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  display: inline-block;
+}
+
+.story-close p {
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.15rem;
   color: var(--muted);
-  margin-top: 2.4rem;
+  margin: 0.9rem 0 0;
 }
 
 /* Features */
@@ -523,6 +549,15 @@ kbd {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.55rem 1.5rem;
+}
+
+.cell-art {
+  display: block;
+  width: calc(100% + 3.05rem);
+  margin: -1.55rem -1.5rem 1.15rem;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .cell p {
@@ -555,12 +590,34 @@ kbd {
 
 .privacy-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-areas:
+    "copy figure"
+    "copy pledge";
+  gap: clamp(1.6rem, 3vw, 2.6rem);
   align-items: center;
 }
 
+.privacy-grid > div:first-child {
+  grid-area: copy;
+}
+
+.privacy-figure {
+  grid-area: figure;
+  margin: 0;
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--night-2);
+}
+
+.privacy-figure img {
+  display: block;
+  width: 100%;
+}
+
 .pledge {
+  grid-area: pledge;
   margin: 0;
   background: var(--card);
   border: 1px solid var(--line);
@@ -837,6 +894,13 @@ kbd {
   .mentor-grid,
   .privacy-grid {
     grid-template-columns: 1fr;
+  }
+
+  .privacy-grid {
+    grid-template-areas:
+      "copy"
+      "figure"
+      "pledge";
   }
 
   .story-grid,

@@ -26,7 +26,7 @@
 
   // Gentle reveal for chapters, cards and figures.
   const revealables = document.querySelectorAll(
-    ".chapter, .cell, .qa, .frame, .mentor-figure, .pledge",
+    ".chapter, .cell, .qa, .frame, .mentor-figure, .privacy-figure, .pledge",
   );
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced || !("IntersectionObserver" in window)) {
