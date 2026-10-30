@@ -31,6 +31,8 @@ const MAX_TEXT_BYTES: usize = 1_000_000;
 #[derive(Default)]
 struct WorkspaceState {
     capture: AtomicBool,
+    quick_access: AtomicBool,
+    quick_shortcut_down: AtomicBool,
     clipboard_lock: Mutex<()>,
     fingerprint: Mutex<Option<u64>>,
     sequence: Mutex<Option<u32>>,
@@ -97,6 +99,31 @@ fn show_main_window(app: &tauri::AppHandle, open_quick_access: bool) {
             let _ = window.emit("quick-access", ());
         }
     }
+}
+
+/// Dismiss the active quick window; otherwise bring quick access to the foreground.
+fn toggle_quick_access(app: &tauri::AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        let state = app.state::<WorkspaceState>();
+        if state.quick_access.load(Ordering::SeqCst)
+            && window.is_visible().unwrap_or(false)
+            && !window.is_minimized().unwrap_or(true)
+            && window.is_focused().unwrap_or(false)
+        {
+            if let Err(error) = window.hide() {
+                let _ = window.emit("clipboard-warning", error.to_string());
+            }
+            return;
+        }
+        show_main_window(app, true);
+    }
+}
+
+#[tauri::command]
+fn set_quick_access(app: tauri::AppHandle, enabled: bool) {
+    app.state::<WorkspaceState>()
+        .quick_access
+        .store(enabled, Ordering::SeqCst);
 }
 
 fn fingerprint<T: Hash + ?Sized>(kind: &str, data: &T) -> u64 {
@@ -458,10 +485,23 @@ fn main() {
     let quick_handler_shortcut = quick_access_shortcut.clone();
 
     tauri::Builder::default()
-        .manage(WorkspaceState::default())
+        .manage(WorkspaceState {
+            quick_access: AtomicBool::new(true),
+            ..WorkspaceState::default()
+        })
         .plugin(
             tauri_plugin_global_shortcut::Builder::new()
                 .with_handler(move |app, triggered_shortcut, event| {
+                    if *triggered_shortcut == quick_handler_shortcut {
+                        let state = app.state::<WorkspaceState>();
+                        let down = &state.quick_shortcut_down;
+                        if event.state == ShortcutState::Released {
+                            down.store(false, Ordering::SeqCst);
+                        } else if !down.swap(true, Ordering::SeqCst) {
+                            toggle_quick_access(app);
+                        }
+                        return;
+                    }
                     if event.state != ShortcutState::Pressed {
                         return;
                     }
@@ -478,11 +518,6 @@ fn main() {
                                 }
                             }
                         });
-                        return;
-                    }
-
-                    if *triggered_shortcut == quick_handler_shortcut {
-                        show_main_window(app, true);
                         return;
                     }
 
@@ -515,7 +550,7 @@ fn main() {
             let quit_item = MenuItem::with_id(app, "quit", "Quit SnapNote", true, None::<&str>)?;
             let tray_menu = Menu::with_items(app, &[&quick_item, &show_item, &quit_item])?;
             let tray_builder = TrayIconBuilder::with_id("snapnote-tray")
-                .tooltip("SnapNote — Alt+X opens quick access")
+                .tooltip("SnapNote — Alt+X toggles quick access")
                 .menu(&tray_menu)
                 .show_menu_on_left_click(true)
                 .on_menu_event(|app, event| match event.id.as_ref() {
@@ -580,6 +615,7 @@ fn main() {
             read_clipboard,
             write_clipboard,
             set_floating,
+            set_quick_access,
             pin_image,
             pinned_image,
             close_pinned_images,

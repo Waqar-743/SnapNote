@@ -400,6 +400,17 @@ try:
     hotkey('alt+x', '%x')
     wait('return document.querySelector(".workspace-shell").classList.contains("quick-mode")')
     assert js('return window.innerWidth') <= 600
+    wait('return document.hasFocus()')
+    hotkey('alt+x', '%x')
+    wait('return window.__TAURI_INTERNALS__ != null')
+    end = time.monotonic() + 5
+    while invoke('plugin:window|is_visible', {'label': 'main'}) and time.monotonic() < end:
+        time.sleep(.15)
+    assert not invoke('plugin:window|is_visible', {'label': 'main'}), 'Second Alt+X must hide quick access'
+    hotkey('alt+x', '%x')
+    wait('return document.hasFocus()')
+    assert invoke('plugin:window|is_visible', {'label': 'main'})
+    record('Repeated Alt+X hides and reopens the native quick window')
     js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
     wait('return !document.querySelector(".workspace-shell").classList.contains("quick-mode")')
     record('Alt+X opens the real floating quick-access window and restores workspace size')

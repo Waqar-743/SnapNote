@@ -217,6 +217,7 @@ function DesktopWorkspace() {
             );
           }
           await invoke("set_floating", { enabled: enabled || floating });
+          await invoke("set_quick_access", { enabled });
         }
         setQuick(enabled);
         if (enabled) {
@@ -1360,7 +1361,7 @@ function DesktopWorkspace() {
             {help ? (
               <div className="shortcut-list">
                 {[
-                  ["Alt + X", "Open quick access"],
+                  ["Alt + X", "Show / hide quick access"],
                   ["Ctrl + Alt + C", "Capture into the active note"],
                   ["Ctrl + Alt + O", "Show SnapNote"],
                   ["Ctrl + K", "Search clips"],
