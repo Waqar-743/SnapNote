@@ -10,6 +10,7 @@ import {
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import { closeHistory } from "@tiptap/pm/history";
 import { Placeholder } from "@tiptap/extensions";
 import Highlight from "@tiptap/extension-highlight";
 import { TaskList, TaskItem } from "@tiptap/extension-list";
@@ -113,7 +114,12 @@ const OCRImageNode = (props: NodeViewProps) => {
         <button
           type="button"
           className="delete-image-button"
-          onClick={() => props.deleteNode()}
+          onClick={() => {
+            // Keep removal separate from a just-pasted image or OCR insertion,
+            // so a single undo restores the image even after rapid actions.
+            props.editor.view.dispatch(closeHistory(props.editor.state.tr));
+            props.deleteNode();
+          }}
           aria-label="Delete image from note"
           title="Delete image from note (undo with Ctrl+Z)"
         >
