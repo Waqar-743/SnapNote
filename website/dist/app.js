@@ -49,3 +49,41 @@
     });
   }
 })();
+
+// Resolve assets from GitHub's latest published release. Every link already has
+// a working /releases/latest fallback for offline/API-limited/JavaScript-free use.
+(async () => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(
+      "https://api.github.com/repos/Waqar-743/SnapNote/releases/latest",
+      { signal: controller.signal, headers: { Accept: "application/vnd.github+json" } },
+    );
+    if (!response.ok) return;
+    const release = await response.json();
+    const patterns = {
+      msi: /_x64_en-US\.msi$/i,
+      exe: /_x64-setup\.exe$/i,
+      checksums: /_SHA256SUMS\.txt$/i,
+    };
+    if (!Array.isArray(release.assets)) return;
+    for (const link of document.querySelectorAll("[data-release-download]")) {
+      const pattern = patterns[link.dataset.releaseDownload];
+      const asset = release.assets.find((item) => pattern?.test(item.name));
+      if (!asset || typeof asset.browser_download_url !== "string") continue;
+      const url = new URL(asset.browser_download_url);
+      if (
+        url.origin === "https://github.com" &&
+        url.pathname.startsWith("/Waqar-743/SnapNote/releases/download/")
+      ) link.href = url.href;
+    }
+    const label = document.querySelector("[data-release-version]");
+    if (label && typeof release.tag_name === "string")
+      label.textContent = `SnapNote ${release.tag_name}`;
+  } catch {
+    // The release page remains available when metadata cannot be fetched.
+  } finally {
+    clearTimeout(timeout);
+  }
+})();
