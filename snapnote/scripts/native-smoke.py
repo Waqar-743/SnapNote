@@ -500,6 +500,9 @@ try:
     record('Light and dark native workspace screenshots captured')
 
     js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
+    assert 'Waqar Ahmed' in js('return document.querySelector("[aria-label=\"About SnapNote\"]").textContent')
+    assert 'Version' in js('return document.querySelector("[aria-label=\"About SnapNote\"]").textContent')
+    record('Settings identifies the developer and application version')
     fill('input[placeholder="At least 10 characters"]', 'native test password 12345')
     fill('input[placeholder="Repeat the workspace password"]', 'native test password 12345')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Enable workspace encryption")).click();')

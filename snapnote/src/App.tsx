@@ -13,6 +13,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { LogicalSize } from "@tauri-apps/api/dpi";
 import logoDark from "./assets/logo-dark.png";
 import logoWhite from "./assets/logo-white.png";
+import { version } from "../package.json";
 import {
   ClipboardList,
   Search,
@@ -1390,6 +1391,14 @@ function DesktopWorkspace() {
               </div>
             ) : (
               <>
+                <div className="settings-section" aria-label="About SnapNote">
+                  <h3>About SnapNote</h3>
+                  <p>
+                    <strong>Version</strong> {version}
+                    <br />
+                    <strong>Developer</strong> Waqar Ahmed
+                  </p>
+                </div>
                 <div className="settings-section">
                   <h3>Clipboard & privacy</h3>
                   <label className="setting-row">
@@ -1691,8 +1700,9 @@ function DesktopWorkspace() {
                     SnapNote opens as a small quick-access window; use the icons
                     in the header or "Open workspace" to spread out. Closing the
                     window keeps SnapNote running in the system tray so Alt+X
-                    always works. Choose "Quit SnapNote" in the tray menu to
-                    exit completely.
+                    stays available. Press Alt+X again to hide the focused quick
+                    window. Choose "Quit SnapNote" in the tray menu to exit
+                    completely.
                   </p>
                 </div>
               </>
