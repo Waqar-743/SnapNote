@@ -18,6 +18,8 @@ Mark text as a reusable snippet in its details. Use placeholders such as `Hello 
 
 Select an image for **Extract text**, **Edit image**, or **Pin to screen**. Extracted text becomes searchable and can be copied separately. Draw annotations or select and apply a crop; saving creates another clip and keeps the source image. Editing resizes images larger than 4096 pixels. Pinning opens an image window above other apps.
 
+Use the trash button beside an image clip's copy button to delete it, then confirm. In Notes, **Delete image** under a pasted image removes that image from the note; **Undo** restores it. Clips and embedded note images are independent copies.
+
 OCR works locally and needs Tesseract with its language data installed and available on `PATH`. It is not bundled in the current installer. Restart SnapNote after installing it. Missing OCR dependencies produce an error without removing the image.
 
 ## Keep writing in notes
@@ -26,7 +28,7 @@ Your existing rich-text notes remain in **Notes**. Create, rename, switch and cl
 
 ## Reach the workspace quickly
 
-- **Alt+X:** floating quick access. **Open workspace** restores the full window.
+- **Alt+X:** show or hide floating quick access. Press it again while the quick window is focused to hide it. **Open workspace** restores the full window.
 - **Ctrl+Alt+C:** deliberately capture the current clipboard into the active rich note.
 - **Ctrl+Alt+O:** show and focus SnapNote.
 - **Escape:** close the current dialog, detail pane or quick panel.
@@ -34,6 +36,8 @@ Your existing rich-text notes remain in **Notes**. Create, rename, switch and cl
 Use Command in place of Ctrl on macOS. Shortcut conflicts appear in the app and do not prevent startup. Closing the main window saves your work and keeps SnapNote in the system tray, so **Alt+X brings the quick window back at any time** — even if you have not looked at SnapNote in a while. Choose **Quit SnapNote** in the tray menu to exit completely; shortcuts and capture rest until you start the app again.
 
 ## Privacy, passwords and backups
+
+**About SnapNote** in Settings shows the installed version and developer, Waqar Ahmed.
 
 **Settings & privacy** controls capture, retention and floating behavior. Ordinary history pruning and **Clear recent history** preserve notes, favorites, snippets and clips assigned to a folder or session.
 
