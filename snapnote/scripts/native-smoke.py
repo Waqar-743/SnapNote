@@ -359,6 +359,40 @@ try:
     wait('return document.querySelector(".tiptap-editor").textContent.includes("SNAPNOTE")', timeout=20)
     record('Original image paste and inline OCR still work in notes')
 
+    note_text = js('const copy=document.querySelector(".tiptap-editor").cloneNode(true);copy.querySelectorAll(".note-image-actions").forEach(el=>el.remove());return copy.textContent;')
+    click('[aria-label="Delete image from note"]')
+    wait('return document.querySelector(".tiptap-editor img") === null')
+    assert js('return document.querySelector(".tiptap-editor").textContent') == note_text
+    click('[aria-label="Undo"]')
+    wait('return Boolean(document.querySelector(".tiptap-editor img"))')
+    record('Inline image deletion preserves note text and supports undo')
+
+    # Deleting one clip must persist without deleting its independent note copy.
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
+    deleted_image = js('return document.querySelector(".clip-card .clip-preview img").src')
+    click('.clip-card button[title="Delete image clip"]')
+    command('alert/dismiss', {})
+    assert js('return document.querySelectorAll(".clip-card").length') == 5
+    click('.clip-card button[title="Delete image clip"]')
+    command('alert/accept', {})
+    wait('return document.querySelectorAll(".clip-card").length', 4)
+    wait('return document.body.textContent.includes("Saved on this device")')
+    command('refresh', {})
+    wait('return Boolean(document.querySelector(".workspace-shell"))')
+    assert not js('return Array.from(document.querySelectorAll(".clip-preview img")).some(img=>img.src===arguments[0])', deleted_image)
+    js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
+    wait('return document.querySelector(".workspace-shell.quick-mode") === null')
+    js('document.querySelector(".rail-button[aria-label=Notes]").click();')
+    wait('return Boolean(document.querySelector(".tiptap-editor img"))')
+    # Restore the deleted test fixture for the remaining backup/import checks.
+    clipboard(base64.b64decode(deleted_image.split(',')[1]), image=True)
+    js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
+    click('.heading-actions .button.primary')
+    wait('return document.querySelectorAll(".clip-card").length', 5)
+    js('document.querySelector(".rail-button[aria-label=Notes]").click();')
+    wait('return Boolean(document.querySelector(".tiptap-editor"))')
+    record('Image clip deletion can be cancelled, survives reload, and keeps note images')
+
     click('[aria-label="New note"]')
     wait('return document.querySelectorAll(".note-tab").length', 2)
     click('.note-tab.active [title="Rename note"]')

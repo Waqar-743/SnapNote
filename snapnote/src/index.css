@@ -139,12 +139,35 @@ body {
   position: relative;
   margin: 16px 0;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
+.note-image-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+}
+.note-image-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.delete-image-button {
+  color: var(--danger, #a33b2e);
+  background: var(--surface);
+  border: 1px solid currentColor;
+}
+.delete-image-button:hover {
+  background: var(--hover);
+}
 .ocr-button {
-  position: absolute;
-  right: 8px;
-  top: 8px;
   display: flex;
   align-items: center;
   gap: 6px;

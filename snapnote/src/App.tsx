@@ -369,6 +369,13 @@ function DesktopWorkspace() {
       ...w,
       clips: w.clips.map((c) => (c.id === clip.id ? { ...c, ...patch } : c)),
     }));
+  const deleteClip = (clip: Clip) => {
+    if (!window.confirm("Delete this clip?")) return;
+    mutate((w) => ({ ...w, clips: w.clips.filter((c) => c.id !== clip.id) }));
+    setSelectedId((current) => (current === clip.id ? null : current));
+    setChecked((ids) => ids.filter((x) => x !== clip.id));
+    setNotice(clip.type === "image" ? "Image clip deleted." : "Clip deleted.");
+  };
   const navigate = (next: View) => {
     setView(next);
     setSelectedId(null);
@@ -1028,6 +1035,16 @@ function DesktopWorkspace() {
                           >
                             <Copy size={15} />
                           </button>
+                          {clip.type === "image" && (
+                            <button
+                              className="icon-button danger"
+                              title="Delete image clip"
+                              aria-label={`Delete image clip: ${clip.title}`}
+                              onClick={() => deleteClip(clip)}
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          )}
                         </div>
                         <div className="clip-bottom">
                           <span>
@@ -1280,18 +1297,7 @@ function DesktopWorkspace() {
                   )}
                   <button
                     className="text-button danger"
-                    onClick={() => {
-                      if (window.confirm("Delete this clip?")) {
-                        mutate((w) => ({
-                          ...w,
-                          clips: w.clips.filter((c) => c.id !== selected.id),
-                        }));
-                        setSelectedId(null);
-                        setChecked((ids) =>
-                          ids.filter((x) => x !== selected.id),
-                        );
-                      }
-                    }}
+                    onClick={() => deleteClip(selected)}
                   >
                     <Trash2 size={14} /> Delete clip
                   </button>

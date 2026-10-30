@@ -34,6 +34,7 @@ import {
   Plus,
   X,
   Copy,
+  Trash2,
 } from "lucide-react";
 import { id, plainText, type Note, type ClipboardPayload } from "../workspace";
 
@@ -99,10 +100,26 @@ const OCRImageNode = (props: NodeViewProps) => {
         alt="Pasted"
         className="note-image"
       />
-      <button type="button" onClick={handleExtract} className="ocr-button">
-        <ScanSearch size={14} />
-        {isExtracting ? "Extracting..." : "Extract Text"}
-      </button>
+      <div className="note-image-actions" contentEditable={false}>
+        <button
+          type="button"
+          onClick={handleExtract}
+          className="ocr-button"
+          disabled={isExtracting}
+        >
+          <ScanSearch size={14} />
+          {isExtracting ? "Extracting..." : "Extract Text"}
+        </button>
+        <button
+          type="button"
+          className="delete-image-button"
+          onClick={() => props.deleteNode()}
+          aria-label="Delete image from note"
+          title="Delete image from note (undo with Ctrl+Z)"
+        >
+          <Trash2 size={14} /> Delete image
+        </button>
+      </div>
       {error && (
         <p role="alert" className="image-error">
           {error}
