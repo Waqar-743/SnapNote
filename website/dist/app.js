@@ -58,7 +58,10 @@
   try {
     const response = await fetch(
       "https://api.github.com/repos/Waqar-743/SnapNote/releases/latest",
-      { signal: controller.signal, headers: { Accept: "application/vnd.github+json" } },
+      {
+        signal: controller.signal,
+        headers: { Accept: "application/vnd.github+json" },
+      },
     );
     if (!response.ok) return;
     const release = await response.json();
@@ -76,7 +79,8 @@
       if (
         url.origin === "https://github.com" &&
         url.pathname.startsWith("/Waqar-743/SnapNote/releases/download/")
-      ) link.href = url.href;
+      )
+        link.href = url.href;
     }
     const label = document.querySelector("[data-release-version]");
     if (label && typeof release.tag_name === "string")
@@ -86,4 +90,62 @@
   } finally {
     clearTimeout(timeout);
   }
+})();
+
+// A deliberately small preview using sample content, independent of app storage.
+(() => {
+  const search = document.querySelector('[aria-label="Search sample clips"]');
+  const filters = document.querySelectorAll("[data-demo-filter]");
+  const cards = [...document.querySelectorAll("[data-demo-type]")];
+  let activeFilter = "all";
+  const update = () => {
+    const query = search?.value.trim().toLowerCase() || "";
+    let visible = 0;
+    for (const card of cards) {
+      card.hidden =
+        (activeFilter !== "all" && card.dataset.demoType !== activeFilter) ||
+        !card.dataset.demoSearch.includes(query);
+      if (!card.hidden) visible++;
+    }
+    const empty = document.querySelector(".demo-empty");
+    if (empty) empty.hidden = visible > 0;
+  };
+  search?.addEventListener("input", update);
+  filters.forEach((button) =>
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.demoFilter;
+      filters.forEach((item) =>
+        item.setAttribute("aria-pressed", String(item === button)),
+      );
+      update();
+    }),
+  );
+  document.querySelectorAll("[data-demo-copy]").forEach((button) =>
+    button.addEventListener("click", async () => {
+      const feedback = document.querySelector(".demo-feedback");
+      try {
+        await navigator.clipboard.writeText(button.dataset.demoCopy);
+        if (feedback)
+          feedback.textContent = "Sample copied. Paste it anywhere.";
+      } catch {
+        if (feedback)
+          feedback.textContent =
+            "Select the sample text to copy it in this browser.";
+      }
+    }),
+  );
+  const quickToggle = document.querySelector("[data-quick-toggle]");
+  quickToggle?.addEventListener("click", () => {
+    const preview = document.getElementById("quick-preview");
+    if (!preview) return;
+    preview.hidden = !preview.hidden;
+    quickToggle.setAttribute("aria-expanded", String(!preview.hidden));
+    const hint = document.querySelector(".quick-hidden");
+    if (hint) hint.hidden = !preview.hidden;
+    const status = document.querySelector(".quick-demo-status");
+    if (status)
+      status.textContent = preview.hidden
+        ? "Hidden. Press again to bring it back."
+        : "Press to hide the preview.";
+  });
 })();

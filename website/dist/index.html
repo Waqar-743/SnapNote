@@ -9,28 +9,99 @@
       content="SnapNote keeps your clipboard history, notes, snippets and images together in one private Windows workspace. No account, no cloud, no noise. Alt+X brings it up anywhere."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="SnapNote — A quiet place for everything you copy." />
+    <meta
+      property="og:title"
+      content="SnapNote — A quiet place for everything you copy."
+    />
     <meta
       property="og:description"
       content="Clipboard history, quick access, snippets, image tools and encrypted backups — private by default, on your device."
     />
     <meta
       property="og:image"
-      content="https://waqar-743.github.io/SnapNote/assets/workspace-light.png"
+      content="https://waqar-743.github.io/SnapNote/assets/mentor-teaching.png"
     />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <svg
+      class="icon-definitions"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <defs>
+        <symbol id="icon-clipboard" viewBox="0 0 24 24">
+          <rect x="5" y="5" width="14" height="17" rx="2" />
+          <rect x="9" y="2" width="6" height="5" rx="1" />
+          <path d="M9 12h6m-6 4h4" />
+        </symbol>
+        <symbol id="icon-note" viewBox="0 0 24 24">
+          <path
+            d="M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9z"
+          />
+          <path d="M14 2v7h7M7 13h10M7 17h7" />
+        </symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 5 5" />
+        </symbol>
+        <symbol id="icon-code" viewBox="0 0 24 24">
+          <path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-14-2 20" />
+        </symbol>
+        <symbol id="icon-image" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <circle cx="8" cy="8" r="1" />
+          <path d="m21 15-6-6L3 21" />
+        </symbol>
+        <symbol id="icon-keyboard" viewBox="0 0 24 24">
+          <rect x="2" y="5" width="20" height="14" rx="3" />
+          <path
+            d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"
+          />
+        </symbol>
+        <symbol id="icon-folder" viewBox="0 0 24 24">
+          <path
+            d="M3 7V5a2 2 0 0 1 2-2h5l3 4h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+          />
+        </symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24">
+          <rect x="4" y="10" width="16" height="12" rx="3" />
+          <path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v3" />
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+          <path d="m5 12 4 4L20 5" />
+        </symbol>
+        <symbol id="icon-arrow" viewBox="0 0 24 24">
+          <path d="M4 12h16m-6-6 6 6-6 6" />
+        </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1z" />
+        </symbol>
+        <symbol id="icon-copy" viewBox="0 0 24 24">
+          <rect x="8" y="8" width="13" height="13" rx="2" />
+          <path d="M16 8V3H3v13h5" />
+        </symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24">
+          <path d="M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6z" />
+          <path d="m8 12 3 3 5-6" />
+        </symbol>
+      </defs>
+    </svg>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header" id="top">
       <div class="wrap header-inner">
         <a class="brand" href="#top" aria-label="SnapNote home">
-          <img class="brand-mark" src="assets/logo-dark.png" alt="" width="803" height="870" />
+          <svg class="icon brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#icon-note" />
+          </svg>
           <span class="brand-word">SnapNote</span>
         </a>
-        <nav class="site-nav" aria-label="Site">
+        <nav class="site-nav" id="site-nav" aria-label="Site">
           <a href="#quick">Quick access</a>
           <a href="#mentor">The Mentor</a>
           <a href="#story">A day with it</a>
@@ -39,14 +110,17 @@
           <a href="#faq">FAQ</a>
         </nav>
         <div class="header-actions">
-          <a class="button small primary" href="https://github.com/Waqar-743/SnapNote/releases/latest">Download</a>
+          <a
+            class="button small primary"
+            href="https://github.com/Waqar-743/SnapNote/releases/latest"
+            >Download</a
+          >
           <button
             class="nav-toggle"
             type="button"
             aria-expanded="false"
             aria-controls="site-nav"
             aria-label="Menu"
-            hidden
           >
             <span></span><span></span><span></span>
           </button>
@@ -62,12 +136,16 @@
             <p class="eyebrow">A local-first Windows workspace by Waqar</p>
             <h1 id="hero-title">A quiet place for everything you copy.</h1>
             <p class="lede">
-              The line you liked. The link for later. The command that took twenty minutes.
-              SnapNote keeps them close — on your device only — and hands them back the
-              moment you reach for them.
+              The line you liked. The link for later. The command that took
+              twenty minutes. SnapNote keeps them close — on your device only —
+              and hands them back the moment you reach for them.
             </p>
             <div class="hero-cta">
-              <a class="button primary" href="https://github.com/Waqar-743/SnapNote/releases/latest">Download for Windows</a>
+              <a
+                class="button primary"
+                href="https://github.com/Waqar-743/SnapNote/releases/latest"
+                >Download for Windows</a
+              >
               <a class="button ghost" href="#quick">See how it works</a>
             </div>
             <ul class="trust" aria-label="Promises">
@@ -77,14 +155,150 @@
               <li>Windows 10 &amp; 11</li>
             </ul>
           </div>
-          <figure class="hero-shot frame">
-            <img
-              src="assets/workspace-light.png"
-              width="1180"
-              height="800"
-              alt="SnapNote workspace in the light theme with the clip library open"
-            />
-            <figcaption>The real workspace, light theme — a clip library, not a mockup.</figcaption>
+          <figure
+            class="hero-shot frame demo-workspace"
+            aria-label="Interactive preview with sample clips"
+          >
+            <div class="demo-titlebar">
+              <span class="window-dots" aria-hidden="true">● ● ●</span
+              ><span>SnapNote</span
+              ><span class="demo-badge">Interactive preview</span>
+            </div>
+            <div class="demo-body">
+              <div class="demo-rail" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#icon-clipboard" /></svg
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#icon-star" /></svg
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#icon-image" /></svg
+                ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#icon-note" />
+                </svg>
+              </div>
+              <div class="demo-library">
+                <div class="demo-heading">
+                  <strong>Your useful bits.</strong
+                  ><span class="live-label"><i></i> On this device</span>
+                </div>
+                <label class="demo-search"
+                  ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-search" /></svg
+                  ><input
+                    type="search"
+                    placeholder="Try searching ‘idea’"
+                    aria-label="Search sample clips"
+                /></label>
+                <div
+                  class="demo-filters"
+                  role="group"
+                  aria-label="Sample clip filters"
+                >
+                  <button
+                    type="button"
+                    data-demo-filter="all"
+                    aria-pressed="true"
+                  >
+                    All clips</button
+                  ><button
+                    type="button"
+                    data-demo-filter="text"
+                    aria-pressed="false"
+                  >
+                    Text</button
+                  ><button
+                    type="button"
+                    data-demo-filter="image"
+                    aria-pressed="false"
+                  >
+                    Images
+                  </button>
+                </div>
+                <div class="demo-clips">
+                  <article
+                    class="demo-clip"
+                    data-demo-type="text"
+                    data-demo-search="idea next small idea make room"
+                  >
+                    <span class="demo-type"
+                      ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#icon-note" />
+                      </svg>
+                      A small idea</span
+                    >
+                    <p>Make room for the next good thing.</p>
+                    <button
+                      type="button"
+                      data-demo-copy="Make room for the next good thing."
+                      aria-label="Copy sample idea"
+                    >
+                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#icon-copy" />
+                      </svg></button
+                    ><small>Just now</small>
+                  </article>
+                  <article
+                    class="demo-clip"
+                    data-demo-type="text"
+                    data-demo-search="command git status"
+                  >
+                    <span class="demo-type"
+                      ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#icon-code" />
+                      </svg>
+                      That useful command</span
+                    >
+                    <p><code>git status --short</code></p>
+                    <button
+                      type="button"
+                      data-demo-copy="git status --short"
+                      aria-label="Copy sample command"
+                    >
+                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#icon-copy" />
+                      </svg></button
+                    ><small>2 min ago</small>
+                  </article>
+                  <article
+                    class="demo-clip image-demo"
+                    data-demo-type="image"
+                    data-demo-search="image saved reference landscape"
+                  >
+                    <span class="demo-type"
+                      ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#icon-image" />
+                      </svg>
+                      A saved reference</span
+                    ><svg
+                      class="landscape-svg"
+                      viewBox="0 0 220 80"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        class="svg-drift"
+                        cx="169"
+                        cy="23"
+                        r="12"
+                        fill="var(--gold)"
+                      />
+                      <path
+                        d="m0 80 65-64 65 64m-20 0 57-46 53 46"
+                        fill="var(--olive)"
+                        opacity=".7"
+                      /></svg
+                    ><small>Sample image</small>
+                  </article>
+                </div>
+                <p class="demo-empty" hidden>
+                  No sample clips match. Try another search.
+                </p>
+              </div>
+            </div>
+            <figcaption>
+              <span class="demo-feedback" role="status" aria-live="polite"
+                >Sample clips. Try a filter, search, or copy.</span
+              ><kbd>Alt X</kbd>
+            </figcaption>
           </figure>
         </div>
       </section>
@@ -92,29 +306,73 @@
       <!-- Quick access -->
       <section class="quick" id="quick" aria-labelledby="quick-title">
         <div class="wrap quick-grid">
-          <figure class="quick-shot frame dark-frame">
-            <img
-              src="assets/quick-access.png"
-              width="560"
-              height="640"
-              alt="The small SnapNote quick-access window floating above other apps"
-            />
+          <figure class="quick-shot frame dark-frame quick-demo">
+            <div class="quick-demo-stage">
+              <div class="quick-orbit" aria-hidden="true"></div>
+              <div class="quick-preview" id="quick-preview">
+                <div class="quick-preview-head">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-clipboard" /></svg
+                  ><strong>Quick access</strong><span>Alt X</span>
+                </div>
+                <div class="quick-preview-search">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-search" />
+                  </svg>
+                  Find the thing you just copied
+                </div>
+                <div class="quick-preview-row">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-note" />
+                  </svg>
+                  Your next idea, kept close.
+                </div>
+                <div class="quick-preview-row">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-code" />
+                  </svg>
+                  The command that finally worked.
+                </div>
+              </div>
+              <p class="quick-hidden" hidden>Out of the way. Still in reach.</p>
+            </div>
+            <div class="quick-demo-controls">
+              <button
+                class="button light"
+                type="button"
+                data-quick-toggle
+                aria-controls="quick-preview"
+                aria-expanded="true"
+              >
+                Try Alt + X
+              </button>
+              <p role="status" class="quick-demo-status">
+                Press to hide the preview.
+              </p>
+            </div>
+            <figcaption>
+              A working illustration of the shortcut. Install SnapNote to use it
+              across apps.
+            </figcaption>
           </figure>
           <div class="quick-copy">
             <p class="eyebrow">It starts with one keystroke</p>
             <h2 id="quick-title">Alt + X. Anywhere. Every time.</h2>
             <p>
-              Open a small floating window right above whatever you were doing. It launches
-              first, it stays reachable, and every icon you need sits in its header —
-              clipboard, favorites, images, notes, snippets, folders. Most moments never
-              need the full screen.
+              Open a small floating window right above whatever you were doing.
+              It launches first, it stays reachable, and every icon you need
+              sits in its header — clipboard, favorites, images, notes,
+              snippets, folders. Most moments never need the full screen.
             </p>
             <p>
-              Closed the window? SnapNote waits quietly in your system tray, so
-              <strong>Alt+X works even when SnapNote is nowhere in sight</strong>.
+              Press it again to hide the focused quick window. Closed the
+              window? SnapNote waits in your system tray, so
+              <strong>Alt+X works even when SnapNote is nowhere in sight</strong
+              >.
             </p>
             <p class="chip-row" aria-label="Shortcut reminder">
-              <kbd>Alt</kbd><span>+</span><kbd>X</kbd><span class="chip-note">opens quick access</span>
+              <kbd>Alt</kbd><span>+</span><kbd>X</kbd
+              ><span class="chip-note">show it. Hide it. Keep moving.</span>
             </p>
           </div>
         </div>
@@ -135,16 +393,21 @@
             <p class="eyebrow">Meet the guide</p>
             <h2 id="mentor-title">The Mentor doesn’t judge your forty tabs.</h2>
             <p>
-              Every workspace deserves a calm presence, so SnapNote got one: a snow-white
-              wolf in a charcoal suit, glasses low, pointer raised. He has seen every mess a
-              busy day can make and never looks worried about yours.
+              Every workspace deserves a calm presence, so SnapNote got one: a
+              snow-white wolf in a charcoal suit, glasses low, pointer raised.
+              He has seen every mess a busy day can make and never looks worried
+              about yours.
             </p>
             <p>
-              We drew him — front, three-quarter, teaching pose — chose “The Mentor” from
-              three candidates, and let him set the tone. He keeps the brand kind while the
-              app stays out of your way. He is why nothing here shouts at you.
+              We drew him — front, three-quarter, teaching pose — chose “The
+              Mentor” from three candidates, and let him set the tone. He keeps
+              the brand kind while the app stays out of your way. He is why
+              nothing here shouts at you.
             </p>
-            <a class="text-link" href="https://github.com/Waqar-743/SnapNote/tree/main/docs/brand/README.md">
+            <a
+              class="text-link"
+              href="https://github.com/Waqar-743/SnapNote/tree/main/docs/brand/README.md"
+            >
               Read his model sheet <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -158,70 +421,90 @@
             <p class="eyebrow">A day you’ll recognise</p>
             <h2 id="story-title">Three small rescues, one quiet tool.</h2>
           </div>
-          <figure class="story-lead frame">
-            <img
-              src="assets/hero-desk.jpg"
-              width="1400"
-              height="933"
-              alt="A lamplit desk at night with a journal, loose notes and a small key"
-            />
-          </figure>
           <ol class="story-grid">
             <li class="chapter">
-              <img
-                class="chapter-art"
-                src="assets/drawer.jpg"
-                width="880"
-                height="880"
-                alt="An olive drawer of note cards with a magnifier, drawn warmly"
-                loading="lazy"
-              />
+              <div class="chapter-vector" aria-hidden="true">
+                <svg
+                  class="icon chapter-icon svg-drift"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <use href="#icon-search" /></svg
+                ><svg
+                  class="vector-lines"
+                  viewBox="0 0 180 60"
+                  aria-hidden="true"
+                >
+                  <path class="svg-write" d="M5 10h165M5 30h120M5 50h145" />
+                </svg>
+              </div>
               <span class="chapter-time">9:04 — Morning</span>
               <h3>The address that arrived too early</h3>
               <p>
-                A friend sends a café address, then a train time, then a link — and your
-                clipboard forgets all but the last. With automatic capture on, SnapNote
-                keeps each one. Search “café” at the gate and breathe out.
+                A friend sends a café address, then a train time, then a link —
+                and your clipboard forgets all but the last. With automatic
+                capture on, SnapNote keeps each one. Search “café” at the gate
+                and breathe out.
               </p>
             </li>
             <li class="chapter">
-              <img
-                class="chapter-art"
-                src="assets/reply-cards.jpg"
-                width="880"
-                height="880"
-                alt="Reply cards with blank token slots, drawn like paper craft"
-                loading="lazy"
-              />
+              <div class="chapter-vector" aria-hidden="true">
+                <svg
+                  class="icon chapter-icon svg-drift"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <use href="#icon-code" /></svg
+                ><svg
+                  class="vector-lines"
+                  viewBox="0 0 180 60"
+                  aria-hidden="true"
+                >
+                  <path class="svg-write" d="M5 10h165M5 30h120M5 50h145" />
+                </svg>
+              </div>
               <span class="chapter-time">14:20 — Afternoon</span>
               <h3>The reply you keep rewriting</h3>
               <p>
-                The same thank-you note, the same status format, week after week. Save it
-                once as a snippet with <code>{{name}}</code> and <code>{{project}}</code>.
-                This time it takes eleven seconds, and it feels a little magical anyway.
+                The same thank-you note, the same status format, week after
+                week. Save it once as a snippet with <code>{{name}}</code> and
+                <code>{{project}}</code>. This time it takes eleven seconds, and
+                it feels a little magical anyway.
               </p>
             </li>
             <li class="chapter">
-              <img
-                class="chapter-art"
-                src="assets/text-extraction.jpg"
-                width="880"
-                height="880"
-                alt="Paper-craft scene of a screenshot turning into readable text"
-                loading="lazy"
-              />
+              <div class="chapter-vector" aria-hidden="true">
+                <svg
+                  class="icon chapter-icon svg-drift"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <use href="#icon-image" /></svg
+                ><svg
+                  class="vector-lines"
+                  viewBox="0 0 180 60"
+                  aria-hidden="true"
+                >
+                  <path class="svg-write" d="M5 10h165M5 30h120M5 50h145" />
+                </svg>
+              </div>
               <span class="chapter-time">22:47 — Late evening</span>
               <h3>The screenshot full of numbers</h3>
               <p>
-                A chart someone pasted in a meeting. Pin it on screen, crop the region you
-                need, and let local OCR pull the text out so it becomes searchable. Nobody
-                had to open a spreadsheet at midnight.
+                A chart someone pasted in a meeting. Pin it on screen, crop the
+                region you need, and let local OCR pull the text out so it
+                becomes searchable. Nobody had to open a spreadsheet at
+                midnight.
               </p>
             </li>
           </ol>
           <div class="story-close">
-            <img src="assets/notepad-icon.jpg" width="320" height="320" alt="" loading="lazy" />
-            <p>Small rescues, all day — and not one of them left your machine.</p>
+            <svg class="icon story-seal" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-shield" />
+            </svg>
+            <p>
+              Small rescues, all day — and not one of them left your machine.
+            </p>
           </div>
         </div>
       </section>
@@ -231,96 +514,145 @@
         <div class="wrap">
           <div class="section-head">
             <p class="eyebrow">Inside the workspace</p>
-            <h2 id="features-title">Everything copied, finally in one place.</h2>
+            <h2 id="features-title">
+              Everything copied, finally in one place.
+            </h2>
           </div>
           <div class="bento">
-            <article class="cell shot-cell wide">
-              <img
-                src="assets/workspace-dark.png"
-                width="1180"
-                height="800"
-                alt="SnapNote workspace in the dark theme with the clip detail pane open"
-              />
+            <article class="cell shot-cell wide workflow-cell">
+              <p class="eyebrow">From scattered to sorted</p>
+              <h3>A little order.<br />A lot more headspace.</h3>
+              <div class="workflow-diagram" aria-hidden="true">
+                <div class="workflow-source">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-note" /></svg
+                  ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-image" /></svg
+                  ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-code" />
+                  </svg>
+                </div>
+                <svg viewBox="0 0 280 110" class="workflow-paths">
+                  <path
+                    d="M0 15C130 15 130 55 280 55M0 55h280M0 95C130 95 130 55 280 55"
+                  />
+                  <circle class="workflow-packet" r="4" cx="140" cy="55" />
+                </svg>
+                <div class="workflow-destination">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-folder" /></svg
+                  ><span>Your workspace</span>
+                </div>
+              </div>
+              <div class="workflow-labels">
+                <span>Copy it</span><span>Find it</span
+                ><span>Keep it yours</span>
+              </div>
+              <p>
+                Text, images, notes and reusable replies. One place to return
+                to.
+              </p>
             </article>
             <article class="cell">
-              <img
-                class="cell-art"
-                src="assets/clipped-notes.jpg"
-                width="900"
-                height="900"
-                alt="Clipped notes and snapshots gathered on a pinboard, drawn warmly"
-                loading="lazy"
-              />
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-clipboard" />
+              </svg>
               <h3>Clipboard with a memory</h3>
               <p>
-                Text and images, deduplicated, searchable across titles, content, tags and
-                text found inside images. A bounded history you decide the size of.
+                Text and images, deduplicated, searchable across titles,
+                content, tags and text found inside images. A bounded history
+                you decide the size of.
               </p>
             </article>
             <article class="cell">
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-note" />
+              </svg>
               <h3>Notes that keep their shape</h3>
               <p>
-                A real editor: headings, lists, tasks, code blocks, undo and redo. Your old
-                notes migrate over untouched on first launch.
+                A real editor: headings, lists, tasks, code blocks, undo and
+                redo. Your old notes migrate over untouched on first launch.
               </p>
             </article>
             <article class="cell">
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-code" />
+              </svg>
               <h3>Snippets with blanks</h3>
               <p>
-                Mark any text as a template with <code>{{variables}}</code>. Copying fills
-                the blanks and leaves the original untouched.
+                Mark any text as a template with <code>{{variables}}</code>.
+                Copying fills the blanks and leaves the original untouched.
               </p>
             </article>
             <article class="cell">
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-image" />
+              </svg>
               <h3>Images, handled</h3>
               <p>
-                Crop, annotate, extract text with local OCR, or pin an image above other
-                windows while you work. The original is always kept.
+                Crop, annotate, extract text with local OCR, or pin an image
+                above other windows while you work. Delete images from clips or
+                notes whenever you choose.
               </p>
             </article>
             <article class="cell">
-              <img
-                class="cell-art"
-                src="assets/alt-x-notes.jpg"
-                width="760"
-                height="760"
-                alt="A note card marked Alt plus X beside quick-access lines"
-                loading="lazy"
-              />
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-keyboard" />
+              </svg>
               <h3>Alt+X, everywhere</h3>
               <p>
-                The small quick window with every icon in its header, one keystroke away —
-                even straight from the system tray after you close the app.
+                The small quick window with every icon in its header, one
+                keystroke away — even straight from the system tray after you
+                close the app.
               </p>
             </article>
             <article class="cell">
-              <img
-                class="cell-art"
-                src="assets/starred-note.jpg"
-                width="760"
-                height="760"
-                alt="A starred note under a magnifying glass, drawn warmly"
-                loading="lazy"
-              />
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-folder" />
+              </svg>
               <h3>Folders, sessions, favorites</h3>
               <p>
-                Group a moment of research into a session, park a project in a folder,
-                star what keeps coming back. Multi-select copies text across clips.
+                Group a moment of research into a session, park a project in a
+                folder, star what keeps coming back. Multi-select copies text
+                across clips.
               </p>
             </article>
             <article class="cell">
-              <img
-                class="cell-art"
-                src="assets/archive-box.jpg"
-                width="760"
-                height="760"
-                alt="An olive archive box holding note cards, drawn warmly"
-                loading="lazy"
-              />
+              <svg
+                class="icon feature-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <use href="#icon-lock" />
+              </svg>
               <h3>A vault, if you want one</h3>
               <p>
-                Optional AES-256 encryption for the live workspace, instant lock, and
-                password-protected backups you can take anywhere.
+                Optional AES-256 encryption for the live workspace, instant
+                lock, and password-protected backups you can take anywhere.
               </p>
             </article>
           </div>
@@ -334,30 +666,55 @@
             <p class="eyebrow on-dark">Privacy, in plain words</p>
             <h2 id="privacy-title">Your words stay yours.</h2>
             <p>
-              SnapNote makes no account, cloud or telemetry requests. History lives in a
-              transactional store inside the app’s own profile; nothing is uploaded
-              because there is nothing to upload with.
+              SnapNote makes no account, cloud or telemetry requests. History
+              lives in a transactional store inside the app’s own profile;
+              nothing is uploaded because there is nothing to upload with.
             </p>
             <p>
-              Turn on lock-and-encryption and the workspace is rewritten with AES-256-GCM
-              and PBKDF2 — the password exists only in your head. Backups can carry a
-              password too, so a copy in your bag stays a secret.
+              Turn on lock-and-encryption and the workspace is rewritten with
+              AES-256-GCM and PBKDF2 — the password exists only in your head.
+              Backups can carry a password too, so a copy in your bag stays a
+              secret.
             </p>
           </div>
           <figure class="privacy-figure">
-            <img
-              src="assets/padlock.jpg"
-              width="820"
-              height="820"
-              alt="A monitor showing a golden padlock, drawn warmly"
-              loading="lazy"
-            />
+            <svg
+              class="privacy-svg"
+              viewBox="0 0 360 260"
+              role="img"
+              aria-labelledby="privacy-svg-title"
+            >
+              <title id="privacy-svg-title">
+                Your private workspace stays on this device
+              </title>
+              <rect x="43" y="37" width="274" height="177" rx="15" />
+              <path d="M125 238h110m-55-24v24" />
+              <circle class="privacy-ring" cx="180" cy="123" r="67" />
+              <circle class="privacy-ring inner" cx="180" cy="123" r="52" />
+              <g class="privacy-lock">
+                <rect x="154" y="113" width="52" height="43" rx="8" />
+                <path d="M165 113V99a15 15 0 0 1 30 0v14m-15 16v10" />
+              </g>
+              <path class="svg-write" d="m236 75 7 7 14-16" />
+            </svg>
           </figure>
           <dl class="pledge">
-            <div><dt>Accounts</dt><dd>None</dd></div>
-            <div><dt>Cloud uploads</dt><dd>None</dd></div>
-            <div><dt>Telemetry</dt><dd>None</dd></div>
-            <div><dt>Your data</dt><dd>Yours</dd></div>
+            <div>
+              <dt>Accounts</dt>
+              <dd>None</dd>
+            </div>
+            <div>
+              <dt>Cloud uploads</dt>
+              <dd>None</dd>
+            </div>
+            <div>
+              <dt>Telemetry</dt>
+              <dd>None</dd>
+            </div>
+            <div>
+              <dt>Your data</dt>
+              <dd>Yours</dd>
+            </div>
           </dl>
         </div>
       </section>
@@ -366,35 +723,62 @@
       <section class="download" id="download" aria-labelledby="download-title">
         <div class="wrap download-inner">
           <p class="eyebrow on-dark">Ready when you are</p>
-          <h2 id="download-title"><span data-release-version>Latest SnapNote</span> for Windows</h2>
+          <h2 id="download-title">
+            <span data-release-version>Latest SnapNote</span> for Windows
+          </h2>
           <p class="download-lede">
-            x64 installers, built and validated by the public Windows pipeline — real
-            clipboard, OCR, shortcut and persistence checks on a fresh runner.
+            x64 installers, built and validated by the public Windows pipeline —
+            real clipboard, OCR, shortcut and persistence checks on a fresh
+            runner.
           </p>
           <div class="download-buttons">
             <a
               class="button primary big"
-              data-release-download="msi" href="https://github.com/Waqar-743/SnapNote/releases/latest"
+              data-release-download="msi"
+              href="https://github.com/Waqar-743/SnapNote/releases/latest"
             >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-download" />
+              </svg>
               Download MSI <span class="muted-line">recommended</span>
             </a>
             <a
               class="button light big"
-              data-release-download="exe" href="https://github.com/Waqar-743/SnapNote/releases/latest"
+              data-release-download="exe"
+              href="https://github.com/Waqar-743/SnapNote/releases/latest"
             >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-download" />
+              </svg>
               Download setup.exe
             </a>
           </div>
           <p class="fine">
             SHA-256 checksums in
-            <a data-release-download="checksums" href="https://github.com/Waqar-743/SnapNote/releases/latest">the release checksum file</a>
-            on the <a href="https://github.com/Waqar-743/SnapNote/releases/latest">latest release</a>.
-            Builds are unsigned; SmartScreen may ask — verify the checksum if that helps.
+            <a
+              data-release-download="checksums"
+              href="https://github.com/Waqar-743/SnapNote/releases/latest"
+              >the release checksum file</a
+            >
+            on the
+            <a href="https://github.com/Waqar-743/SnapNote/releases/latest"
+              >latest release</a
+            >. Builds are unsigned; SmartScreen may ask — verify the checksum if
+            that helps.
           </p>
           <ol class="steps" aria-label="First steps after install">
-            <li><strong>Install</strong> — Next, Next, Done. Nothing else is chosen for you.</li>
-            <li><strong>Press Alt+X</strong> — the small quick window appears wherever you are.</li>
-            <li><strong>Copy something</strong> — enable capture, and history starts keeping up.</li>
+            <li>
+              <strong>Install</strong> — Next, Next, Done. Nothing else is
+              chosen for you.
+            </li>
+            <li>
+              <strong>Press Alt+X</strong> — the small quick window appears
+              wherever you are.
+            </li>
+            <li>
+              <strong>Copy something</strong> — enable capture, and history
+              starts keeping up.
+            </li>
           </ol>
         </div>
       </section>
@@ -409,40 +793,44 @@
           <details class="qa">
             <summary>Does Alt+X work if I closed the app?</summary>
             <p>
-              If the window is closed, yes — SnapNote keeps running in the system tray and
-              the shortcut brings the quick window straight back. If you chose Quit in the
-              tray menu, the shortcut rests too; start SnapNote once and it is listening again.
+              If the window is closed, yes — SnapNote keeps running in the
+              system tray and the shortcut brings the quick window straight
+              back. If you chose Quit in the tray menu, the shortcut rests too;
+              start SnapNote once and it is listening again.
             </p>
           </details>
           <details class="qa">
             <summary>Where does my data go?</summary>
             <p>
-              Nowhere. Clips, notes and settings live in local, transactional storage
-              inside the app’s profile on this device. There is no sync, no server, no
-              analytics to send them to.
+              Nowhere. Clips, notes and settings live in local, transactional
+              storage inside the app’s profile on this device. There is no sync,
+              no server, no analytics to send them to.
             </p>
           </details>
           <details class="qa">
             <summary>Why is OCR separate?</summary>
             <p>
-              Text recognition uses Tesseract, and bundling someone else’s runtime silently
-              didn’t feel ours to do. Install Tesseract once, add it to PATH, and SnapNote
-              uses it for image text — extract it once and the text becomes searchable.
+              Text recognition uses Tesseract, and bundling someone else’s
+              runtime silently didn’t feel ours to do. Install Tesseract once,
+              add it to PATH, and SnapNote uses it for image text — extract it
+              once and the text becomes searchable.
             </p>
           </details>
           <details class="qa">
             <summary>Is my old SnapNote data compatible?</summary>
             <p>
-              Yes. On first launch your original rich-text notes are migrated into the new
-              store, with a recovery copy of the old records kept during normal use.
-              Storage problems surface in the app instead of being swallowed.
+              Yes. On first launch your original rich-text notes are migrated
+              into the new store, with a recovery copy of the old records kept
+              during normal use. Storage problems surface in the app instead of
+              being swallowed.
             </p>
           </details>
           <details class="qa">
             <summary>Windows only?</summary>
             <p>
-              Windows 10 and 11 are where it is built and validated end to end. The code is
-              Tauri-based and dreams of more, but today Windows is the honest answer.
+              Windows 10 and 11 are where it is built and validated end to end.
+              The code is Tauri-based and dreams of more, but today Windows is
+              the honest answer.
             </p>
           </details>
         </div>
@@ -452,17 +840,27 @@
     <footer class="site-footer">
       <div class="wrap footer-grid">
         <div class="footer-brand">
-          <img class="brand-mark" src="assets/logo-original.png" alt="" width="803" height="873" />
+          <svg class="icon brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#icon-note" />
+          </svg>
           <div>
             <p class="brand-word">SnapNote</p>
-            <p class="footer-line">Built with patience by Waqar — and The Mentor, for the small rescues.</p>
+            <p class="footer-line">
+              Built with patience by Waqar — and The Mentor, for the small
+              rescues.
+            </p>
           </div>
         </div>
         <nav class="footer-nav" aria-label="Footer">
           <a href="https://github.com/Waqar-743/SnapNote">GitHub</a>
           <a href="https://github.com/Waqar-743/SnapNote/releases">Releases</a>
-          <a href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md">Desktop guide</a>
-          <a href="https://github.com/Waqar-743/SnapNote/blob/main/README.md">README</a>
+          <a
+            href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md"
+            >Desktop guide</a
+          >
+          <a href="https://github.com/Waqar-743/SnapNote/blob/main/README.md"
+            >README</a
+          >
         </nav>
       </div>
       <div class="wrap footer-base">

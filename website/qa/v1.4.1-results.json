@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-30T07:43:40.330Z",
+  "browser": "156.0.8078.4",
+  "checks": [
+    "Installer links and displayed version follow the latest release API, including future versions",
+    "The wolf is the only bitmap; it decodes successfully",
+    "Unique SVG/section IDs and valid internal anchors",
+    "Sample preview filters, searches, shows an empty result and copies literal text",
+    "Quick-access illustration hides and reopens with accessible state",
+    "No horizontal overflow at 320, 390, 620, 768, 960, 1024 or 1440 pixels",
+    "Mobile navigation opens and closes on section selection",
+    "Reduced-motion mode disables illustration animations",
+    "API failure retains working latest-release fallback links",
+    "Content and latest release links work without JavaScript",
+    "No JavaScript errors or failed HTTP resources"
+  ],
+  "errors": [],
+  "failed": []
+}
