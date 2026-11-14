@@ -15,6 +15,12 @@ permissions:
 jobs:
   build-windows:
     runs-on: windows-latest
+    env:
+      # Issue #9: snapnote.exe failed to start on machines without the
+      # Visual C++ Redistributable ("VCRUNTIME140.dll was not found").
+      # Statically linking the C runtime makes the binary self-contained,
+      # so the installers run on any Windows 10/11 machine out of the box.
+      RUSTFLAGS: -C target-feature=+crt-static
     defaults:
       run:
         working-directory: snapnote
@@ -79,6 +85,21 @@ jobs:
 
       - name: Build Tauri app (Windows bundles)
         run: npm run tauri build
+
+      - name: Verify snapnote.exe needs no Visual C++ runtime
+        shell: pwsh
+        run: |
+          $exe = "src-tauri/target/release/snapnote.exe"
+          if (-not (Test-Path $exe)) { Write-Error "Missing $exe"; exit 1 }
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          $text = [System.Text.Encoding]::ASCII.GetString($bytes)
+          $hits = [regex]::Matches($text, '(?i)(vcruntime140(?:_1)?|msvcp140|concrt140|vcamp140|vcomp140)\.dll') |
+            ForEach-Object { $_.Value } | Sort-Object -Unique
+          if ($hits) {
+            Write-Error "snapnote.exe still imports: $($hits -join ', ')"
+            exit 1
+          }
+          Write-Output "Verified: snapnote.exe imports no Visual C++ runtime DLLs."
 
       - name: Upload MSI artifact
         uses: actions/upload-artifact@v4
