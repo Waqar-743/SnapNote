@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://waqar-743.github.io/SnapNote/sitemap.xml

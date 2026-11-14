@@ -1,0 +1,91 @@
+{
+  "issue": "https://github.com/Waqar-743/SnapNote/issues/9",
+  "date": "2026-11-14",
+  "scope": "Website redesign verification — real screenshots, professional layout, complete SEO",
+  "environment": {
+    "renderer": "Microsoft Edge (Chromium) headless",
+    "server": "local static file server on http://127.0.0.1:4173",
+    "captures": [
+      "issue-9-desktop-hero.png (1440x900)",
+      "issue-9-desktop-full.png (1440x5200)",
+      "issue-9-mobile-hero.png (390x844)",
+      "issue-9-mobile-full.png (390x6800)"
+    ]
+  },
+  "checks": [
+    {
+      "name": "JavaScript syntax",
+      "method": "node --check dist/app.js",
+      "result": "pass"
+    },
+    {
+      "name": "Local asset references resolve",
+      "method": "Node script scanned every src/href in index.html (31 unique references)",
+      "result": "pass"
+    },
+    {
+      "name": "In-page anchors have targets",
+      "method": "19 anchors matched to element ids",
+      "result": "pass"
+    },
+    {
+      "name": "JSON-LD structured data",
+      "method": "Parses as JSON; @graph contains WebSite, Person, SoftwareApplication, FAQPage",
+      "result": "pass"
+    },
+    {
+      "name": "SEO meta completeness",
+      "method": "description, canonical, og:title/description/image/url/site_name, twitter:card/image verified present",
+      "result": "pass"
+    },
+    {
+      "name": "Single h1 and image accessibility",
+      "method": "Exactly one h1; all 4 img tags carry alt text and explicit width/height",
+      "result": "pass"
+    },
+    {
+      "name": "robots.txt and sitemap.xml",
+      "method": "robots.txt references the sitemap; sitemap lists the canonical URL",
+      "result": "pass"
+    },
+    {
+      "name": "Social banner",
+      "method": "og-banner.png verified 1200x630 PNG",
+      "result": "pass"
+    },
+    {
+      "name": "Removed content",
+      "method": "No references to the mascot section remain; mentor-teaching.png (1.5 MB) deleted",
+      "result": "pass"
+    },
+    {
+      "name": "Desktop render",
+      "method": "Headless capture; OCR confirmed hero, 8 feature cards, quick access, screenshots gallery, privacy, download, FAQ all render with real app screenshots",
+      "result": "pass"
+    },
+    {
+      "name": "Mobile render",
+      "method": "Headless capture at 390px; OCR confirmed responsive hero with stacked layout and mobile nav toggle",
+      "result": "pass"
+    },
+    {
+      "name": "Release resolution",
+      "method": "Live GitHub API call resolved the current latest release (v1.4.1) into the download section headline",
+      "result": "pass"
+    },
+    {
+      "name": "Workflow YAML validity",
+      "method": "js-yaml parse of windows-tauri-release.yml and deploy-website.yml",
+      "result": "pass"
+    },
+    {
+      "name": "Frontend regression after version bump",
+      "method": "npm test (10/10 pass), npm run format:check (clean), npm run build (success)",
+      "result": "pass"
+    }
+  ],
+  "notes": [
+    "The VCRUNTIME140.dll startup fix is verified by the Windows workflow: the release build runs with RUSTFLAGS=-C target-feature=+crt-static and a post-build step fails the run if snapnote.exe still imports any Visual C++ runtime DLL.",
+    "Page weight: the published site dropped by approximately 1.5 MB after removing the mascot PNG; the four shipped PNGs are real application captures plus the generated social banner."
+  ]
+}

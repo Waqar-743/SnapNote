@@ -43,6 +43,14 @@ The owner reported a website 404 and explicitly chose public access. Site public
 
 The `v1.2.0` tag was released with the CI-built EXE, MSI and checksum file from run `38879682636`, published to the [v1.2.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.2.0), marked latest. The v0.1.0 release remains available. [Release receipt](releases/windows-1.2.0.json). Website download buttons link directly to those verified release assets.
 
+## Issue #9 fix: startup error and website quality, 2026-11-14
+
+The owner reported ([issue #9](https://github.com/Waqar-743/SnapNote/issues/9)) that the downloaded app failed to start with "The code execution cannot proceed because VCRUNTIME140.dll was not found," and criticized the website as casual, unrealistic and weak on SEO.
+
+- **Startup fix:** the Windows build now sets `RUSTFLAGS=-C target-feature=+crt-static`, statically linking the Visual C++ runtime into `snapnote.exe`. A new post-build workflow step fails the run if the binary still imports any Visual C++ runtime DLL, so the error cannot ship again. Version bumped to 1.4.2 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.4.2.md](releases/v1.4.2.md). Tag `v1.4.2` publishes the fixed installers.
+- **Website redesign:** rebuilt around the real application screenshots (hero, quick access, light/dark gallery); removed the mascot section and its 1.5 MB image, the interactive mock preview and the fictional day-story. Copy rewritten to be concrete and professional. Full SEO added: canonical URL, Open Graph and Twitter cards with a generated 1200×630 banner, `SoftwareApplication`/`WebSite`/`FAQPage` JSON-LD, `robots.txt` and `sitemap.xml`. Verification evidence: [issue-9 QA results](../website/qa/issue-9-results.json).
+- **Local verification:** frontend `npm test` (10/10), `format:check` and production build pass after the version bump; both workflow YAML files parse; headless Edge captures of the redesigned site verified at desktop and mobile widths.
+
 ## Product limits to keep visible
 
 Tesseract and language data must be installed locally for OCR. No sync provider or automatic paste injection ships. Windows installers are unsigned unless separately configured. macOS runtime checks are not complete. Tray behavior, per-app capture exclusions, automatic lock and richer annotation tools remain later enhancements.
