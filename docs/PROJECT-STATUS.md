@@ -60,6 +60,16 @@ The owner reported two issues: the favicon and app icon should use the dashboard
 - **Efficiency:** memoized clip search/filtering, selection lookups (Set), and sidebar group counts (single pass); one shared `Intl.DateTimeFormat` for clip dates; sidebar brand logos downscaled to display size (~1 MB → 48 KB).
 - **Validation:** the native smoke suite now drives the starter walkthrough through its own buttons and asserts the 30% bound (29 checks); frontend `npm test` (10/10), `format:check`, and the production build pass locally after the bump. Version raised to 1.5.0 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.5.0.md](releases/v1.5.0.md). Tag `v1.5.0` publishes the installers.
 
+## Glossy icon rebrand, 2026-11-17
+
+The owner replaced the v1.5.0 icon choice with two new glossy icons: a light pencil icon for light contexts and a dark glossy icon for dark mode. The v1.5.0 icon was reported as blurry.
+
+- **Desktop app icon:** every bundled icon (ICO, ICNS, PNG sizes, Windows Store logos) was regenerated from the dark glossy icon, cropped to its artwork and padded square at 1024px so masks never clip it.
+- **Favicons:** the app and the website now ship theme-aware PNG favicons (light pencil in light scheme, dark glossy in dark scheme) plus an Apple touch icon on the website; the old SVG favicon was removed.
+- **In-app brand:** the sidebar logo uses the new icons matched to the theme (square 34px).
+- **README and website:** the README picture block uses the light pencil icon by default and the dark icon in dark mode; the website header and footer brand marks use the same theme-aware pair. Superseded root images (`SnapNote-logo-Dark.png`, `SnapNote-logo-white.png`, `SnapNote-App.png`) were removed.
+- **Validation:** frontend `npm test` (10/10), `format:check`, and the production build pass after the bump. Version raised to 1.5.1 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.5.1.md](releases/v1.5.1.md). Tag `v1.5.1` publishes the installers.
+
 ## Product limits to keep visible
 
 Tesseract and language data must be installed locally for OCR. No sync provider or automatic paste injection ships. Windows installers are unsigned unless separately configured. macOS runtime checks are not complete. Tray behavior, per-app capture exclusions, automatic lock and richer annotation tools remain later enhancements.

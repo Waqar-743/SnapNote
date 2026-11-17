@@ -55,7 +55,10 @@
       content="https://waqar-743.github.io/SnapNote/assets/og-banner.png"
     />
 
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" href="assets/favicon-light.png" />
+    <link rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" href="assets/favicon-dark.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-dark.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <link rel="stylesheet" href="styles.css" />
 
     <script type="application/ld+json">
@@ -87,7 +90,7 @@
             "description": "A private clipboard manager and notes workspace for Windows. Clipboard history, quick access with Alt+X, reusable snippets, image tools and optional AES-256 encryption — all data stays on the local device.",
             "applicationCategory": "UtilitiesApplication",
             "operatingSystem": ["Windows 10", "Windows 11"],
-            "softwareVersion": "1.5.0",
+            "softwareVersion": "1.5.1",
             "downloadUrl": "https://github.com/Waqar-743/SnapNote/releases/latest",
             "installUrl": "https://github.com/Waqar-743/SnapNote/releases/latest",
             "screenshot": "https://waqar-743.github.io/SnapNote/assets/workspace-light.png",
@@ -238,9 +241,10 @@
     <header class="site-header" id="top">
       <div class="wrap header-inner">
         <a class="brand" href="#top" aria-label="SnapNote home">
-          <svg class="icon brand-mark" viewBox="0 0 24 24" aria-hidden="true">
-            <use href="#icon-note" />
-          </svg>
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="assets/icon-dark.png" />
+            <img class="brand-mark" src="assets/icon-light.png" alt="" width="38" height="38" />
+          </picture>
           <span class="brand-word">SnapNote</span>
         </a>
         <nav class="site-nav" id="site-nav" aria-label="Site">
@@ -733,9 +737,10 @@
     <footer class="site-footer">
       <div class="wrap footer-grid">
         <div class="footer-brand">
-          <svg class="icon brand-mark" viewBox="0 0 24 24" aria-hidden="true">
-            <use href="#icon-note" />
-          </svg>
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="assets/icon-dark.png" />
+            <img class="brand-mark" src="assets/icon-light.png" alt="" width="48" height="48" />
+          </picture>
           <div>
             <p class="brand-word">SnapNote</p>
             <p class="footer-line">

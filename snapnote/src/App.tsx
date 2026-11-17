@@ -682,7 +682,7 @@ function DesktopWorkspace() {
               src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
               alt="SnapNote"
               width={34}
-              height={37}
+              height={34}
             />
             <div>
               SnapNote<small>Your visual workspace.</small>

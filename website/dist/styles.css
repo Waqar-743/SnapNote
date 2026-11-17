@@ -260,7 +260,7 @@ kbd {
 
 .brand-mark {
   width: 38px;
-  height: 41px;
+  height: 38px;
   border-radius: 10px;
 }
 
@@ -745,8 +745,8 @@ kbd {
 }
 
 .footer-brand .brand-mark {
-  width: 46px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
 }
 
 .footer-line {
@@ -848,9 +848,7 @@ kbd {
 }
 
 .brand-mark {
-  color: var(--accent);
-  background: var(--paper-deep);
-  padding: 7px;
+  object-fit: contain;
 }
 
 [hidden] {
