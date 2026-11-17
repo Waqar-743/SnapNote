@@ -141,7 +141,7 @@ svg {
   font-size: 15px;
   font-weight: 650;
   letter-spacing: -0.4px;
-  margin: 0 8px 0 4px;
+  margin: 0 8px 0 0;
   white-space: nowrap;
 }
 .rail-divider {
@@ -1208,6 +1208,103 @@ kbd {
 }
 .quick-mode .clip-preview {
   height: 68px;
+}
+.starter-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: #37290f33;
+  backdrop-filter: blur(1.5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.starter-card {
+  width: min(400px, 90vw);
+  max-height: min(268px, 60dvh);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 13px 16px 16px;
+  box-shadow: 0 30px 100px #0005;
+  animation: starter-in 0.18s ease;
+}
+.starter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.starter-counter {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+}
+.starter-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 7px;
+  padding: 2px 8px;
+}
+.starter-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.starter-body h2 {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+}
+.starter-body p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.starter-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+}
+.starter-dots {
+  display: flex;
+  gap: 5px;
+}
+.starter-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--line);
+  transition: background 0.15s;
+}
+.starter-dots span.on {
+  background: var(--accent);
+}
+.starter-footer .button {
+  min-width: 138px;
+}
+@keyframes starter-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @media (min-width: 1450px) {
   .clip-grid {

@@ -4,6 +4,7 @@ import {
   useCallback,
   useDeferredValue,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -31,7 +32,9 @@ import {
   X,
   Moon,
   Sun,
+  ArrowRight,
   ArrowUpRight,
+  ExternalLink,
   Pin,
   ScanText,
   Pencil,
@@ -78,6 +81,35 @@ type View =
   | "snippets"
   | `folder:${string}`
   | `session:${string}`;
+const PROJECT_URL = "https://github.com/Waqar-743/SnapNote";
+const WALKTHROUGH_KEY = "snapnote-starter";
+const WALKTHROUGH_STEPS = [
+  {
+    icon: ClipboardList,
+    title: "Everything you copy, kept",
+    text: "Text, links, and images land in a searchable history that lives only on this device.",
+  },
+  {
+    icon: Keyboard,
+    title: "One keystroke away",
+    text: "Press Alt + X anywhere and a small quick-access window appears above your work, ready to search and copy.",
+  },
+  {
+    icon: Folder,
+    title: "Sort things your way",
+    text: "Favorites, folders, tags, and sessions keep a project together. Snippets reuse the words you write twice too often.",
+  },
+  {
+    icon: Pencil,
+    title: "Notes with a real editor",
+    text: "Headings, lists, task lists, and code blocks. Images can be cropped, annotated, pinned, and read back with local OCR.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Private by default",
+    text: "No account, no cloud, no telemetry. Optional AES-256 encryption protects the workspace at rest.",
+  },
+];
 
 function PinnedImage() {
   const [src, setSrc] = useState("");
@@ -94,6 +126,58 @@ function PinnedImage() {
       ) : (
         <p role="alert">{error || "Opening image…"}</p>
       )}
+    </div>
+  );
+}
+
+function StarterScreen({
+  step,
+  onSkip,
+  onContinue,
+}: {
+  step: number;
+  onSkip: () => void;
+  onContinue: () => void;
+}) {
+  const current = WALKTHROUGH_STEPS[step] ?? WALKTHROUGH_STEPS[0];
+  const last = step >= WALKTHROUGH_STEPS.length - 1;
+  const Icon = current.icon;
+  return (
+    <div className="starter-backdrop" onClick={onSkip}>
+      <section
+        className="starter-card"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Getting started with SnapNote"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header className="starter-top">
+          <button className="text-button" onClick={onSkip}>
+            Skip
+          </button>
+          <span className="starter-counter">
+            {step + 1} / {WALKTHROUGH_STEPS.length}
+          </span>
+        </header>
+        <div className="starter-body">
+          <span className="starter-icon" aria-hidden="true">
+            <Icon size={20} />
+          </span>
+          <h2>{current.title}</h2>
+          <p>{current.text}</p>
+        </div>
+        <footer className="starter-footer">
+          <div className="starter-dots" aria-hidden="true">
+            {WALKTHROUGH_STEPS.map((_, index) => (
+              <span key={index} className={index === step ? "on" : ""} />
+            ))}
+          </div>
+          <button autoFocus className="button primary" onClick={onContinue}>
+            {last ? "Get started" : "Continue"}
+            {last ? <Check size={14} /> : <ArrowRight size={14} />}
+          </button>
+        </footer>
+      </section>
     </div>
   );
 }
@@ -121,6 +205,10 @@ function DesktopWorkspace() {
   const [settings, setSettings] = useState(false);
   const [help, setHelp] = useState(false);
   const [quick, setQuick] = useState(true);
+  const [starter, setStarter] = useState(
+    () => localStorage.getItem(WALKTHROUGH_KEY) !== "1",
+  );
+  const [starterStep, setStarterStep] = useState(0);
   const [floating, setFloating] = useState(false);
   const [editingImage, setEditingImage] = useState<Clip | null>(null);
   const [ocrBusy, setOcrBusy] = useState(false);
@@ -143,6 +231,14 @@ function DesktopWorkspace() {
     (payload: ClipboardPayload) => mutate((w) => addClip(w, payload)),
     [mutate],
   );
+  const closeStarter = useCallback(() => {
+    localStorage.setItem(WALKTHROUGH_KEY, "1");
+    setStarter(false);
+  }, []);
+  const advanceStarter = useCallback(() => {
+    if (starterStep >= WALKTHROUGH_STEPS.length - 1) closeStarter();
+    else setStarterStep(starterStep + 1);
+  }, [starterStep, closeStarter]);
 
   useEffect(() => {
     let disposed = false;
@@ -302,15 +398,16 @@ function DesktopWorkspace() {
       }
       if (e.key === "Escape") {
         if (editingImage) setEditingImage(null);
+        else if (starter) closeStarter();
         else if (settings) setSettings(false);
         else if (help) setHelp(false);
         else if (sidebar) setSidebar(false);
         else if (selectedId) setSelectedId(null);
       }
-      if (e.key === "Tab" && (settings || help || editingImage)) {
+      if (e.key === "Tab" && (settings || help || editingImage || starter)) {
         const items = Array.from(
           document.querySelectorAll<HTMLElement>(
-            ".modal [href], .modal button:not([disabled]), .modal input, .modal select, .modal textarea",
+            ".modal [href], .modal button:not([disabled]), .modal input, .modal select, .modal textarea, .starter-card [href], .starter-card button:not([disabled])",
           ),
         );
         if (!items.length) return;
@@ -327,7 +424,16 @@ function DesktopWorkspace() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [settings, help, editingImage, sidebar, selectedId, toggleQuick]);
+  }, [
+    settings,
+    help,
+    editingImage,
+    sidebar,
+    selectedId,
+    starter,
+    closeStarter,
+    toggleQuick,
+  ]);
 
   const run = async (action: () => Promise<void>) => {
     setError("");
@@ -449,22 +555,44 @@ function DesktopWorkspace() {
     )[view] ??
     groups?.find((g) => g.id === view.split(":")[1])?.name ??
     "Collection";
-  const clips = searchClips(workspace?.clips ?? [], deferredQuery).filter(
-    (c) =>
-      view === "favorites"
-        ? c.favorite
-        : view === "text" || view === "image"
-          ? c.type === view
-          : view === "snippets"
-            ? c.snippet
-            : view.startsWith("folder:")
-              ? c.folderId === view.slice(7)
-              : view.startsWith("session:")
-                ? c.sessionId === view.slice(8)
-                : true,
+  const clips = useMemo(
+    () =>
+      searchClips(workspace?.clips ?? [], deferredQuery).filter((c) =>
+        view === "favorites"
+          ? c.favorite
+          : view === "text" || view === "image"
+            ? c.type === view
+            : view === "snippets"
+              ? c.snippet
+              : view.startsWith("folder:")
+                ? c.folderId === view.slice(7)
+                : view.startsWith("session:")
+                  ? c.sessionId === view.slice(8)
+                  : true,
+      ),
+    [workspace?.clips, deferredQuery, view],
   );
-  const checkedClips = (workspace?.clips ?? []).filter((c) =>
-    checked.includes(c.id),
+  const checkedClips = useMemo(() => {
+    const checkedIds = new Set(checked);
+    return (workspace?.clips ?? []).filter((c) => checkedIds.has(c.id));
+  }, [workspace?.clips, checked]);
+  const groupCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const clip of workspace?.clips ?? []) {
+      if (clip.folderId)
+        counts.set(clip.folderId, (counts.get(clip.folderId) ?? 0) + 1);
+      if (clip.sessionId)
+        counts.set(clip.sessionId, (counts.get(clip.sessionId) ?? 0) + 1);
+    }
+    return counts;
+  }, [workspace?.clips]);
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+      }),
+    [],
   );
   if (!workspace && locked)
     return (
@@ -587,9 +715,7 @@ function DesktopWorkspace() {
             >
               <Folder size={16} />
               <span>{g.name}</span>
-              <small>
-                {workspace.clips.filter((c) => c.folderId === g.id).length}
-              </small>
+              <small>{groupCounts.get(g.id) ?? 0}</small>
             </button>
           ))}
           {!workspace.folders.length && (
@@ -615,9 +741,7 @@ function DesktopWorkspace() {
             >
               <Layers size={16} />
               <span>{g.name}</span>
-              <small>
-                {workspace.clips.filter((c) => c.sessionId === g.id).length}
-              </small>
+              <small>{groupCounts.get(g.id) ?? 0}</small>
             </button>
           ))}
           {!workspace.sessions.length && (
@@ -670,13 +794,6 @@ function DesktopWorkspace() {
       <div className="workspace-main">
         <header className="app-header">
           <div className="launchpad">
-            <img
-              className="brand-logo"
-              src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
-              alt="SnapNote"
-              width={34}
-              height={37}
-            />
             <span className="launchpad-title">SnapNote</span>
             <span className="rail-divider" aria-hidden="true" />
             {(
@@ -1049,10 +1166,7 @@ function DesktopWorkspace() {
                         </div>
                         <div className="clip-bottom">
                           <span>
-                            {new Date(clip.updatedAt).toLocaleDateString(
-                              undefined,
-                              { month: "short", day: "numeric" },
-                            )}
+                            {dateFormatter.format(new Date(clip.updatedAt))}
                           </span>
                           <span>
                             {clip.tags
@@ -1398,6 +1512,21 @@ function DesktopWorkspace() {
                     <br />
                     <strong>Developer</strong> Waqar Ahmed
                   </p>
+                  <button
+                    className="text-button"
+                    onClick={() =>
+                      void run(async () => {
+                        if (native)
+                          await invoke("plugin:opener|open_url", {
+                            url: PROJECT_URL,
+                          });
+                        else window.open(PROJECT_URL, "_blank", "noopener");
+                      })
+                    }
+                  >
+                    <ExternalLink size={13} /> GitHub project — source, docs,
+                    and releases
+                  </button>
                 </div>
                 <div className="settings-section">
                   <h3>Clipboard & privacy</h3>
@@ -1730,6 +1859,13 @@ function DesktopWorkspace() {
             }}
           />
         </Suspense>
+      )}
+      {starter && (
+        <StarterScreen
+          step={starterStep}
+          onSkip={closeStarter}
+          onContinue={advanceStarter}
+        />
       )}
     </div>
   );
