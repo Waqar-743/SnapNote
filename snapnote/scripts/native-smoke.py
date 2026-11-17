@@ -237,6 +237,20 @@ try:
     assert js('return document.querySelector("h1").textContent') == 'Quick access'
     record('Native app opens in quick access with capture paused and no sample data')
 
+    # The first-run starter walkthrough (issues #10/#11) appears exactly once
+    # per fresh profile. Complete it through its own buttons, verify the card
+    # never covers more than 30% of the window, and confirm it unmounts.
+    if js('return Boolean(document.querySelector(".starter-card"))'):
+        area = js('const card=document.querySelector(".starter-card").getBoundingClientRect();return card.width*card.height/(document.documentElement.clientWidth*document.documentElement.clientHeight);')
+        assert area <= 0.30, area
+        for _ in range(10):
+            if not js('return Boolean(document.querySelector(".starter-card .button.primary"))'):
+                break
+            click('.starter-card .button.primary')
+            time.sleep(.1)
+        wait('return !document.querySelector(".starter-card")')
+        record('First-run walkthrough stays within 30% of the screen and completes through its own buttons')
+
     exact = '  <b>Literal clipboard text</b>\n    keep indentation\n'
     clipboard(exact)
     assert invoke('read_clipboard') == {'type': 'text', 'data': exact}

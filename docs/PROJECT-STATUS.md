@@ -51,6 +51,15 @@ The owner reported ([issue #9](https://github.com/Waqar-743/SnapNote/issues/9)) 
 - **Website redesign:** rebuilt around the real application screenshots (hero, quick access, light/dark gallery); removed the mascot section and its 1.5 MB image, the interactive mock preview and the fictional day-story. Copy rewritten to be concrete and professional. Full SEO added: canonical URL, Open Graph and Twitter cards with a generated 1200×630 banner, `SoftwareApplication`/`WebSite`/`FAQPage` JSON-LD, `robots.txt` and `sitemap.xml`. Verification evidence: [issue-9 QA results](../website/qa/issue-9-results.json).
 - **Local verification:** frontend `npm test` (10/10), `format:check` and production build pass after the version bump; both workflow YAML files parse; headless Edge captures of the redesigned site verified at desktop and mobile widths.
 
+## Issues #10 and #11: dashboard polish, starter walkthrough, and icon, 2026-11-17
+
+The owner reported two issues: the favicon and app icon should use the dashboard logo ([#10](https://github.com/Waqar-743/SnapNote/issues/10)), and the dashboard should drop the logo from its top menu, gain a proper first-run starter walkthrough, and link the GitHub project from Settings & privacy ([#11](https://github.com/Waqar-743/SnapNote/issues/11)).
+
+- **Dashboard:** the logo image was removed from the top menu and the remaining title, divider, and rail icons realigned. A compact first-run starter screen now walks through the app's working in five steps with a top-left skip button and a centered continue button; the card is capped at 400×268 px so it never covers more than 30% of the first-open window, and a stored flag limits it to the first launch. Settings & privacy links the GitHub project through the opener plugin (the browser preview falls back to `window.open`).
+- **Icon:** every bundled icon (ICO, ICNS, PNG sizes, Windows Store logos) and the favicon was regenerated from the dashboard logo; unused template assets (`tauri.svg`, `vite.svg`, and the public logo copies) were removed.
+- **Efficiency:** memoized clip search/filtering, selection lookups (Set), and sidebar group counts (single pass); one shared `Intl.DateTimeFormat` for clip dates; sidebar brand logos downscaled to display size (~1 MB → 48 KB).
+- **Validation:** the native smoke suite now drives the starter walkthrough through its own buttons and asserts the 30% bound (29 checks); frontend `npm test` (10/10), `format:check`, and the production build pass locally after the bump. Version raised to 1.5.0 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.5.0.md](releases/v1.5.0.md). Tag `v1.5.0` publishes the installers.
+
 ## Product limits to keep visible
 
 Tesseract and language data must be installed locally for OCR. No sync provider or automatic paste injection ships. Windows installers are unsigned unless separately configured. macOS runtime checks are not complete. Tray behavior, per-app capture exclusions, automatic lock and richer annotation tools remain later enhancements.
