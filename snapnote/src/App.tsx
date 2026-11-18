@@ -681,8 +681,8 @@ function DesktopWorkspace() {
               className="brand-logo"
               src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
               alt="SnapNote"
-              width={34}
-              height={34}
+              width={48}
+              height={48}
             />
             <div>
               SnapNote<small>Your visual workspace.</small>
@@ -794,6 +794,13 @@ function DesktopWorkspace() {
       <div className="workspace-main">
         <header className="app-header">
           <div className="launchpad">
+            <img
+              className="launchpad-logo"
+              src={workspace.settings.theme === "dark" ? logoWhite : logoDark}
+              alt=""
+              width={44}
+              height={44}
+            />
             <span className="launchpad-title">SnapNote</span>
             <span className="rail-divider" aria-hidden="true" />
             {(

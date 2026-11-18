@@ -131,24 +131,26 @@ svg {
   gap: 4px;
   min-width: 0;
 }
-.brand-logo {
-  width: 34px;
+.launchpad-logo {
+  width: 44px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 10px;
   flex-shrink: 0;
+  margin-right: 8px;
 }
 .launchpad-title {
-  font-size: 15px;
-  font-weight: 650;
-  letter-spacing: -0.4px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.9px;
+  line-height: 1;
   margin: 0 8px 0 0;
   white-space: nowrap;
 }
 .rail-divider {
   width: 1px;
-  height: 22px;
+  height: 30px;
   background: var(--line);
-  margin: 0 7px;
+  margin: 0 9px;
   flex-shrink: 0;
 }
 .rail-button {
@@ -219,18 +221,21 @@ svg {
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
   margin: 0 0 0 2px;
-  font-size: 19px;
-  letter-spacing: -0.7px;
-  font-weight: 650;
+  font-size: 26px;
+  letter-spacing: -0.9px;
+  font-weight: 700;
 }
-.brand-logo.large {
-  width: 40px;
+.brand-logo {
+  width: 48px;
+  height: auto;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 .brand small {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
   letter-spacing: 0;
   color: var(--muted);

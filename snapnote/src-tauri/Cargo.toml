@@ -1,6 +1,6 @@
 [package]
 name = "snapnote"
-version = "1.5.1"
+version = "1.6.0"
 description = "A private clipboard and notes workspace for Windows"
 authors = ["Waqar Ahmed"]
 edition = "2021"
