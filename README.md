@@ -17,10 +17,6 @@ SnapNote was built because that felt wrong. Those little pieces of your day dese
 
 So this is SnapNote: a smart clipboard and visual workspace for Windows, made to remember the useful bits — and to keep them yours.
 
-## Meet the guide inside
-
-Every good workspace needs a calm presence. Ours is **The Mentor** — a snow-white wolf with dark glasses and a steady teaching smile, drawn to feel like the colleague who has seen every mess before and never looks worried about yours. He shows up in the brand and on the website; the app itself stays out of your way. You can meet him in the [brand story](docs/brand/README.md).
-
 ## What stays with you
 
 Everything you copy lands in a searchable local history — text, links, and images alike. From there:
