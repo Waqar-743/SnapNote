@@ -70,6 +70,16 @@ The owner replaced the v1.5.0 icon choice with two new glossy icons: a light pen
 - **README and website:** the README picture block uses the light pencil icon by default and the dark icon in dark mode; the website header and footer brand marks use the same theme-aware pair. Superseded root images (`SnapNote-logo-Dark.png`, `SnapNote-logo-white.png`, `SnapNote-App.png`) were removed.
 - **Validation:** frontend `npm test` (10/10), `format:check`, and the production build pass after the bump. Version raised to 1.5.1 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.5.1.md](releases/v1.5.1.md). Tag `v1.5.1` publishes the installers.
 
+## Doubled workspace header brand and refreshed product shots, 2026-11-18
+
+The owner asked for a stronger brand at the top left: the width where the name and icon live looked small, and was to be doubled in size without introducing a background colour that departs from the system theme.
+
+- **Workspace header brand:** the glossy theme-aware SnapNote icon now sits beside the app name in the workspace header, and the wordmark doubles from 15px to 30px (weight 700, icon at 44px, divider scaled to match). The wordmark still hides below the 1100px breakpoint, so the quick-access window keeps the icon with the rail exactly as before.
+- **System surface untouched:** the brand lives directly on the existing `--surface` theme colour with no separate background, so it cannot clash in light or dark. A headless render pass measured the header at the exact theme surface in both light (`#fffdf8`) and dark (`rgb(31,26,21)`), with the white pencil icon appearing on the dark theme.
+- **Sidebar brand:** the drawer brand grows to stay in the same family (48px icon, 26px name) and now renders without overflow next to the close control.
+- **Product screenshots:** the website hero, gallery, and quick-access shots were re-captured from the v1.6.0 production web build in headless Microsoft Edge on Windows, seeded through the app's own backup import with the same illustrative clips the native staging flow uses; capture conditions are recorded in [product/README.md](product/README.md).
+- **Validation:** frontend `npm test` (10/10), `format:check`, and the production build pass; headless render checks confirm no overflow, all header controls, and no page errors in both themes. Version raised to 1.6.0 across `package.json`, `Cargo.toml`, `Cargo.lock` and `tauri.conf.json`; release notes in [releases/v1.6.0.md](releases/v1.6.0.md). Tag `v1.6.0` published the installers to the [v1.6.0 release](https://github.com/Waqar-743/SnapNote/releases/tag/v1.6.0); README download links and the website version metadata follow.
+
 ## Product limits to keep visible
 
 Tesseract and language data must be installed locally for OCR. No sync provider or automatic paste injection ships. Windows installers are unsigned unless separately configured. macOS runtime checks are not complete. Tray behavior, per-app capture exclusions, automatic lock and richer annotation tools remain later enhancements.
