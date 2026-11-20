@@ -38,6 +38,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { id, plainText, type Note, type ClipboardPayload } from "../workspace";
+import type { AlertOptions, ConfirmOptions } from "./AppDialog";
 
 // The original TipTap image view and extension factory are retained here.
 const readFileAsDataUrl = (file: Blob) =>
@@ -178,12 +179,14 @@ function NoteEditor({
   capture,
   onClip,
   onCaptureConsumed,
+  onAlert,
 }: {
   note: Note;
   onChange: (html: string) => void;
   capture: { nonce: string; payload: ClipboardPayload } | null;
   onClip: (payload: ClipboardPayload) => void;
   onCaptureConsumed: () => void;
+  onAlert: (options: AlertOptions) => Promise<void>;
 }) {
   const consumed = useRef<string | null>(null);
   const editor = useEditor({
@@ -217,7 +220,11 @@ function NoteEditor({
           return false;
         event.preventDefault();
         if (image && image.size > 8_000_000) {
-          window.alert("Choose an image smaller than 8 MB.");
+          void onAlert({
+            title: "Image is too large",
+            description: "Choose an image smaller than 8 MB.",
+            icon: "warning",
+          });
           return true;
         }
         // WebKit may supply image-only HTML with a webkit-fake-url rather than a File.
@@ -236,10 +243,14 @@ function NoteEditor({
             if (editor && !editor.isDestroyed)
               editor.chain().focus().setImage({ src: data }).run();
           })
-          .catch((error) =>
-            window.alert(
-              error instanceof Error ? error.message : String(error),
-            ),
+          .catch(
+            (error) =>
+              void onAlert({
+                title: "Could not paste image",
+                description:
+                  error instanceof Error ? error.message : String(error),
+                icon: "warning",
+              }),
           );
         return true;
       },
@@ -404,6 +415,8 @@ export default function NotesWorkspace({
   capture,
   onClip,
   onCaptureConsumed,
+  onConfirm,
+  onAlert,
 }: {
   notes: Note[];
   activeId: string;
@@ -412,6 +425,8 @@ export default function NotesWorkspace({
   capture: { nonce: string; payload: ClipboardPayload } | null;
   onClip: (payload: ClipboardPayload) => void;
   onCaptureConsumed: () => void;
+  onConfirm: (options: ConfirmOptions) => Promise<boolean>;
+  onAlert: (options: AlertOptions) => Promise<void>;
 }) {
   const active = notes.find((n) => n.id === activeId) ?? notes[0];
   const [renaming, setRenaming] = useState<string | null>(null);
@@ -426,15 +441,19 @@ export default function NotesWorkspace({
     onNotesChange([...notes, note]);
     onSelect(note.id);
   };
-  const close = (note: Note) => {
+  const close = async (note: Note) => {
     if (notes.length === 1) return;
-    if (
-      note.content &&
-      !window.confirm(
-        `Close and delete “${note.title}”? Export a backup first if you need this note.`,
-      )
-    )
-      return;
+    if (note.content) {
+      const confirmed = await onConfirm({
+        title: `Delete “${note.title}”?`,
+        description:
+          "This note and its content will be permanently removed. Export a backup first if you want to keep a copy.",
+        confirmLabel: "Delete note",
+        tone: "danger",
+        icon: "delete",
+      });
+      if (!confirmed) return;
+    }
     const next = notes.filter((n) => n.id !== note.id);
     onNotesChange(next);
     if (note.id === activeId) onSelect(next[0].id);
@@ -499,7 +518,7 @@ export default function NotesWorkspace({
               <button
                 className="icon-button small"
                 aria-label={`Close ${note.title}`}
-                onClick={() => close(note)}
+                onClick={() => void close(note)}
               >
                 <X size={12} />
               </button>
@@ -526,6 +545,7 @@ export default function NotesWorkspace({
         capture={capture}
         onClip={onClip}
         onCaptureConsumed={onCaptureConsumed}
+        onAlert={onAlert}
       />
     </section>
   );
