@@ -6,6 +6,13 @@
   "permissions": [
     "core:default",
     "core:window:allow-set-size",
+    "core:window:allow-minimize",
+    "core:window:allow-maximize",
+    "core:window:allow-unmaximize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-close",
+    "core:window:allow-start-dragging",
+    "core:window:allow-start-resize-dragging",
     "opener:default",
     "global-shortcut:default",
     "clipboard-manager:default"

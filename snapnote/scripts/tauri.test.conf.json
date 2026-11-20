@@ -9,6 +9,9 @@
         "minWidth": 380,
         "minHeight": 400,
         "center": true,
+        "decorations": false,
+        "shadow": true,
+        "resizable": true,
         "additionalBrowserArgs": "--remote-debugging-port=9222"
       }
     ]
