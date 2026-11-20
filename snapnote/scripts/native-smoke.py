@@ -189,31 +189,10 @@ def record(name):
 def new_session():
     global SESSION, APP_PROCESS, APP_LOG
     application = ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote')
-    if WINDOWS:
-        # Use Microsoft's documented attach mode. EdgeDriver's launch mode can
-        # wait for DevToolsActivePort in a profile different from Tauri's profile.
-        port = 9222  # Explicitly configured in the isolated Windows test build.
-        app_env = dict(ENV, TAURI_WEBVIEW_AUTOMATION='true',
-                       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f'--remote-debugging-port={port}')
-        APP_LOG = open(PROFILE / 'app.log', 'a')
-        APP_PROCESS = subprocess.Popen([str(application)], env=app_env, stdout=APP_LOG, stderr=APP_LOG)
-        deadline = time.monotonic() + 45
-        while True:
-            if APP_PROCESS.poll() is not None:
-                APP_LOG.flush()
-                raise RuntimeError('Desktop app exited during startup: ' + (PROFILE / 'app.log').read_text(errors='replace'))
-            try:
-                with LOCAL_HTTP.open(f'http://127.0.0.1:{port}/json/version', timeout=2) as response:
-                    json.load(response)
-                break
-            except (OSError, urllib.error.URLError):
-                if time.monotonic() >= deadline:
-                    raise RuntimeError('The desktop app did not open its isolated WebView2 automation port.')
-                time.sleep(.2)
-        capabilities = {'browserName': 'webview2', 'ms:edgeChromium': True,
-                        'ms:edgeOptions': {'debuggerAddress': f'127.0.0.1:{port}'}}
-    else:
-        capabilities = {'tauri:options': {'application': str(application)}}
+    # Let tauri-driver launch and attach to the Tauri process. On Windows,
+    # manual msedgedriver attach can attach before Tauri injects __TAURI_INTERNALS__,
+    # leaving the native WebView UI disconnected from the IPC bridge.
+    capabilities = {'tauri:options': {'application': str(application)}}
     value = request('POST', '/session', {'capabilities': {'alwaysMatch': capabilities}}, timeout=120 if WINDOWS else 45)
     SESSION = value['sessionId']
     command('timeouts', {'script': 30000, 'pageLoad': 30000})
