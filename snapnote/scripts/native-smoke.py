@@ -190,9 +190,10 @@ def new_session():
     global SESSION, APP_PROCESS, APP_LOG
     application = ROOT / 'src-tauri' / 'target' / 'debug' / ('snapnote.exe' if WINDOWS else 'snapnote')
     if WINDOWS:
-        # Use Microsoft's documented attach mode. EdgeDriver's launch mode can
-        # wait for DevToolsActivePort in a profile different from Tauri's profile.
-        port = 9222  # Explicitly configured in the isolated Windows test build.
+        # Start the test app ourselves and attach EdgeDriver to its explicit
+        # remote-debugging port. Letting msedgedriver launch the app can produce
+        # no DevToolsActivePort on hosted Windows runners.
+        port = 9222
         app_env = dict(ENV, TAURI_WEBVIEW_AUTOMATION='true',
                        WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f'--remote-debugging-port={port}')
         APP_LOG = open(PROFILE / 'app.log', 'a')
