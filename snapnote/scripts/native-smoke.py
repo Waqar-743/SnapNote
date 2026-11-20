@@ -218,6 +218,7 @@ def new_session():
     SESSION = value['sessionId']
     command('timeouts', {'script': 30000, 'pageLoad': 30000})
     if WINDOWS:
+        wait('return Boolean(window.__TAURI_INTERNALS__ && window.__TAURI_INTERNALS__.invoke)', timeout=25)
         assert invoke('plugin:app|identifier') == 'come.codespace.snapnote.tests', 'Refusing to test the normal Windows data profile'
     wait('return Boolean(document.querySelector(".workspace-shell, .unlock-input"))', timeout=25)
 
