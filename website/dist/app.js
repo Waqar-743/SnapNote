@@ -1,10 +1,22 @@
-/* SnapNote site — progressive enhancement only; the page works without it. */
+/* SnapNote product website — progressive enhancement only. */
 (() => {
-  // Current year in the footer.
   const year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());
 
-  // Mobile navigation.
+  // Theme toggle (light / dark)
+  const themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const dark = document.documentElement.classList.toggle("dark");
+      try {
+        localStorage.setItem("snapnote-site-theme", dark ? "dark" : "light");
+      } catch {
+        // Ignore storage restrictions.
+      }
+    });
+  }
+
+  // Mobile navigation
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".site-nav");
   if (toggle && nav) {
@@ -24,9 +36,87 @@
     });
   }
 
-  // Gentle reveal for cards, screenshots and figures.
+  // Interactive Hero Real-App Preview Switcher
+  const previews = {
+    light: {
+      src: "assets/workspace-light.png",
+      width: 1180,
+      height: 800,
+      alt: "SnapNote clipboard manager and notes workspace on Windows in light theme",
+      caption:
+        "Real desktop screenshot — searchable clipboard cards, folders, snippets, and rich notes in one unified window.",
+      quick: false,
+    },
+    dark: {
+      src: "assets/workspace-dark.png",
+      width: 1180,
+      height: 800,
+      alt: "SnapNote clipboard manager and notes workspace on Windows in dark theme",
+      caption:
+        "Dark mode — deep charcoal surfaces with warm amber highlights built for late-night focus.",
+      quick: false,
+    },
+    quick: {
+      src: "assets/quick-access.png",
+      width: 560,
+      height: 640,
+      alt: "SnapNote floating Alt+X Quick Access window showing searchable recent clips",
+      caption:
+        "Alt+X Quick Access — compact floating window that appears above any app and tucks back into the system tray.",
+      quick: true,
+    },
+  };
+
+  const previewButtons = document.querySelectorAll("[data-preview]");
+  const previewImg = document.getElementById("hero-preview-img");
+  const previewCaption = document.getElementById("hero-preview-caption");
+  const previewFrame = document.getElementById("hero-preview-frame");
+
+  const setPreview = (key) => {
+    const item = previews[key];
+    if (!item || !(previewImg instanceof HTMLImageElement)) return;
+    previewImg.src = item.src;
+    previewImg.width = item.width;
+    previewImg.height = item.height;
+    previewImg.alt = item.alt;
+    if (previewCaption) previewCaption.textContent = item.caption;
+    if (previewFrame) previewFrame.classList.toggle("is-quick", item.quick);
+    previewButtons.forEach((btn) => {
+      const active = btn.dataset.preview === key;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-selected", String(active));
+    });
+  };
+
+  previewButtons.forEach((btn) => {
+    btn.addEventListener("click", () => setPreview(btn.dataset.preview));
+  });
+
+  if (document.documentElement.classList.contains("dark")) {
+    setPreview("dark");
+  }
+
+  // Copy SHA-256 verification command
+  const copyBtn = document.getElementById("copy-verify-btn");
+  const verifyCmd = document.getElementById("verify-cmd");
+  if (copyBtn && verifyCmd) {
+    copyBtn.addEventListener("click", async () => {
+      const label = copyBtn.querySelector("span");
+      try {
+        await navigator.clipboard.writeText(verifyCmd.textContent || "");
+        if (label) label.textContent = "Copied!";
+        setTimeout(() => {
+          if (label) label.textContent = "Copy";
+        }, 1800);
+      } catch {
+        if (label) label.textContent = "Select & copy";
+      }
+    });
+  }
+
+  // Scroll reveal
   const revealables = document.querySelectorAll(
-    ".feature-card, .frame, .pledge, .qa",
+    ".bento-card, .gallery-card, .pledge-card, .quick-frame, .faq-item",
   );
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced || !("IntersectionObserver" in window)) {
@@ -41,7 +131,7 @@
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -24px" },
+      { threshold: 0.1, rootMargin: "0px 0px -20px" },
     );
     revealables.forEach((el) => {
       el.classList.add("reveal");
@@ -50,8 +140,7 @@
   }
 })();
 
-// Resolve assets from GitHub's latest published release. Every link already has
-// a working /releases/latest fallback for offline/API-limited/JavaScript-free use.
+// Resolve assets dynamically from GitHub's latest published release.
 (async () => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
@@ -79,14 +168,19 @@
       if (
         url.origin === "https://github.com" &&
         url.pathname.startsWith("/Waqar-743/SnapNote/releases/download/")
-      )
+      ) {
         link.href = url.href;
+      }
     }
-    const label = document.querySelector("[data-release-version]");
-    if (label && typeof release.tag_name === "string")
-      label.textContent = `Get SnapNote ${release.tag_name}`;
+    if (typeof release.tag_name === "string") {
+      const heading = document.querySelector("[data-release-version]");
+      if (heading) heading.textContent = `Download SnapNote ${release.tag_name}`;
+      const pill = document.querySelector("[data-release-pill]");
+      if (pill)
+        pill.textContent = `${release.tag_name} · Windows 10 & 11 · Free & Local-First`;
+    }
   } catch {
-    // The release page remains available when metadata cannot be fetched.
+    // Fallback /releases/latest links remain active if API is unreachable.
   } finally {
     clearTimeout(timeout);
   }
