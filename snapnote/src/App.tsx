@@ -67,6 +67,12 @@ import {
   unlockWorkspace,
 } from "./storage";
 import { createBackup, readBackup } from "./backup";
+import { useAppDialog } from "./components/AppDialog";
+import {
+  useWindowChrome,
+  WindowControls,
+  WindowResizeHandles,
+} from "./components/WindowChrome";
 const NotesWorkspace = lazy(() => import("./components/NotesWorkspace"));
 const ImageTools = lazy(() => import("./components/ImageTools"));
 const native = isTauri();
@@ -110,6 +116,15 @@ const WALKTHROUGH_STEPS = [
     text: "No account, no cloud, no telemetry. Optional AES-256 encryption protects the workspace at rest.",
   },
 ];
+
+function BrandWordmark() {
+  return (
+    <>
+      <span className="brand-snap">Snap</span>
+      <span className="brand-note">Note</span>
+    </>
+  );
+}
 
 function PinnedImage() {
   const [src, setSrc] = useState("");
@@ -193,6 +208,9 @@ function DesktopWorkspace() {
   const [saveState, setSaveState] = useState("Opening workspace…");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const windowChrome = useWindowChrome(setError);
+  const dialog = useAppDialog();
   const [view, setView] = useState<View>("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
@@ -223,6 +241,7 @@ function DesktopWorkspace() {
   const searchRef = useRef<HTMLInputElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
   const quickBounds = useRef<{ width: number; height: number } | null>(null);
+  const quickWasMaximized = useRef(false);
   const mutate = useCallback(
     (fn: (w: Workspace) => Workspace) => setWorkspace((w) => (w ? fn(w) : w)),
     [],
@@ -291,13 +310,21 @@ function DesktopWorkspace() {
         if (native) {
           const win = getCurrentWindow();
           if (enabled) {
-            const size = await win.innerSize();
-            const scale = await win.scaleFactor();
-            if (!quickBounds.current)
-              quickBounds.current = {
-                width: size.width / scale,
-                height: size.height / scale,
-              };
+            const wasMaximized = await win.isMaximized();
+            if (wasMaximized) {
+              quickWasMaximized.current = true;
+              await win.unmaximize();
+              windowChrome.setMaximized(false);
+            } else {
+              quickWasMaximized.current = false;
+              const size = await win.innerSize();
+              const scale = await win.scaleFactor();
+              if (!quickBounds.current)
+                quickBounds.current = {
+                  width: size.width / scale,
+                  height: size.height / scale,
+                };
+            }
             await win.setSize(new LogicalSize(560, 640));
           } else {
             const saved = quickBounds.current;
@@ -312,6 +339,11 @@ function DesktopWorkspace() {
                 wasQuickish ? 800 : saved.height,
               ),
             );
+            if (quickWasMaximized.current) {
+              quickWasMaximized.current = false;
+              await win.maximize();
+              windowChrome.setMaximized(true);
+            }
           }
           await invoke("set_floating", { enabled: enabled || floating });
           await invoke("set_quick_access", { enabled });
@@ -327,7 +359,7 @@ function DesktopWorkspace() {
         setError(message(e));
       }
     },
-    [floating],
+    [floating, windowChrome.setMaximized],
   );
   const quickHandler = useRef(toggleQuick);
   quickHandler.current = toggleQuick;
@@ -391,24 +423,36 @@ function DesktopWorkspace() {
     return () => clearTimeout(timer);
   }, [notice]);
   useEffect(() => {
+    if (!copiedId) return;
+    const timer = window.setTimeout(() => setCopiedId(null), 1600);
+    return () => clearTimeout(timer);
+  }, [copiedId]);
+  useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         searchRef.current?.focus();
       }
       if (e.key === "Escape") {
+        if (dialog.isOpen) return;
         if (editingImage) setEditingImage(null);
         else if (starter) closeStarter();
         else if (settings) setSettings(false);
         else if (help) setHelp(false);
         else if (sidebar) setSidebar(false);
         else if (selectedId) setSelectedId(null);
+        else if (document.activeElement === searchRef.current && query)
+          setQuery("");
       }
-      if (e.key === "Tab" && (settings || help || editingImage || starter)) {
+      if (
+        e.key === "Tab" &&
+        (dialog.isOpen || settings || help || editingImage || starter)
+      ) {
+        const selector = dialog.isOpen
+          ? ".app-dialog [href], .app-dialog button:not([disabled]), .app-dialog input, .app-dialog select, .app-dialog textarea"
+          : ".modal [href], .modal button:not([disabled]), .modal input, .modal select, .modal textarea, .starter-card [href], .starter-card button:not([disabled])";
         const items = Array.from(
-          document.querySelectorAll<HTMLElement>(
-            ".modal [href], .modal button:not([disabled]), .modal input, .modal select, .modal textarea, .starter-card [href], .starter-card button:not([disabled])",
-          ),
+          document.querySelectorAll<HTMLElement>(selector),
         );
         if (!items.length) return;
         const first = items[0],
@@ -433,6 +477,8 @@ function DesktopWorkspace() {
     starter,
     closeStarter,
     toggleQuick,
+    query,
+    dialog.isOpen,
   ]);
 
   const run = async (action: () => Promise<void>) => {
@@ -461,7 +507,14 @@ function DesktopWorkspace() {
           ),
         ];
         for (const variable of variables) {
-          const value = window.prompt(`Template value for ${variable}`);
+          const value = await dialog.prompt({
+            title: `Fill template variable`,
+            description: `Enter a value for {{${variable}}} before copying.`,
+            label: variable.toUpperCase(),
+            placeholder: `Value for ${variable}`,
+            confirmLabel: "Continue",
+            icon: "edit",
+          });
           if (value === null) return;
           data = data.replace(
             /\{\{\s*([^{}]+?)\s*\}\}/g,
@@ -470,18 +523,46 @@ function DesktopWorkspace() {
         }
       }
       await copyPayload({ type: clip.type, data });
+      setCopiedId(clip.id);
     });
   const patchClip = (clip: Clip, patch: Partial<Clip>) =>
     mutate((w) => ({
       ...w,
       clips: w.clips.map((c) => (c.id === clip.id ? { ...c, ...patch } : c)),
     }));
-  const deleteClip = (clip: Clip) => {
-    if (!window.confirm("Delete this clip?")) return;
+  const deleteClip = async (clip: Clip) => {
+    const confirmed = await dialog.confirm({
+      title: clip.type === "image" ? "Delete image clip?" : "Delete this clip?",
+      description: `“${clip.title}” will be removed from your clipboard library.`,
+      confirmLabel: "Delete",
+      tone: "danger",
+      icon: "delete",
+    });
+    if (!confirmed) return;
     mutate((w) => ({ ...w, clips: w.clips.filter((c) => c.id !== clip.id) }));
     setSelectedId((current) => (current === clip.id ? null : current));
     setChecked((ids) => ids.filter((x) => x !== clip.id));
     setNotice(clip.type === "image" ? "Image clip deleted." : "Clip deleted.");
+  };
+  const deleteSelectedClips = async () => {
+    if (!checked.length) return;
+    const count = checked.length;
+    const confirmed = await dialog.confirm({
+      title: `Delete ${count} selected ${count === 1 ? "clip" : "clips"}?`,
+      description:
+        "Selected clips will be permanently removed from your library.",
+      confirmLabel: `Delete ${count}`,
+      tone: "danger",
+      icon: "delete",
+    });
+    if (!confirmed) return;
+    const doomed = new Set(checked);
+    mutate((w) => ({ ...w, clips: w.clips.filter((c) => !doomed.has(c.id)) }));
+    setSelectedId((current) =>
+      current && doomed.has(current) ? null : current,
+    );
+    setChecked([]);
+    setNotice(`Deleted ${count} ${count === 1 ? "clip" : "clips"}.`);
   };
   const navigate = (next: View) => {
     setView(next);
@@ -490,13 +571,21 @@ function DesktopWorkspace() {
     setQuery("");
     setSidebar(false);
   };
-  const createGroup = (
+  const createGroup = async (
     type: "folders" | "sessions",
     clipIds: string[] = [],
   ) => {
-    const name = window.prompt(
-      type === "folders" ? "Folder name" : "Session name",
-    );
+    const isFolder = type === "folders";
+    const name = await dialog.prompt({
+      title: isFolder ? "New folder" : "New session",
+      description: isFolder
+        ? "Keep related clips organized together in one place."
+        : "Group a set of clips from a moment of research or work.",
+      label: isFolder ? "FOLDER NAME" : "SESSION NAME",
+      placeholder: isFolder ? "e.g. Project notes" : "e.g. Design review",
+      confirmLabel: isFolder ? "Create folder" : "Create session",
+      icon: "folder",
+    });
     if (!name?.trim()) return;
     const group = { id: id(), name: name.trim().slice(0, 100) };
     mutate((w) => ({
@@ -504,12 +593,25 @@ function DesktopWorkspace() {
       [type]: [...w[type], group],
       clips: w.clips.map((c) =>
         clipIds.includes(c.id)
-          ? { ...c, [type === "folders" ? "folderId" : "sessionId"]: group.id }
+          ? { ...c, [isFolder ? "folderId" : "sessionId"]: group.id }
           : c,
       ),
     }));
-    navigate(`${type === "folders" ? "folder" : "session"}:${group.id}`);
+    navigate(`${isFolder ? "folder" : "session"}:${group.id}`);
   };
+  const toggleFloating = () =>
+    run(async () => {
+      const next = !floating;
+      if (native) {
+        await invoke("set_floating", { enabled: next || quick });
+      }
+      setFloating(next);
+      setNotice(
+        next
+          ? "Window pinned on top of other apps."
+          : "Window unpinned from top.",
+      );
+    });
   const exportBackup = () =>
     run(async () => {
       if (!workspace) return;
@@ -594,77 +696,125 @@ function DesktopWorkspace() {
       }),
     [],
   );
+  const minimalTitleBar = (
+    <header
+      className="app-header minimal-titlebar"
+      onMouseDown={windowChrome.handleTitleBarMouseDown}
+    >
+      <div className="launchpad">
+        <img
+          className="launchpad-logo"
+          src={
+            document.documentElement.classList.contains("dark")
+              ? logoWhite
+              : logoDark
+          }
+          alt=""
+          width={32}
+          height={32}
+          draggable={false}
+        />
+        <span className="minimal-titlebar-name">
+          <BrandWordmark />
+        </span>
+      </div>
+      <div className="titlebar-drag-spacer" aria-hidden="true" />
+      <div className="header-right">
+        <WindowControls
+          maximized={windowChrome.maximized}
+          onMinimize={windowChrome.minimize}
+          onToggleMaximize={windowChrome.toggleMaximize}
+          onClose={windowChrome.closeWindow}
+        />
+      </div>
+    </header>
+  );
   if (!workspace && locked)
     return (
-      <form
-        className="loading-screen"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void run(async () => {
-            const loaded = await unlockWorkspace(unlockPassword);
-            setWorkspace(loaded);
-            setLocked(false);
-            setUnlockPassword("");
-            locking.current = false;
-          });
-        }}
+      <div
+        className={`window-frame ${native ? "frameless-window" : ""} ${windowChrome.maximized ? "maximized" : ""}`}
       >
-        <ShieldCheck size={34} />
-        <h1>Your workspace is locked</h1>
-        <p>Enter your password to open your local notes and clips.</p>
-        <input
-          autoFocus
-          type="password"
-          className="unlock-input"
-          autoComplete="current-password"
-          aria-label="Workspace password"
-          value={unlockPassword}
-          onChange={(e) => setUnlockPassword(e.target.value)}
-        />
-        <button type="submit" className="button primary">
-          Unlock workspace
-        </button>
-        {error && <p role="alert">{error}</p>}
-        <small className="muted">
-          This password cannot be recovered. Keep an encrypted backup.
-        </small>
-      </form>
+        <WindowResizeHandles maximized={windowChrome.maximized} />
+        {minimalTitleBar}
+        <form
+          className="loading-screen"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void run(async () => {
+              const loaded = await unlockWorkspace(unlockPassword);
+              setWorkspace(loaded);
+              setLocked(false);
+              setUnlockPassword("");
+              locking.current = false;
+            });
+          }}
+        >
+          <ShieldCheck size={34} />
+          <h1>Your workspace is locked</h1>
+          <p>Enter your password to open your local notes and clips.</p>
+          <input
+            autoFocus
+            type="password"
+            className="unlock-input"
+            autoComplete="current-password"
+            aria-label="Workspace password"
+            value={unlockPassword}
+            onChange={(e) => setUnlockPassword(e.target.value)}
+          />
+          <button type="submit" className="button primary">
+            Unlock workspace
+          </button>
+          {error && <p role="alert">{error}</p>}
+          <small className="muted">
+            This password cannot be recovered. Keep an encrypted backup.
+          </small>
+        </form>
+      </div>
     );
   if (!workspace)
     return (
-      <div className="loading-screen">
-        <ClipboardList size={34} />
-        <h1>SnapNote</h1>
-        <p role={loadError ? "alert" : "status"}>
-          {loadError || "Opening your workspace…"}
-        </p>
-        {loadError && (
-          <>
-            <button
-              className="button"
-              onClick={() =>
-                download(
-                  "SnapNote-original-notes.json",
-                  JSON.stringify({
-                    tabs: localStorage.getItem("snapnote-tabs"),
-                    activeTab: localStorage.getItem("snapnote-active-tab"),
-                    theme: localStorage.getItem("snapnote-theme"),
-                  }),
-                )
-              }
-            >
-              Export original data
-            </button>
-            <button className="button" onClick={() => location.reload()}>
-              Try again
-            </button>
-          </>
-        )}
+      <div
+        className={`window-frame ${native ? "frameless-window" : ""} ${windowChrome.maximized ? "maximized" : ""}`}
+      >
+        <WindowResizeHandles maximized={windowChrome.maximized} />
+        {minimalTitleBar}
+        <div className="loading-screen">
+          <ClipboardList size={34} />
+          <h1>SnapNote</h1>
+          <p role={loadError ? "alert" : "status"}>
+            {loadError || "Opening your workspace…"}
+          </p>
+          {loadError && (
+            <>
+              <button
+                className="button"
+                onClick={() =>
+                  download(
+                    "SnapNote-original-notes.json",
+                    JSON.stringify({
+                      tabs: localStorage.getItem("snapnote-tabs"),
+                      activeTab: localStorage.getItem("snapnote-active-tab"),
+                      theme: localStorage.getItem("snapnote-theme"),
+                    }),
+                  )
+                }
+              >
+                Export original data
+              </button>
+              <button className="button" onClick={() => location.reload()}>
+                Try again
+              </button>
+            </>
+          )}
+        </div>
       </div>
     );
 
   return (
-    <div className={`workspace-shell ${quick ? "quick-mode" : ""}`}>
+    <div
+      className={`workspace-shell ${quick ? "quick-mode" : ""} ${native ? "frameless-window" : ""} ${windowChrome.maximized ? "maximized" : ""}`}
+    >
+      <WindowResizeHandles maximized={windowChrome.maximized} />
       <div
         className={`drawer-backdrop ${sidebar ? "open" : ""}`}
         aria-hidden="true"
@@ -685,7 +835,8 @@ function DesktopWorkspace() {
               height={48}
             />
             <div>
-              SnapNote<small>Your visual workspace.</small>
+              <BrandWordmark />
+              <small>Your visual workspace.</small>
             </div>
           </div>
           <button
@@ -792,7 +943,10 @@ function DesktopWorkspace() {
         </div>
       </aside>
       <div className="workspace-main">
-        <header className="app-header">
+        <header
+          className="app-header"
+          onMouseDown={windowChrome.handleTitleBarMouseDown}
+        >
           <div className="launchpad">
             <img
               className="launchpad-logo"
@@ -800,8 +954,11 @@ function DesktopWorkspace() {
               alt=""
               width={44}
               height={44}
+              draggable={false}
             />
-            <span className="launchpad-title">SnapNote</span>
+            <span className="launchpad-title">
+              <BrandWordmark />
+            </span>
             <span className="rail-divider" aria-hidden="true" />
             {(
               [
@@ -815,6 +972,7 @@ function DesktopWorkspace() {
             ).map(([key, label, Icon]) => (
               <button
                 key={key}
+                type="button"
                 className={`rail-button ${view === key ? "selected" : ""}`}
                 aria-label={label}
                 aria-pressed={view === key}
@@ -825,6 +983,7 @@ function DesktopWorkspace() {
               </button>
             ))}
             <button
+              type="button"
               className={`rail-button ${sidebar ? "selected" : ""}`}
               aria-label="Folders and sessions"
               aria-expanded={sidebar}
@@ -834,37 +993,76 @@ function DesktopWorkspace() {
               <Folder size={17} />
             </button>
           </div>
-          <div className="header-actions">
-            <span className="local-badge">
-              <ShieldCheck size={14} />
-              {native ? "On this device" : "Browser preview"}
-            </span>
-            <button
-              className="icon-button"
-              aria-label="Keyboard shortcuts"
-              onClick={() => setHelp(true)}
-            >
-              <Keyboard size={17} />
-            </button>
-            <button
-              className="icon-button"
-              aria-label="Toggle theme"
-              onClick={() =>
-                mutate((w) => ({
-                  ...w,
-                  settings: {
-                    ...w.settings,
-                    theme: w.settings.theme === "dark" ? "light" : "dark",
-                  },
-                }))
-              }
-            >
-              {workspace.settings.theme === "dark" ? (
-                <Sun size={17} />
-              ) : (
-                <Moon size={17} />
-              )}
-            </button>
+          <div className="titlebar-drag-spacer" aria-hidden="true" />
+          <div className="header-right">
+            <div className="header-actions">
+              <span className="local-badge">
+                <ShieldCheck size={14} />
+                {native ? "On this device" : "Browser preview"}
+              </span>
+              <button
+                type="button"
+                className={`icon-button header-utility-secondary ${floating ? "active" : ""}`}
+                aria-label={floating ? "Unpin from top" : "Keep window on top"}
+                aria-pressed={floating}
+                title={
+                  floating ? "Pinned on top (click to unpin)" : "Keep on top"
+                }
+                onClick={() => void toggleFloating()}
+              >
+                <Pin size={16} />
+              </button>
+              <button
+                type="button"
+                className="icon-button header-utility-secondary"
+                aria-label="Settings and privacy"
+                title="Settings & privacy"
+                onClick={() => setSettings(true)}
+              >
+                <Settings size={17} />
+              </button>
+              <button
+                type="button"
+                className="icon-button header-utility-tertiary"
+                aria-label="Keyboard shortcuts"
+                title="Keyboard shortcuts"
+                onClick={() => setHelp(true)}
+              >
+                <Keyboard size={17} />
+              </button>
+              <button
+                type="button"
+                className="icon-button"
+                aria-label="Toggle theme"
+                title={
+                  workspace.settings.theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+                }
+                onClick={() =>
+                  mutate((w) => ({
+                    ...w,
+                    settings: {
+                      ...w.settings,
+                      theme: w.settings.theme === "dark" ? "light" : "dark",
+                    },
+                  }))
+                }
+              >
+                {workspace.settings.theme === "dark" ? (
+                  <Sun size={17} />
+                ) : (
+                  <Moon size={17} />
+                )}
+              </button>
+            </div>
+            <span className="window-controls-divider" aria-hidden="true" />
+            <WindowControls
+              maximized={windowChrome.maximized}
+              onMinimize={windowChrome.minimize}
+              onToggleMaximize={windowChrome.toggleMaximize}
+              onClose={windowChrome.closeWindow}
+            />
           </div>
         </header>
         <div className="page-heading">
@@ -877,49 +1075,67 @@ function DesktopWorkspace() {
                   <button
                     className="icon-button"
                     aria-label="Rename collection"
-                    onClick={() => {
-                      const name = window.prompt(
-                        "Collection name",
-                        collection.name,
-                      );
-                      if (!name?.trim()) return;
-                      mutate((w) => ({
-                        ...w,
-                        [collectionType]: w[collectionType].map((g) =>
-                          g.id === collection.id
-                            ? { ...g, name: name.trim().slice(0, 100) }
-                            : g,
-                        ),
-                      }));
-                    }}
+                    title="Rename collection"
+                    onClick={() =>
+                      void (async () => {
+                        const name = await dialog.prompt({
+                          title:
+                            collectionType === "folders"
+                              ? "Rename folder"
+                              : "Rename session",
+                          description: "Give this collection a clear name.",
+                          label: "COLLECTION NAME",
+                          defaultValue: collection.name,
+                          confirmLabel: "Save name",
+                          icon: "edit",
+                        });
+                        if (!name?.trim()) return;
+                        mutate((w) => ({
+                          ...w,
+                          [collectionType]: w[collectionType].map((g) =>
+                            g.id === collection.id
+                              ? { ...g, name: name.trim().slice(0, 100) }
+                              : g,
+                          ),
+                        }));
+                      })()
+                    }
                   >
                     <Pencil size={15} />
                   </button>
                   <button
-                    className="icon-button"
+                    className="icon-button danger"
                     aria-label="Remove collection"
-                    onClick={() => {
-                      if (
-                        !window.confirm(
-                          "Remove this collection? Its clips will stay in your library.",
-                        )
-                      )
-                        return;
-                      const field =
-                        collectionType === "folders" ? "folderId" : "sessionId";
-                      mutate((w) => ({
-                        ...w,
-                        [collectionType]: w[collectionType].filter(
-                          (g) => g.id !== collection.id,
-                        ),
-                        clips: w.clips.map((c) =>
-                          c[field] === collection.id
-                            ? { ...c, [field]: "" }
-                            : c,
-                        ),
-                      }));
-                      navigate("all");
-                    }}
+                    title="Remove collection"
+                    onClick={() =>
+                      void (async () => {
+                        const confirmed = await dialog.confirm({
+                          title: `Remove “${collection.name}”?`,
+                          description:
+                            "This collection will be deleted, while its clips stay safely in your library.",
+                          confirmLabel: "Remove",
+                          tone: "danger",
+                          icon: "delete",
+                        });
+                        if (!confirmed) return;
+                        const field =
+                          collectionType === "folders"
+                            ? "folderId"
+                            : "sessionId";
+                        mutate((w) => ({
+                          ...w,
+                          [collectionType]: w[collectionType].filter(
+                            (g) => g.id !== collection.id,
+                          ),
+                          clips: w.clips.map((c) =>
+                            c[field] === collection.id
+                              ? { ...c, [field]: "" }
+                              : c,
+                          ),
+                        }));
+                        navigate("all");
+                      })()
+                    }
                   >
                     <Trash2 size={15} />
                   </button>
@@ -999,6 +1215,8 @@ function DesktopWorkspace() {
                 add(payload);
                 setNotice("Saved to your clipboard library.");
               }}
+              onConfirm={dialog.confirm}
+              onAlert={dialog.alert}
             />
           </Suspense>
         ) : (
@@ -1068,6 +1286,12 @@ function DesktopWorkspace() {
                   onClick={() => createGroup("sessions", checked)}
                 >
                   <Layers size={14} /> Group in session
+                </button>
+                <button
+                  className="text-button danger"
+                  onClick={deleteSelectedClips}
+                >
+                  <Trash2 size={14} /> Delete selected
                 </button>
                 <button className="text-button" onClick={() => setChecked([])}>
                   Clear selection
@@ -1152,24 +1376,38 @@ function DesktopWorkspace() {
                           >
                             {clip.title}
                           </button>
-                          <button
-                            className="icon-button"
-                            title="Copy clip"
-                            aria-label={`Copy ${clip.title}`}
-                            onClick={() => void copyClip(clip)}
-                          >
-                            <Copy size={15} />
-                          </button>
-                          {clip.type === "image" && (
+                          <div className="clip-card-actions">
+                            <button
+                              className={`icon-button ${copiedId === clip.id ? "copied" : ""}`}
+                              title={
+                                copiedId === clip.id ? "Copied" : "Copy clip"
+                              }
+                              aria-label={`Copy ${clip.title}`}
+                              onClick={() => void copyClip(clip)}
+                            >
+                              {copiedId === clip.id ? (
+                                <Check size={15} />
+                              ) : (
+                                <Copy size={15} />
+                              )}
+                            </button>
                             <button
                               className="icon-button danger"
-                              title="Delete image clip"
-                              aria-label={`Delete image clip: ${clip.title}`}
+                              title={
+                                clip.type === "image"
+                                  ? "Delete image clip"
+                                  : "Delete clip"
+                              }
+                              aria-label={
+                                clip.type === "image"
+                                  ? `Delete image clip: ${clip.title}`
+                                  : `Delete clip: ${clip.title}`
+                              }
                               onClick={() => deleteClip(clip)}
                             >
                               <Trash2 size={15} />
                             </button>
-                          )}
+                          </div>
                         </div>
                         <div className="clip-bottom">
                           <span>
@@ -1198,27 +1436,11 @@ function DesktopWorkspace() {
                     <p>
                       {query
                         ? "Try a different word, title, or tag."
-                        : "Copy text or an image, then capture it here. Enable automatic capture to keep a local history while you work."}
+                        : "Copy text or an image to keep a private, searchable history right on this device."}
                     </p>
-                    {!query && (
-                      <button
-                        className="button primary"
-                        disabled={!native}
-                        onClick={() =>
-                          mutate((w) => ({
-                            ...w,
-                            settings: { ...w.settings, capture: true },
-                          }))
-                        }
-                      >
-                        <Play size={15} />
-                        {workspace.settings.capture
-                          ? "Capture is enabled"
-                          : "Enable automatic capture"}
-                      </button>
-                    )}
-                    <small>
-                      Private by default. No account. No cloud upload.
+                    <small className="empty-privacy-pill">
+                      <ShieldCheck size={13} />
+                      Private by default · No account · No cloud upload
                     </small>
                   </div>
                 )}
@@ -1274,8 +1496,16 @@ function DesktopWorkspace() {
                     className="button primary full"
                     onClick={() => void copyClip(selected)}
                   >
-                    <Copy size={15} /> Copy{" "}
-                    {selected.snippet ? "template" : "clip"}
+                    {copiedId === selected.id ? (
+                      <>
+                        <Check size={15} /> Copied to clipboard
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={15} /> Copy{" "}
+                        {selected.snippet ? "template" : "clip"}
+                      </>
+                    )}
                   </button>
                   {selected.type === "image" && (
                     <div className="image-action-grid">
@@ -1701,12 +1931,14 @@ function DesktopWorkspace() {
                               throw new Error(
                                 "The workspace passwords do not match.",
                               );
-                            if (
-                              !window.confirm(
-                                "Encrypt this workspace and remove the old plaintext note copies after saving? Keep the password and a backup; there is no password recovery.",
-                              )
-                            )
-                              return;
+                            const confirmed = await dialog.confirm({
+                              title: "Encrypt local workspace?",
+                              description:
+                                "This encrypts your workspace and removes old plaintext copies after saving. Keep your password and a backup safe—there is no password recovery.",
+                              confirmLabel: "Encrypt workspace",
+                              icon: "warning",
+                            });
+                            if (!confirmed) return;
                             setBackupBusy(true);
                             try {
                               await enableWorkspaceEncryption(
@@ -1811,12 +2043,17 @@ function DesktopWorkspace() {
                   </p>
                   <button
                     className="button danger"
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Clear recent history? Favorites, snippets, grouped clips and notes will be kept.",
-                        )
-                      ) {
+                    onClick={() =>
+                      void (async () => {
+                        const confirmed = await dialog.confirm({
+                          title: "Clear recent history?",
+                          description:
+                            "Unorganized clips will be removed. Favorites, snippets, grouped clips, and notes will be kept.",
+                          confirmLabel: "Clear history",
+                          tone: "danger",
+                          icon: "delete",
+                        });
+                        if (!confirmed) return;
                         mutate((w) => ({
                           ...w,
                           clips: w.clips.filter(protectedClip),
@@ -1824,8 +2061,8 @@ function DesktopWorkspace() {
                         setChecked([]);
                         setSelectedId(null);
                         setNotice("Recent history cleared.");
-                      }
-                    }}
+                      })()
+                    }
                   >
                     <Trash2 size={15} /> Clear recent history
                   </button>
@@ -1874,6 +2111,7 @@ function DesktopWorkspace() {
           onContinue={advanceStarter}
         />
       )}
+      {dialog.dialogNode}
     </div>
   );
 }
