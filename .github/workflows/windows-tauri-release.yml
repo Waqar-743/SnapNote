@@ -133,6 +133,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          body_path: docs/releases/${{ github.ref_name }}.md
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
