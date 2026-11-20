@@ -65,11 +65,11 @@ Prebuilt, self-contained **Windows 10 & 11 (x64)** installers are compiled and v
 
 | Installer | Type | Notes |
 | --- | --- | --- |
-| [`SnapNote_1.6.0_x64_en-US.msi`](https://github.com/Waqar-743/SnapNote/releases/download/v1.6.0/SnapNote_1.6.0_x64_en-US.msi) | MSI installer | **Recommended** — clean standard Windows install |
-| [`SnapNote_1.6.0_x64-setup.exe`](https://github.com/Waqar-743/SnapNote/releases/download/v1.6.0/SnapNote_1.6.0_x64-setup.exe) | NSIS executable | Standalone setup wizard |
-| [`SnapNote_1.6.0_SHA256SUMS.txt`](https://github.com/Waqar-743/SnapNote/releases/download/v1.6.0/SnapNote_1.6.0_SHA256SUMS.txt) | SHA-256 checksums | Verify downloads via PowerShell `Get-FileHash` |
+| [`SnapNote_1.7.0_x64_en-US.msi`](https://github.com/Waqar-743/SnapNote/releases/latest) | MSI installer | **Recommended** — clean standard Windows install |
+| [`SnapNote_1.7.0_x64-setup.exe`](https://github.com/Waqar-743/SnapNote/releases/latest) | NSIS executable | Standalone setup wizard |
+| [`SnapNote_1.7.0_SHA256SUMS.txt`](https://github.com/Waqar-743/SnapNote/releases/latest) | SHA-256 checksums | Verify downloads via PowerShell `Get-FileHash` |
 
-> **Zero extra runtimes:** The C runtime is statically linked, so SnapNote runs on a fresh Windows 10/11 machine without installing Visual C++ Redistributable. Because indie builds are unsigned, Windows SmartScreen may ask for confirmation on first install — check the [latest release](https://github.com/Waqar-743/SnapNote/releases/latest) checksums anytime.
+> **Zero extra runtimes:** The C runtime is statically linked, so SnapNote runs on a fresh Windows 10/11 machine without installing Visual C++ Redistributable. Because indie builds are unsigned, Windows SmartScreen may ask for confirmation on first install — see the [v1.7.0 release notes](docs/releases/v1.7.0.md) and check the [latest release](https://github.com/Waqar-743/SnapNote/releases/latest) checksums anytime.
 
 ## Keyboard Shortcuts
 
