@@ -140,7 +140,8 @@
   }
 })();
 
-// Resolve assets dynamically from GitHub's latest published release.
+// Display the latest published release version tag without rewriting download
+// links — every download button intentionally redirects to GitHub /releases/latest.
 (async () => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
@@ -154,24 +155,6 @@
     );
     if (!response.ok) return;
     const release = await response.json();
-    const patterns = {
-      msi: /_x64_en-US\.msi$/i,
-      exe: /_x64-setup\.exe$/i,
-      checksums: /_SHA256SUMS\.txt$/i,
-    };
-    if (!Array.isArray(release.assets)) return;
-    for (const link of document.querySelectorAll("[data-release-download]")) {
-      const pattern = patterns[link.dataset.releaseDownload];
-      const asset = release.assets.find((item) => pattern?.test(item.name));
-      if (!asset || typeof asset.browser_download_url !== "string") continue;
-      const url = new URL(asset.browser_download_url);
-      if (
-        url.origin === "https://github.com" &&
-        url.pathname.startsWith("/Waqar-743/SnapNote/releases/download/")
-      ) {
-        link.href = url.href;
-      }
-    }
     if (typeof release.tag_name === "string") {
       const heading = document.querySelector("[data-release-version]");
       if (heading) heading.textContent = `Download SnapNote ${release.tag_name}`;
@@ -180,7 +163,7 @@
         pill.textContent = `${release.tag_name} · Windows 10 & 11 · Free & Local-First`;
     }
   } catch {
-    // Fallback /releases/latest links remain active if API is unreachable.
+    // Fallback labels remain active if GitHub API is unreachable.
   } finally {
     clearTimeout(timeout);
   }

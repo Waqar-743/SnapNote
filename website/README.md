@@ -6,7 +6,7 @@ A fast, zero-build static product website in `dist/`, published automatically to
 
 - **Typography:** Paired `Plus Jakarta Sans` (display headings & two-tone `SnapNote` wordmark), `Inter` (body copy), and `JetBrains Mono` (keyboard shortcuts, snippet `{{variables}}`, and PowerShell SHA-256 verification commands), with crisp system fallbacks.
 - **Themes:** Full light and dark theme toggle with `prefers-color-scheme` detection and persistent preference, plus an interactive Hero app showcase switching between real Light workspace, Dark workspace, and `Alt+X` Quick Access screenshots.
-- **Layout:** Hero with live release badge, 4-column metrics strip, bento feature grid, dark Quick Access spotlight with keyboard shortcuts, real interface gallery, privacy & cloud-comparison table, Download Hub with 1-click PowerShell SHA-256 copy, FAQ accordion, and structured multi-column footer.
+- **Layout:** Hero with live release badge, 4-column metrics strip, bento feature grid, dark Quick Access spotlight with keyboard shortcuts, real interface gallery, privacy & cloud-comparison table, Download Hub (all download buttons redirect directly to GitHub's `/releases/latest` page rather than triggering binary downloads from the site) with 1-click PowerShell SHA-256 copy, FAQ accordion, and structured multi-column footer.
 
 ## SEO & Backlinks
 
