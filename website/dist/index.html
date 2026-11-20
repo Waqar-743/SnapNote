@@ -3,18 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SnapNote — Private Clipboard Manager &amp; Notes App for Windows</title>
+    <title>SnapNote — Free Private Clipboard Manager &amp; Notes App for Windows</title>
     <meta
       name="description"
-      content="SnapNote is a free clipboard manager and notes workspace for Windows 10 and 11. Clipboard history, quick access with Alt+X, snippets, image tools and AES-256 encryption — everything stays on your device. No account, no cloud, no telemetry."
+      content="SnapNote is a free, local-first clipboard manager and notes workspace for Windows 10 &amp; 11. Search clipboard history with Alt+X, reuse snippet templates, extract image text with offline OCR, and lock with AES-256 — no account, no cloud, no telemetry."
     />
     <meta
       name="keywords"
-      content="clipboard manager, clipboard history, Windows clipboard manager, notes app, snippet manager, quick access, Alt+X, local-first, private, Windows 10, Windows 11"
+      content="Windows clipboard manager, clipboard history Windows 11, private clipboard manager, offline notes app Windows, Alt+X quick access, snippet manager, local OCR clipboard, AES-256 encrypted notes, Tauri desktop app, free clipboard manager"
     />
     <meta name="author" content="Waqar Ahmed" />
-    <meta name="theme-color" content="#201a12" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#f7f3ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14110d" media="(prefers-color-scheme: dark)" />
     <link rel="canonical" href="https://waqar-743.github.io/SnapNote/" />
+    <link rel="alternate" hreflang="en" href="https://waqar-743.github.io/SnapNote/" />
+    <link rel="alternate" hreflang="x-default" href="https://waqar-743.github.io/SnapNote/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -22,11 +29,11 @@
     <meta property="og:url" content="https://waqar-743.github.io/SnapNote/" />
     <meta
       property="og:title"
-      content="SnapNote — Private Clipboard Manager &amp; Notes App for Windows"
+      content="SnapNote — Free Private Clipboard Manager &amp; Notes App for Windows"
     />
     <meta
       property="og:description"
-      content="Clipboard history, quick access, snippets, image tools and encrypted backups — a free Windows app that keeps everything you copy on your device. No account, no cloud, no telemetry."
+      content="Clipboard history, Alt+X floating quick access, rich notes, snippet templates, offline OCR, and optional AES-256 encryption — kept strictly on your Windows PC."
     />
     <meta
       property="og:image"
@@ -36,31 +43,73 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="SnapNote — clipboard history, notes and snippets kept private on your device"
+      content="SnapNote — private clipboard history, notes, snippets, and image tools for Windows"
     />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="SnapNote — Private Clipboard Manager &amp; Notes App for Windows"
+      content="SnapNote — Free Private Clipboard Manager &amp; Notes App for Windows"
     />
     <meta
       name="twitter:description"
-      content="Clipboard history, quick access, snippets, image tools and encrypted backups — a free Windows app that keeps everything you copy on your device."
+      content="Search everything you copy in a second with Alt+X. Notes, snippets, image OCR, and AES-256 vault — 100% local on Windows 10 &amp; 11."
     />
     <meta
       name="twitter:image"
       content="https://waqar-743.github.io/SnapNote/assets/og-banner.png"
     />
+    <meta
+      name="twitter:image:alt"
+      content="SnapNote Windows desktop workspace in light and dark themes"
+    />
 
-    <link rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" href="assets/favicon-light.png" />
-    <link rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" href="assets/favicon-dark.png" />
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      media="(prefers-color-scheme: light)"
+      href="assets/favicon-light.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      media="(prefers-color-scheme: dark)"
+      href="assets/favicon-dark.png"
+    />
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-dark.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+
+    <!-- Typography: Plus Jakarta Sans + Inter + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="assets/workspace-light.png" />
     <link rel="stylesheet" href="styles.css" />
 
+    <!-- Apply saved theme before paint to prevent flash -->
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("snapnote-site-theme");
+          const dark =
+            saved === "dark" ||
+            (!saved &&
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.classList.add("dark");
+        } catch {}
+      })();
+    </script>
+
+    <!-- Structured Data (SEO) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -70,8 +119,9 @@
             "@id": "https://waqar-743.github.io/SnapNote/#website",
             "url": "https://waqar-743.github.io/SnapNote/",
             "name": "SnapNote",
-            "description": "Private clipboard manager and notes workspace for Windows 10 and 11.",
-            "inLanguage": "en",
+            "alternateName": "SnapNote for Windows",
+            "description": "Free, local-first clipboard manager, snippet library, and rich notes workspace for Windows 10 and 11.",
+            "inLanguage": "en-US",
             "publisher": {
               "@id": "https://waqar-743.github.io/SnapNote/#author"
             }
@@ -80,29 +130,53 @@
             "@type": "Person",
             "@id": "https://waqar-743.github.io/SnapNote/#author",
             "name": "Waqar Ahmed",
-            "url": "https://github.com/Waqar-743"
+            "url": "https://github.com/Waqar-743",
+            "sameAs": [
+              "https://github.com/Waqar-743",
+              "https://github.com/Waqar-743/SnapNote"
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://waqar-743.github.io/SnapNote/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "SnapNote Home",
+                "item": "https://waqar-743.github.io/SnapNote/"
+              }
+            ]
           },
           {
             "@type": "SoftwareApplication",
             "@id": "https://waqar-743.github.io/SnapNote/#app",
             "name": "SnapNote",
             "url": "https://waqar-743.github.io/SnapNote/",
-            "description": "A private clipboard manager and notes workspace for Windows. Clipboard history, quick access with Alt+X, reusable snippets, image tools and optional AES-256 encryption — all data stays on the local device.",
+            "description": "A private, local-first clipboard manager and notes workspace for Windows 10 and 11. Features searchable clipboard history, Alt+X floating quick access, unified custom title bar, rich-text notes, reusable snippet templates, screenshot annotation and local OCR, and optional AES-256-GCM encryption.",
             "applicationCategory": "UtilitiesApplication",
+            "applicationSubCategory": "Clipboard Manager & Note Taking",
             "operatingSystem": ["Windows 10", "Windows 11"],
             "softwareVersion": "1.6.0",
             "downloadUrl": "https://github.com/Waqar-743/SnapNote/releases/latest",
             "installUrl": "https://github.com/Waqar-743/SnapNote/releases/latest",
-            "screenshot": "https://waqar-743.github.io/SnapNote/assets/workspace-light.png",
+            "releaseNotes": "https://github.com/Waqar-743/SnapNote/releases",
+            "softwareHelp": "https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md",
+            "codeRepository": "https://github.com/Waqar-743/SnapNote",
+            "screenshot": [
+              "https://waqar-743.github.io/SnapNote/assets/workspace-light.png",
+              "https://waqar-743.github.io/SnapNote/assets/workspace-dark.png",
+              "https://waqar-743.github.io/SnapNote/assets/quick-access.png"
+            ],
             "featureList": [
-              "Automatic clipboard history for text and images",
-              "Global Alt+X quick access window",
-              "Rich-text notes with headings, lists and code blocks",
-              "Reusable snippets with fill-in variables",
-              "Image crop, annotation, pinning and local OCR",
-              "Folders, sessions and favorites",
-              "Optional AES-256-GCM workspace encryption",
-              "Password-protected backups"
+              "Automatic local clipboard history for text, links, and images",
+              "Global Alt+X floating quick access window from the system tray",
+              "Unified custom frameless title bar with keep-on-top pin control",
+              "Rich-text notes with headings, task lists, code blocks, and image paste",
+              "Reusable snippet templates with fill-in {{variables}}",
+              "Built-in screenshot crop, annotate, pin-to-screen, and offline Tesseract OCR",
+              "Folders, sessions, favorites, multi-select copy, and 1-click clip delete",
+              "Optional AES-256-GCM workspace encryption and password-protected backups"
             ],
             "author": { "@id": "https://waqar-743.github.io/SnapNote/#author" },
             "offers": {
@@ -113,6 +187,32 @@
             "isAccessibleForFree": true
           },
           {
+            "@type": "HowTo",
+            "@id": "https://waqar-743.github.io/SnapNote/#howto",
+            "name": "How to start using SnapNote clipboard history on Windows",
+            "description": "Install SnapNote and start searching your clipboard history with Alt+X in under a minute.",
+            "step": [
+              {
+                "@type": "HowToStep",
+                "position": 1,
+                "name": "Download and install",
+                "text": "Run the self-contained Windows MSI installer or setup.exe. No Visual C++ Redistributable or account signup is required."
+              },
+              {
+                "@type": "HowToStep",
+                "position": 2,
+                "name": "Press Alt+X anywhere",
+                "text": "Summon the floating Quick Access window over any app. Press Alt+X again to tuck it back into the system tray."
+              },
+              {
+                "@type": "HowToStep",
+                "position": 3,
+                "name": "Copy, search, and reuse",
+                "text": "Enable automatic capture to index text, links, and images locally. Organize with folders, sessions, snippets, and rich notes."
+              }
+            ]
+          },
+          {
             "@type": "FAQPage",
             "@id": "https://waqar-743.github.io/SnapNote/#faq",
             "mainEntity": [
@@ -121,47 +221,63 @@
                 "name": "Does SnapNote need the Visual C++ Redistributable or anything else installed?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "No. Since v1.4.2 the Windows build statically links the C runtime, so the installer works on a clean Windows 10 or 11 machine out of the box. The only optional extra is the Tesseract engine, which enables text recognition inside images."
+                  "text": "No. SnapNote statically links the C runtime in its Windows builds, so the MSI and setup.exe installers run on a clean Windows 10 or 11 machine out of the box. The only optional extra is Tesseract if you want offline OCR text extraction inside images."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Where is my data stored?",
+                "name": "Where is my clipboard and notes data stored?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Everything lives in local transactional storage inside the app's own profile on your device. There is no sync, no server and no analytics. Backups are exported only when you ask for them."
+                  "text": "Everything lives inside local transactional storage in the app's device profile on your PC. There is no cloud sync, no account, and zero telemetry. Backups are created only when you explicitly export them."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Does Alt+X still work after I close the app window?",
+                "name": "Does Alt+X still work after I close the SnapNote window?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. With the window closed, SnapNote keeps running in the system tray and Alt+X brings quick access back. If you choose Quit from the tray menu, the shortcut rests until you start SnapNote again."
+                  "text": "Yes. Closing the window minimizes SnapNote to the Windows system tray so Alt+X remains ready globally. Choosing Quit SnapNote from the tray menu exits the app completely."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Can SnapNote read text inside screenshots?",
+                "name": "Can SnapNote extract text from screenshots offline?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes, with local OCR. Install Tesseract once and add it to PATH; SnapNote then extracts text from images so it becomes searchable. Recognition runs on your machine — images are never uploaded."
+                  "text": "Yes. Install Tesseract OCR once and add it to your Windows PATH. SnapNote runs recognition locally on your machine and stores extracted text as searchable metadata without uploading images anywhere."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Is my data from an older SnapNote version compatible?",
+                "name": "How does SnapNote workspace encryption work?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. On first launch your original rich-text notes migrate into the new store, and a recovery copy of the old records is kept. Storage problems are surfaced in the app instead of being silently swallowed."
+                  "text": "You can enable optional live vault encryption in Settings. SnapNote encrypts stored clips, notes, and images using AES-256-GCM with PBKDF2-SHA256 key derivation. Your password is never stored or transmitted, so keep a secure copy and an encrypted backup."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Is SnapNote available on macOS or Linux?",
+                "name": "Why does Windows SmartScreen show a prompt on first install?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "SnapNote is built and validated end to end on Windows 10 and 11. The codebase is Tauri-based, but Windows is the platform the releases currently target."
+                  "text": "SnapNote is an independent, free open-source project and its Windows installers are currently unsigned. Every release is built in a public GitHub Actions pipeline and ships with SHA-256 checksums so you can verify the exact file before installing."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my data from an older version of SnapNote compatible?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. On first launch, existing rich-text notes migrate cleanly into the workspace store while retaining a recovery copy of legacy records."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is SnapNote available for macOS or Linux?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "SnapNote is built with Tauri v2 and Rust, and prebuilt installers are currently tested and released for Windows 10 and Windows 11 (x64). Developers can inspect or build from source in the public GitHub repository."
                 }
               }
             ]
@@ -171,101 +287,137 @@
     </script>
   </head>
   <body>
-    <svg
-      class="icon-definitions"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
+    <!-- Inline SVG Sprite -->
+    <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <symbol id="icon-clipboard" viewBox="0 0 24 24">
-          <rect x="5" y="5" width="14" height="17" rx="2" />
-          <rect x="9" y="2" width="6" height="5" rx="1" />
-          <path d="M9 12h6m-6 4h4" />
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
         </symbol>
-        <symbol id="icon-note" viewBox="0 0 24 24">
-          <path
-            d="M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9z"
-          />
-          <path d="M14 2v7h7M7 13h10M7 17h7" />
-        </symbol>
-        <symbol id="icon-search" viewBox="0 0 24 24">
-          <circle cx="10.5" cy="10.5" r="6.5" />
-          <path d="m16 16 5 5" />
-        </symbol>
-        <symbol id="icon-code" viewBox="0 0 24 24">
-          <path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-14-2 20" />
-        </symbol>
-        <symbol id="icon-image" viewBox="0 0 24 24">
-          <rect x="3" y="3" width="18" height="18" rx="3" />
-          <circle cx="8" cy="8" r="1" />
-          <path d="m21 15-6-6L3 21" />
-        </symbol>
-        <symbol id="icon-keyboard" viewBox="0 0 24 24">
-          <rect x="2" y="5" width="20" height="14" rx="3" />
-          <path
-            d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"
-          />
-        </symbol>
-        <symbol id="icon-folder" viewBox="0 0 24 24">
-          <path
-            d="M3 7V5a2 2 0 0 1 2-2h5l3 4h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-          />
-        </symbol>
-        <symbol id="icon-lock" viewBox="0 0 24 24">
-          <rect x="4" y="10" width="16" height="12" rx="3" />
-          <path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v3" />
-        </symbol>
-        <symbol id="icon-download" viewBox="0 0 24 24">
-          <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
-        </symbol>
-        <symbol id="icon-star" viewBox="0 0 24 24">
-          <path d="m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1z" />
-        </symbol>
-        <symbol id="icon-shield" viewBox="0 0 24 24">
-          <path d="M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6z" />
-          <path d="m8 12 3 3 5-6" />
-        </symbol>
-        <symbol id="icon-archive" viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="5" rx="1" />
-          <path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4" />
-        </symbol>
-        <symbol id="icon-github" viewBox="0 0 24 24">
+        <symbol id="i-github" viewBox="0 0 24 24">
           <path
             d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"
           />
         </symbol>
+        <symbol id="i-clipboard" viewBox="0 0 24 24">
+          <rect x="5" y="5" width="14" height="17" rx="2" />
+          <rect x="9" y="2" width="6" height="5" rx="1" />
+          <path d="M9 12h6m-6 4h4" />
+        </symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24">
+          <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
+        </symbol>
+        <symbol id="i-note" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <path d="M14 2v6h6M8 13h8M8 17h5" />
+        </symbol>
+        <symbol id="i-braces" viewBox="0 0 24 24">
+          <path d="M8 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1" />
+        </symbol>
+        <symbol id="i-image" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="m21 15-5-5L5 21" />
+        </symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24">
+          <path d="M3 7V5a2 2 0 0 1 2-2h5l3 3h6a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+          <rect x="4" y="10" width="16" height="12" rx="3" />
+          <path d="M8 10V6a4 4 0 0 1 8 0v4m-4 4v3" />
+        </symbol>
+        <symbol id="i-archive" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="5" rx="1.5" />
+          <path d="M5 9v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 14h4" />
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+          <path d="M12 2 4 5.5v6c0 5 3.4 9.3 8 10.5 4.6-1.2 8-5.5 8-10.5v-6z" />
+          <path d="m9 12 2 2 4-4" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="M20 6 9 17l-5-5" />
+        </symbol>
+        <symbol id="i-x" viewBox="0 0 24 24">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24">
+          <rect x="9" y="9" width="12" height="12" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M5 12h14m-6-6 6 6-6 6" />
+        </symbol>
       </defs>
     </svg>
-    <a class="skip-link" href="#main">Skip to content</a>
 
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <!-- Sticky Glass Navigation -->
     <header class="site-header" id="top">
-      <div class="wrap header-inner">
+      <div class="container header-row">
         <a class="brand" href="#top" aria-label="SnapNote home">
-          <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="assets/icon-dark.png" />
-            <img class="brand-mark" src="assets/icon-light.png" alt="" width="38" height="38" />
-          </picture>
-          <span class="brand-word">SnapNote</span>
+          <img
+            class="brand-icon icon-light"
+            src="assets/icon-light.png"
+            alt=""
+            width="36"
+            height="36"
+          />
+          <img
+            class="brand-icon icon-dark"
+            src="assets/icon-dark.png"
+            alt=""
+            width="36"
+            height="36"
+          />
+          <span class="brand-word"
+            ><span class="brand-snap">Snap</span
+            ><span class="brand-note">Note</span></span
+          >
         </a>
-        <nav class="site-nav" id="site-nav" aria-label="Site">
+
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
           <a href="#features">Features</a>
-          <a href="#quick">Quick access</a>
-          <a href="#screenshots">Screenshots</a>
+          <a href="#quick-access">Quick access</a>
           <a href="#privacy">Privacy</a>
+          <a href="#compare">Compare</a>
+          <a href="#download">Download</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <div class="header-actions">
-          <a
-            class="button small primary"
-            href="https://github.com/Waqar-743/SnapNote/releases/latest"
-            >Download</a
-          >
+
+        <div class="header-cta">
           <button
-            class="nav-toggle"
             type="button"
+            class="icon-btn"
+            id="theme-toggle"
+            aria-label="Toggle color theme"
+            title="Switch light / dark theme"
+          >
+            <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#i-sun" />
+            </svg>
+            <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#i-moon" />
+            </svg>
+          </button>
+          <a
+            class="btn btn-sm btn-primary"
+            href="#download"
+          >
+            Download
+          </a>
+          <button
+            type="button"
+            class="nav-toggle"
             aria-expanded="false"
             aria-controls="site-nav"
-            aria-label="Menu"
+            aria-label="Open navigation menu"
           >
             <span></span><span></span><span></span>
           </button>
@@ -276,494 +428,838 @@
     <main id="main">
       <!-- Hero -->
       <section class="hero" aria-labelledby="hero-title">
-        <div class="wrap hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow">Free clipboard manager for Windows 10 &amp; 11</p>
-            <h1 id="hero-title">
-              Everything you copy, kept and searchable. On your PC only.
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="container">
+          <div class="hero-center">
+            <a
+              class="release-pill"
+              href="https://github.com/Waqar-743/SnapNote/releases/latest"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="pill-dot" aria-hidden="true"></span>
+              <span data-release-pill>Windows 10 &amp; 11 · Free &amp; Local-First</span>
+              <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#i-arrow" />
+              </svg>
+            </a>
+
+            <h1 id="hero-title" class="hero-title">
+              Everything you copy, <span class="text-gradient">kept and searchable.</span><br />
+              Strictly on your PC.
             </h1>
-            <p class="lede">
-              SnapNote remembers your clipboard history, notes, snippets and
-              images in one private Windows workspace. Press
-              <kbd>Alt</kbd>+<kbd>X</kbd> anywhere to find any of it in a second
-              — no account, no cloud, no telemetry.
+
+            <p class="hero-lede">
+              SnapNote turns your Windows clipboard into a fast, private workspace for
+              <strong>clips, notes, snippets, and screenshots</strong>. Press
+              <kbd>Alt</kbd> + <kbd>X</kbd> from any app to find what you copied in a second —
+              with zero accounts, zero cloud uploads, and zero telemetry.
             </p>
-            <div class="hero-cta">
+
+            <div class="hero-actions">
               <a
-                class="button primary"
+                class="btn btn-lg btn-primary"
+                data-release-download="msi"
                 href="https://github.com/Waqar-743/SnapNote/releases/latest"
               >
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <use href="#icon-download" />
+                  <use href="#i-download" />
                 </svg>
-                Download for Windows</a
-              >
+                <span>Download for Windows</span>
+              </a>
               <a
-                class="button ghost"
+                class="btn btn-lg btn-outline"
                 href="https://github.com/Waqar-743/SnapNote"
+                target="_blank"
+                rel="noopener"
               >
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <use href="#icon-github" />
+                  <use href="#i-github" />
                 </svg>
-                View on GitHub</a
-              >
+                <span>Star on GitHub</span>
+              </a>
             </div>
-            <ul class="trust" aria-label="Promises">
-              <li>Free, no account</li>
-              <li>Local-only storage</li>
-              <li>No telemetry</li>
-              <li>Works offline</li>
+
+            <ul class="trust-row" aria-label="Core guarantees">
+              <li>
+                <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-check" />
+                </svg>
+                Free &amp; open source
+              </li>
+              <li>
+                <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-check" />
+                </svg>
+                100% offline &amp; local-first
+              </li>
+              <li>
+                <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-check" />
+                </svg>
+                Optional AES-256 vault
+              </li>
+              <li>
+                <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-check" />
+                </svg>
+                Zero extra runtimes
+              </li>
             </ul>
           </div>
-          <figure class="hero-shot frame">
-            <div class="window-titlebar" aria-hidden="true">
-              <span class="window-dots">● ● ●</span><span>SnapNote</span
-              ><span class="window-badge">Actual app</span>
+
+          <!-- Interactive Real App Showcase -->
+          <div class="hero-showcase">
+            <div class="showcase-controls" role="tablist" aria-label="Workspace theme preview">
+              <button
+                type="button"
+                class="seg-btn active"
+                role="tab"
+                aria-selected="true"
+                data-preview="light"
+              >
+                Light workspace
+              </button>
+              <button
+                type="button"
+                class="seg-btn"
+                role="tab"
+                aria-selected="false"
+                data-preview="dark"
+              >
+                Dark workspace
+              </button>
+              <button
+                type="button"
+                class="seg-btn"
+                role="tab"
+                aria-selected="false"
+                data-preview="quick"
+              >
+                Alt+X Quick Access
+              </button>
             </div>
-            <img
-              src="assets/workspace-light.png"
-              width="1180"
-              height="800"
-              alt="SnapNote workspace on Windows showing clipboard history, notes and folders in a light theme"
-              fetchpriority="high"
-            />
-            <figcaption>
-              The real SnapNote workspace — clipboard, notes and snippets in
-              one searchable library.
-            </figcaption>
-          </figure>
+
+            <figure class="app-window" id="hero-preview-frame">
+              <div class="app-window-bar" aria-hidden="true">
+                <span class="app-window-title">
+                  <span class="bar-dot"></span>
+                  SnapNote · Actual Windows App
+                </span>
+                <span class="app-window-controls">
+                  <span>&#8211;</span>
+                  <span>&#9633;</span>
+                  <span>&#215;</span>
+                </span>
+              </div>
+              <div class="app-window-stage">
+                <img
+                  id="hero-preview-img"
+                  src="assets/workspace-light.png"
+                  width="1180"
+                  height="800"
+                  alt="SnapNote clipboard manager and notes workspace on Windows in light theme"
+                  fetchpriority="high"
+                />
+              </div>
+              <figcaption id="hero-preview-caption">
+                Real desktop screenshot — searchable clipboard cards, folders, snippets, and rich notes in one unified window.
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
-      <!-- Features -->
-      <section class="features" id="features" aria-labelledby="features-title">
-        <div class="wrap">
+      <!-- Metrics Strip -->
+      <section class="metrics" aria-label="SnapNote at a glance">
+        <div class="container metrics-grid">
+          <div class="metric-item">
+            <strong>0</strong>
+            <span>Accounts or cloud servers</span>
+          </div>
+          <div class="metric-item">
+            <strong>Alt + X</strong>
+            <span>Global tray quick-access shortcut</span>
+          </div>
+          <div class="metric-item">
+            <strong>AES-256</strong>
+            <span>Optional local GCM vault encryption</span>
+          </div>
+          <div class="metric-item">
+            <strong>Self-contained</strong>
+            <span>Statically linked Windows installer</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bento Features -->
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="container">
           <div class="section-head">
-            <p class="eyebrow">What's inside</p>
-            <h2 id="features-title">Built for the work you repeat every day.</h2>
+            <p class="eyebrow">Built for daily speed</p>
+            <h2 id="features-title">One quiet workspace for everything you copy and write.</h2>
             <p class="section-sub">
-              A clipboard that remembers, notes that stay organized, and tools
-              for the images and text you keep reusing.
+              Stop digging through old tabs, lost chat messages, and overwritten clipboards.
+              SnapNote keeps text, links, images, and notes organized right on your machine.
             </p>
           </div>
-          <div class="feature-grid">
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-clipboard" />
-              </svg>
-              <h3>Clipboard history</h3>
+
+          <div class="bento-grid">
+            <article class="bento-card bento-wide">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-clipboard" />
+                </svg>
+              </div>
+              <h3>Smart Clipboard History</h3>
               <p>
-                Every text and image you copy is captured, deduplicated and
-                indexed — searchable by title, content and tags, with a history
-                size you control.
+                Every text snippet, URL, code block, and screenshot you copy is automatically
+                captured, deduplicated, and indexed locally. Search across titles, body text,
+                tags, and extracted image OCR text instantly with <kbd>Ctrl</kbd>+<kbd>K</kbd>.
+              </p>
+              <div class="card-tags">
+                <span>Text &amp; Links</span>
+                <span>Images</span>
+                <span>1-Click Copy &amp; Delete</span>
+                <span>Bulk Selection</span>
+              </div>
+            </article>
+
+            <article class="bento-card bento-wide">
+              <div class="card-icon accent-gold">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-bolt" />
+                </svg>
+              </div>
+              <h3>Alt+X Floating Quick Access &amp; Stay-on-Top</h3>
+              <p>
+                Tap <kbd>Alt</kbd>+<kbd>X</kbd> from any Windows app to pop up a compact,
+                floating search palette. Copy what you need, tap again to hide — or pin the full
+                frameless workspace above other windows whenever you're researching.
+              </p>
+              <div class="card-tags">
+                <span>System Tray Ready</span>
+                <span>Unified Title Bar</span>
+                <span>Keep on Top Pin</span>
+              </div>
+            </article>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-note" />
+                </svg>
+              </div>
+              <h3>Rich-Text Notes</h3>
+              <p>
+                Write full notes with headings, bullet and numbered lists, interactive task
+                checklists, blockquotes, syntax-friendly code blocks, undo/redo, and direct
+                image paste.
               </p>
             </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-keyboard" />
-              </svg>
-              <h3>Alt+X quick access</h3>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-braces" />
+                </svg>
+              </div>
+              <h3>Snippet Templates</h3>
               <p>
-                One shortcut opens a compact search window above whatever you
-                are doing. Press it again to hide it. It works from the system
-                tray even with the app closed.
+                Turn recurring emails, commands, or replies into reusable snippets using
+                <code>{{variables}}</code>. Copying prompts for each blank while keeping your
+                template intact.
               </p>
             </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-note" />
-              </svg>
-              <h3>Rich-text notes</h3>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-image" />
+                </svg>
+              </div>
+              <h3>Image Tools &amp; Local OCR</h3>
               <p>
-                Headings, lists, tasks, code blocks, undo and redo — with image
-                paste and a full editing history. Existing notes migrate
-                automatically.
+                Crop and annotate screenshots, pin reference images above other apps, and
+                extract searchable text directly on your PC with optional
+                <a
+                  href="https://github.com/tesseract-ocr/tesseract"
+                  target="_blank"
+                  rel="noopener"
+                  >Tesseract OCR</a
+                >.
               </p>
             </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-code" />
-              </svg>
-              <h3>Snippet templates</h3>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-folder" />
+                </svg>
+              </div>
+              <h3>Folders, Sessions &amp; Favorites</h3>
               <p>
-                Turn recurring replies into templates with
-                <code>{{variables}}</code>. Copying fills in the blanks and
-                leaves the original untouched.
+                Organize long-term projects in folders, group temporary research into sessions,
+                and star favorites so clearing history never wipes out what matters.
               </p>
             </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-image" />
-              </svg>
-              <h3>Image tools</h3>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-lock" />
+                </svg>
+              </div>
+              <h3>Optional AES-256 Vault</h3>
               <p>
-                Crop and annotate screenshots, pin images above other windows,
-                and extract their text with local OCR so it becomes searchable.
+                Encrypt your entire local workspace at rest using AES-256-GCM and PBKDF2-SHA256.
+                Lock in one click to halt clipboard capture and close pinned images instantly.
               </p>
             </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-folder" />
-              </svg>
-              <h3>Folders, sessions, favorites</h3>
+
+            <article class="bento-card">
+              <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-archive" />
+                </svg>
+              </div>
+              <h3>Encrypted Backups</h3>
               <p>
-                Group research into sessions, park projects in folders and star
-                what keeps coming back. Multi-select copies several clips at
-                once.
-              </p>
-            </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-lock" />
-              </svg>
-              <h3>Optional encryption</h3>
-              <p>
-                Lock the workspace with AES-256-GCM and PBKDF2. The password
-                exists only in your head — instant lock whenever you step away.
-              </p>
-            </article>
-            <article class="feature-card">
-              <svg
-                class="icon feature-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <use href="#icon-archive" />
-              </svg>
-              <h3>Protected backups</h3>
-              <p>
-                Export everything to a single backup file — optionally
-                password-protected — and restore it on any machine.
+                Export every clip, note, image, folder, and session to a portable JSON or
+                password-encrypted backup file, and merge-import onto any machine cleanly.
               </p>
             </article>
           </div>
         </div>
       </section>
 
-      <!-- Quick access -->
-      <section class="quick" id="quick" aria-labelledby="quick-title">
-        <div class="wrap quick-grid">
-          <figure class="quick-shot frame">
-            <div class="window-titlebar" aria-hidden="true">
-              <span class="window-dots">● ● ●</span><span>Quick access</span
-              ><span class="window-badge"><kbd>Alt</kbd>+<kbd>X</kbd></span>
-            </div>
-            <img
-              src="assets/quick-access.png"
-              width="560"
-              height="640"
-              alt="SnapNote quick access window with search field and recent clipboard clips"
-              loading="lazy"
-            />
-            <figcaption>
-              The real quick access window — search everything you copied and
-              paste it back instantly.
-            </figcaption>
-          </figure>
-          <div class="quick-copy">
-            <p class="eyebrow on-dark">One keystroke, everywhere</p>
-            <h2 id="quick-title">Press Alt+X. Find it. Paste it. Move on.</h2>
-            <p>
-              Quick access opens as a small floating window right above your
-              current work. Search your recent clips, hit
-              <kbd>Enter</kbd> to copy, and the window gets out of the way.
+      <!-- Quick Access & Shortcuts Spotlight -->
+      <section class="spotlight" id="quick-access" aria-labelledby="quick-title">
+        <div class="container spotlight-grid">
+          <div class="spotlight-media">
+            <figure class="quick-frame">
+              <img
+                src="assets/quick-access.png"
+                width="560"
+                height="640"
+                alt="SnapNote floating Alt+X Quick Access window in dark theme showing recent clipboard items"
+                loading="lazy"
+              />
+              <figcaption>
+                Quick Access stays tucked in the system tray until you press <kbd>Alt</kbd>+<kbd>X</kbd>.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="spotlight-copy">
+            <p class="eyebrow eyebrow-gold">Keyboard-first workflow</p>
+            <h2 id="quick-title">Press Alt+X. Grab what you copied. Stay in flow.</h2>
+            <p class="spotlight-lede">
+              SnapNote launches into compact Quick Access so it never interrupts your screen.
+              Search recent clips in milliseconds, expand into the full workspace when writing
+              notes, and close the window anytime without losing your global hotkey.
             </p>
-            <p>
-              Close the app window and SnapNote waits quietly in the system
-              tray — <strong>Alt+X keeps working</strong> from anywhere in
-              Windows.
-            </p>
-            <ol class="steps" aria-label="How to start using SnapNote">
+
+            <ol class="step-list" aria-label="Three steps to get started">
               <li>
-                <strong>Install</strong> — run the MSI or setup EXE. Nothing
-                else is required.
+                <span class="step-num">01</span>
+                <div>
+                  <strong>Install cleanly</strong>
+                  <p>Run the self-contained MSI or setup.exe — no Visual C++ runtime or account needed.</p>
+                </div>
               </li>
               <li>
-                <strong>Press Alt+X</strong> — quick access appears over your
-                current app.
+                <span class="step-num">02</span>
+                <div>
+                  <strong>Summon anywhere with Alt+X</strong>
+                  <p>Quick Access floats above your editor, browser, or terminal. Tap Alt+X again to hide.</p>
+                </div>
               </li>
               <li>
-                <strong>Copy as usual</strong> — enable capture once and history
-                builds itself.
+                <span class="step-num">03</span>
+                <div>
+                  <strong>Capture, organize, and reuse</strong>
+                  <p>Enable history capture when you want it, pause before copying secrets, and lock anytime.</p>
+                </div>
               </li>
             </ol>
+
+            <div class="shortcut-grid" aria-label="Key keyboard shortcuts">
+              <div class="shortcut-chip">
+                <kbd>Alt + X</kbd>
+                <span>Toggle Quick Access</span>
+              </div>
+              <div class="shortcut-chip">
+                <kbd>Ctrl + Alt + C</kbd>
+                <span>Capture into active note</span>
+              </div>
+              <div class="shortcut-chip">
+                <kbd>Ctrl + Alt + O</kbd>
+                <span>Focus SnapNote</span>
+              </div>
+              <div class="shortcut-chip">
+                <kbd>Ctrl + K</kbd>
+                <span>Instant clip search</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Screenshots -->
-      <section
-        class="screenshots"
-        id="screenshots"
-        aria-labelledby="screenshots-title"
-      >
-        <div class="wrap">
+      <!-- Real Interface Gallery -->
+      <section class="section" id="screenshots" aria-labelledby="gallery-title">
+        <div class="container">
           <div class="section-head">
-            <p class="eyebrow">The real interface</p>
-            <h2 id="screenshots-title">What it actually looks like.</h2>
+            <p class="eyebrow">Real desktop interface</p>
+            <h2 id="gallery-title">Designed for calm focus — day and night.</h2>
             <p class="section-sub">
-              Captured from the running app — no mockups. Light and dark themes
-              included.
+              Real captures from the running Windows app. Built with a warm paper light mode,
+              deep espresso dark mode, and a unified custom title bar.
             </p>
           </div>
-          <div class="shot-grid">
-            <figure class="frame">
+
+          <div class="gallery-grid">
+            <figure class="gallery-card">
               <img
                 src="assets/workspace-light.png"
                 width="1180"
                 height="800"
-                alt="SnapNote workspace in the light theme with the clip library, folders and a rich-text note"
+                alt="SnapNote main clipboard workspace in warm light theme with code, text, links, and image cards"
                 loading="lazy"
               />
-              <figcaption>Light theme — the main workspace.</figcaption>
+              <figcaption>
+                <strong>Light theme</strong> — Warm editorial paper tones with crisp contrast for daytime work.
+              </figcaption>
             </figure>
-            <figure class="frame">
+
+            <figure class="gallery-card">
               <img
                 src="assets/workspace-dark.png"
                 width="1180"
                 height="800"
-                alt="SnapNote workspace in the dark theme showing the same clip library and note editing"
+                alt="SnapNote main clipboard workspace in dark theme with amber accents and image previews"
                 loading="lazy"
               />
-              <figcaption>Dark theme — same workspace at night.</figcaption>
+              <figcaption>
+                <strong>Dark theme</strong> — Soft charcoal surfaces and amber highlights that stay easy on the eyes.
+              </figcaption>
             </figure>
           </div>
         </div>
       </section>
 
-      <!-- Privacy -->
-      <section class="privacy" id="privacy" aria-labelledby="privacy-title">
-        <div class="wrap privacy-grid">
-          <div>
-            <p class="eyebrow">Privacy, in plain words</p>
-            <h2 id="privacy-title">Your clipboard never leaves your PC.</h2>
-            <p>
-              SnapNote makes no account, cloud or telemetry requests — there is
-              no server to talk to. Your history lives in transactional local
-              storage inside the app's own device profile, and the app works
-              fully offline.
-            </p>
-            <p>
-              Turn on the vault and the workspace is rewritten with AES-256-GCM
-              and PBKDF2-SHA256. Backups can carry their own password, so a copy
-              in your bag stays a secret.
-            </p>
-            <a
-              class="text-link"
-              href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md"
-            >
-              Read the desktop guide <span aria-hidden="true">→</span>
-            </a>
+      <!-- Privacy & Comparison -->
+      <section class="section section-tinted" id="privacy" aria-labelledby="privacy-title">
+        <div class="container">
+          <div class="privacy-layout">
+            <div class="privacy-copy">
+              <p class="eyebrow">Privacy by architecture</p>
+              <h2 id="privacy-title">Your clipboard touches everything you do. It should never leave your PC.</h2>
+              <p>
+                Passwords, API keys, private drafts, screenshots, and personal messages pass
+                through your clipboard every day. SnapNote is built on a simple rule:
+                <strong>there is no backend server, no login, and no telemetry SDK</strong>.
+              </p>
+              <p>
+                Data is stored locally in transactional IndexedDB inside your Windows profile.
+                Turn on live encryption to lock everything with AES-256-GCM and PBKDF2-SHA256,
+                or pause automatic capture in one click before copying sensitive items.
+              </p>
+              <div class="privacy-links">
+                <a
+                  class="inline-link"
+                  href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Read the Desktop User Guide
+                  <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#i-arrow" />
+                  </svg>
+                </a>
+                <a
+                  class="inline-link"
+                  href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-STRATEGY.md"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Inspect Architecture &amp; Security
+                  <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#i-arrow" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="pledge-card" id="compare">
+              <div class="pledge-head">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-shield" />
+                </svg>
+                <h3>SnapNote vs. Cloud Clipboard Apps</h3>
+              </div>
+              <table class="compare-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Capability</th>
+                    <th scope="col">SnapNote</th>
+                    <th scope="col">Cloud apps</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Account required</td>
+                    <td class="good">Never</td>
+                    <td>Usually</td>
+                  </tr>
+                  <tr>
+                    <td>Works 100% offline</td>
+                    <td class="good">Always</td>
+                    <td>Limited</td>
+                  </tr>
+                  <tr>
+                    <td>Telemetry &amp; tracking</td>
+                    <td class="good">Zero</td>
+                    <td>Common</td>
+                  </tr>
+                  <tr>
+                    <td>AES-256 local encryption</td>
+                    <td class="good">Built in</td>
+                    <td>Paid tier</td>
+                  </tr>
+                  <tr>
+                    <td>Rich notes + OCR + snippets</td>
+                    <td class="good">All in one</td>
+                    <td>Separate tools</td>
+                  </tr>
+                  <tr>
+                    <td>Price</td>
+                    <td class="good">Free</td>
+                    <td>Subscription</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <dl class="pledge">
-            <div>
-              <dt>Accounts required</dt>
-              <dd>None</dd>
-            </div>
-            <div>
-              <dt>Cloud uploads</dt>
-              <dd>None</dd>
-            </div>
-            <div>
-              <dt>Telemetry</dt>
-              <dd>None</dd>
-            </div>
-            <div>
-              <dt>Your data</dt>
-              <dd>Yours</dd>
-            </div>
-          </dl>
         </div>
       </section>
 
-      <!-- Download -->
-      <section class="download" id="download" aria-labelledby="download-title">
-        <div class="wrap download-inner">
-          <p class="eyebrow on-dark">Ready when you are</p>
+      <!-- Download Hub -->
+      <section class="download-band" id="download" aria-labelledby="download-title">
+        <div class="container download-card">
+          <p class="eyebrow eyebrow-gold">Free Windows download</p>
           <h2 id="download-title">
-            <span data-release-version>Get SnapNote</span> for Windows
+            <span data-release-version>Download SnapNote</span> for Windows 10 &amp; 11
           </h2>
-          <p class="download-lede">
-            Free for Windows 10 and 11 (x64). The installers are self-contained
-            — no extra runtimes needed — and every release is built and tested
-            by an automated Windows pipeline.
-          </p>
-          <div class="download-buttons">
+          <p class="download-sub">
+            Self-contained 64-bit Windows installers built and validated automatically on
             <a
-              class="button primary big"
+              href="https://github.com/Waqar-743/SnapNote/actions"
+              target="_blank"
+              rel="noopener"
+              >GitHub Actions</a
+            >. Zero external runtime dependencies.
+          </p>
+
+          <div class="download-actions">
+            <a
+              class="btn btn-lg btn-primary"
               data-release-download="msi"
               href="https://github.com/Waqar-743/SnapNote/releases/latest"
             >
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-download" />
+                <use href="#i-download" />
               </svg>
-              Download MSI <span class="muted-line">recommended</span>
+              <span>Download MSI Installer</span>
+              <span class="btn-tag">Recommended</span>
             </a>
             <a
-              class="button light big"
+              class="btn btn-lg btn-light"
               data-release-download="exe"
               href="https://github.com/Waqar-743/SnapNote/releases/latest"
             >
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-download" />
+                <use href="#i-download" />
               </svg>
-              Download setup.exe
+              <span>Download setup.exe</span>
             </a>
           </div>
-          <p class="fine">
-            SHA-256 checksums are published with
+
+          <div class="verify-box">
+            <div class="verify-head">
+              <span>Verify SHA-256 checksum in PowerShell</span>
+              <a
+                data-release-download="checksums"
+                href="https://github.com/Waqar-743/SnapNote/releases/latest"
+                target="_blank"
+                rel="noopener"
+                >View SHA256SUMS.txt →</a
+              >
+            </div>
+            <div class="verify-code">
+              <code id="verify-cmd">Get-FileHash .\SnapNote_*_x64_en-US.msi -Algorithm SHA256</code>
+              <button
+                type="button"
+                class="copy-cmd-btn"
+                id="copy-verify-btn"
+                aria-label="Copy PowerShell checksum command"
+              >
+                <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#i-copy" />
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="download-note">
+            Installers are unsigned indie builds, so Windows SmartScreen may ask for confirmation
+            on first launch. Check the
             <a
-              data-release-download="checksums"
-              href="https://github.com/Waqar-743/SnapNote/releases/latest"
-              >every release</a
-            >. Builds are unsigned, so SmartScreen may ask for confirmation the
-            first time.
+              href="https://github.com/Waqar-743/SnapNote/releases"
+              target="_blank"
+              rel="noopener"
+              >release notes</a
+            >
+            and
+            <a
+              href="https://github.com/Waqar-743/SnapNote/blob/main/docs/testing/README.md"
+              target="_blank"
+              rel="noopener"
+              >automated validation report</a
+            >
+            anytime.
           </p>
-          <ul class="download-meta" aria-label="Release details">
-            <li>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-shield" />
-              </svg>
-              Runs on a clean Windows install — nothing to install first
-            </li>
-            <li>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-star" />
-              </svg>
-              Free, with no account or subscription
-            </li>
-            <li>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-archive" />
-              </svg>
-              Back up and restore your workspace anytime
-            </li>
-          </ul>
         </div>
       </section>
 
       <!-- FAQ -->
-      <section class="faq" id="faq" aria-labelledby="faq-title">
-        <div class="wrap narrow">
+      <section class="section" id="faq" aria-labelledby="faq-title">
+        <div class="container container-narrow">
           <div class="section-head">
-            <p class="eyebrow">Questions and answers</p>
-            <h2 id="faq-title">Frequently asked questions.</h2>
+            <p class="eyebrow">Answers</p>
+            <h2 id="faq-title">Frequently asked questions</h2>
           </div>
-          <details class="qa">
-            <summary
-              >Does SnapNote need the Visual C++ Redistributable or anything
-              else installed?</summary
-            >
-            <p>
-              No. Since v1.4.2 the Windows build statically links the C runtime,
-              so the installer works on a clean Windows 10 or 11 machine out of
-              the box. The only optional extra is the Tesseract engine, which
-              enables text recognition inside images.
-            </p>
-          </details>
-          <details class="qa">
-            <summary>Where is my data stored?</summary>
-            <p>
-              Everything lives in local transactional storage inside the app's
-              own profile on your device. There is no sync, no server and no
-              analytics. Backups are exported only when you ask for them.
-            </p>
-          </details>
-          <details class="qa">
-            <summary>Does Alt+X still work after I close the app window?</summary>
-            <p>
-              Yes. With the window closed, SnapNote keeps running in the system
-              tray and Alt+X brings quick access back. If you choose Quit from
-              the tray menu, the shortcut rests until you start SnapNote again.
-            </p>
-          </details>
-          <details class="qa">
-            <summary>Can SnapNote read text inside screenshots?</summary>
-            <p>
-              Yes, with local OCR. Install Tesseract once and add it to PATH;
-              SnapNote then extracts text from images so it becomes searchable.
-              Recognition runs on your machine — images are never uploaded.
-            </p>
-          </details>
-          <details class="qa">
-            <summary>Is my data from an older SnapNote version compatible?</summary>
-            <p>
-              Yes. On first launch your original rich-text notes migrate into
-              the new store, and a recovery copy of the old records is kept.
-              Storage problems are surfaced in the app instead of being silently
-              swallowed.
-            </p>
-          </details>
-          <details class="qa">
-            <summary>Is SnapNote available on macOS or Linux?</summary>
-            <p>
-              SnapNote is built and validated end to end on Windows 10 and 11.
-              The codebase is Tauri-based, but Windows is the platform the
-              releases currently target.
-            </p>
-          </details>
+
+          <div class="faq-list">
+            <details class="faq-item" open>
+              <summary>
+                Does SnapNote need the Visual C++ Redistributable or anything else installed?
+              </summary>
+              <p>
+                No. SnapNote statically links the C runtime in its Windows builds, so the MSI and
+                setup.exe installers run on a clean Windows 10 or 11 machine out of the box. The
+                only optional extra is Tesseract if you want offline OCR text extraction inside
+                images.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Where is my clipboard and notes data stored?</summary>
+              <p>
+                Everything lives inside local transactional storage in the app's device profile on
+                your PC. There is no cloud sync, no account, and zero telemetry. Backups are
+                created only when you explicitly export them.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Does Alt+X still work after I close the SnapNote window?</summary>
+              <p>
+                Yes. Closing the window minimizes SnapNote to the Windows system tray so
+                <kbd>Alt</kbd>+<kbd>X</kbd> remains ready globally. Choosing Quit SnapNote from
+                the tray menu exits the app completely.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Can SnapNote extract text from screenshots offline?</summary>
+              <p>
+                Yes. Install
+                <a
+                  href="https://github.com/tesseract-ocr/tesseract"
+                  target="_blank"
+                  rel="noopener"
+                  >Tesseract OCR</a
+                >
+                once and add it to your Windows PATH. SnapNote runs recognition locally on your
+                machine and stores extracted text as searchable metadata without uploading images
+                anywhere.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>How does SnapNote workspace encryption work?</summary>
+              <p>
+                You can enable optional live vault encryption in Settings. SnapNote encrypts stored
+                clips, notes, and images using AES-256-GCM with PBKDF2-SHA256 key derivation. Your
+                password is never stored or transmitted, so keep a secure copy and an encrypted
+                backup.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Why does Windows SmartScreen show a prompt on first install?</summary>
+              <p>
+                SnapNote is an independent, free open-source project and its Windows installers are
+                currently unsigned. Every release is built in a public
+                <a
+                  href="https://github.com/Waqar-743/SnapNote/actions"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub Actions pipeline</a
+                >
+                and ships with SHA-256 checksums so you can verify the exact file before
+                installing.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Is my data from an older version of SnapNote compatible?</summary>
+              <p>
+                Yes. On first launch, existing rich-text notes migrate cleanly into the workspace
+                store while retaining a recovery copy of legacy records.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Is SnapNote available for macOS or Linux?</summary>
+              <p>
+                SnapNote is built with
+                <a href="https://v2.tauri.app/" target="_blank" rel="noopener">Tauri v2</a> and
+                Rust, and prebuilt installers are currently tested and released for Windows 10 and
+                Windows 11 (x64). Developers can inspect or build from source in the
+                <a
+                  href="https://github.com/Waqar-743/SnapNote"
+                  target="_blank"
+                  rel="noopener"
+                  >public GitHub repository</a
+                >.
+              </p>
+            </details>
+          </div>
         </div>
       </section>
     </main>
 
+    <!-- Footer with Structured Links & Backlinks -->
     <footer class="site-footer">
-      <div class="wrap footer-grid">
+      <div class="container footer-grid">
         <div class="footer-brand">
-          <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="assets/icon-dark.png" />
-            <img class="brand-mark" src="assets/icon-light.png" alt="" width="48" height="48" />
-          </picture>
-          <div>
-            <p class="brand-word">SnapNote</p>
-            <p class="footer-line">
-              A local-first clipboard and notes workspace for Windows, built by
-              Waqar Ahmed.
-            </p>
-          </div>
+          <a class="brand" href="#top" aria-label="SnapNote home">
+            <img
+              class="brand-icon icon-light"
+              src="assets/icon-light.png"
+              alt=""
+              width="40"
+              height="40"
+            />
+            <img
+              class="brand-icon icon-dark"
+              src="assets/icon-dark.png"
+              alt=""
+              width="40"
+              height="40"
+            />
+            <span class="brand-word"
+              ><span class="brand-snap">Snap</span
+              ><span class="brand-note">Note</span></span
+            >
+          </a>
+          <p class="footer-desc">
+            A fast, local-first clipboard manager and rich notes workspace for Windows 10 &amp; 11.
+            Crafted by
+            <a
+              href="https://github.com/Waqar-743"
+              target="_blank"
+              rel="me noopener"
+              >Waqar Ahmed</a
+            >.
+          </p>
         </div>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="https://github.com/Waqar-743/SnapNote">GitHub</a>
-          <a href="https://github.com/Waqar-743/SnapNote/releases">Releases</a>
+
+        <nav class="footer-col" aria-label="Product">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#quick-access">Alt+X Quick Access</a>
+          <a href="#screenshots">Screenshots</a>
+          <a href="#privacy">Privacy &amp; Vault</a>
+          <a href="#compare">Comparison</a>
+          <a href="#download">Download</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+
+        <nav class="footer-col" aria-label="Project & Docs">
+          <h4>Open Source</h4>
+          <a
+            href="https://github.com/Waqar-743/SnapNote"
+            target="_blank"
+            rel="noopener"
+            >GitHub Repository</a
+          >
+          <a
+            href="https://github.com/Waqar-743/SnapNote/releases"
+            target="_blank"
+            rel="noopener"
+            >Releases &amp; Checksums</a
+          >
+          <a
+            href="https://github.com/Waqar-743/SnapNote/issues"
+            target="_blank"
+            rel="noopener"
+            >Report an Issue</a
+          >
           <a
             href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-GUIDE.md"
-            >Desktop guide</a
+            target="_blank"
+            rel="noopener"
+            >Desktop User Guide</a
+          >
+          <a
+            href="https://github.com/Waqar-743/SnapNote/blob/main/docs/DESKTOP-STRATEGY.md"
+            target="_blank"
+            rel="noopener"
+            >Architecture Strategy</a
           >
           <a
             href="https://github.com/Waqar-743/SnapNote/blob/main/README.md"
-            >README</a
+            target="_blank"
+            rel="noopener"
+            >Project README</a
+          >
+        </nav>
+
+        <nav class="footer-col" aria-label="Built With">
+          <h4>Ecosystem</h4>
+          <a href="https://v2.tauri.app/" target="_blank" rel="noopener"
+            >Tauri v2 Framework</a
+          >
+          <a href="https://tiptap.dev/" target="_blank" rel="noopener"
+            >TipTap Rich Editor</a
+          >
+          <a
+            href="https://github.com/tesseract-ocr/tesseract"
+            target="_blank"
+            rel="noopener"
+            >Tesseract Local OCR</a
+          >
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
+            target="_blank"
+            rel="noopener"
+            >Web Crypto AES-256</a
+          >
+          <a
+            href="https://github.com/Waqar-743"
+            target="_blank"
+            rel="me noopener"
+            >Developer Profile</a
           >
         </nav>
       </div>
-      <div class="wrap footer-base">
-        <p>© <span id="year">2026</span> SnapNote. Local-first, on purpose.</p>
+
+      <div class="container footer-bottom">
+        <p>© <span id="year">2026</span> SnapNote · Local-first, on purpose.</p>
         <a href="#top">Back to top ↑</a>
       </div>
     </footer>
