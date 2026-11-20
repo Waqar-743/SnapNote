@@ -80,6 +80,22 @@ def click(selector):
     key = element['element-6066-11e4-a52e-4f735466cecf']
     command(f'element/{key}/click', {})
 
+def accept_dialog():
+    wait('return Boolean(document.querySelector(".app-dialog [data-dialog-confirm]"))', timeout=5)
+    click('.app-dialog [data-dialog-confirm]')
+    wait('return !document.querySelector(".app-dialog")', timeout=5)
+
+def dismiss_dialog():
+    wait('return Boolean(document.querySelector(".app-dialog [data-dialog-cancel]"))', timeout=5)
+    click('.app-dialog [data-dialog-cancel]')
+    wait('return !document.querySelector(".app-dialog")', timeout=5)
+
+def submit_dialog_prompt(text):
+    wait('return Boolean(document.querySelector(".app-dialog [data-dialog-input]"))', timeout=5)
+    fill('.app-dialog [data-dialog-input]', text)
+    click('.app-dialog [data-dialog-confirm]')
+    wait('return !document.querySelector(".app-dialog")', timeout=5)
+
 def powershell(code):
     encoded = base64.b64encode(code.encode('utf-16le')).decode()
     return subprocess.check_output(['powershell.exe', '-NoProfile', '-STA', '-EncodedCommand', encoded], timeout=20)
@@ -254,7 +270,7 @@ try:
     exact = '  <b>Literal clipboard text</b>\n    keep indentation\n'
     clipboard(exact)
     assert invoke('read_clipboard') == {'type': 'text', 'data': exact}
-    js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("automatic capture")).click();')
+    js('document.querySelector("[aria-label=\'Enable capture\']").click();')
     wait('return document.querySelectorAll(".clip-card").length', 1)
     assert js('return document.querySelector(".clip-preview pre").textContent') == exact
     js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent.includes("Open workspace")).click();')
@@ -385,10 +401,10 @@ try:
     js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
     deleted_image = js('return document.querySelector(".clip-card .clip-preview img").src')
     click('.clip-card button[title="Delete image clip"]')
-    command('alert/dismiss', {})
+    dismiss_dialog()
     assert js('return document.querySelectorAll(".clip-card").length') == 5
     click('.clip-card button[title="Delete image clip"]')
-    command('alert/accept', {})
+    accept_dialog()
     wait('return document.querySelectorAll(".clip-card").length', 4)
     wait('return document.body.textContent.includes("Saved on this device")')
     command('refresh', {})
@@ -438,7 +454,7 @@ try:
     click('.note-tab [role="tab"]')
     wait('return document.querySelector(".tiptap-editor").textContent.includes("Collect the useful details")')
     click('[aria-label="Close Project brief"]')
-    command('alert/accept', {})
+    accept_dialog()
     fill('[aria-label="Search notes"]', '')
     wait('return document.querySelectorAll(".note-tab").length', 1)
     wait('return document.querySelector(".tiptap-editor").textContent.includes("SNAPNOTE")')
@@ -465,8 +481,7 @@ try:
 
 
     js('document.querySelector("[aria-label=\'New folder\']").click();')
-    command('alert/text', {'text': 'Research'})
-    command('alert/accept', {})
+    submit_dialog_prompt('Research')
     wait('return document.querySelector("h1").textContent', 'Research')
     js('document.querySelector(".rail-button[aria-label=Clipboard]").click();')
     fill('[aria-label="Search clips"]', 'literal only')
@@ -478,8 +493,7 @@ try:
     click('.detail-pane .check-label input')
     fill('[aria-label="Clip text"]', 'Hello {{name}}, your workspace is ready.')
     click('.detail-pane .button.primary')
-    command('alert/text', {'text': 'Alex'})
-    command('alert/accept', {})
+    submit_dialog_prompt('Alex')
     wait('return document.body.textContent.includes("Copied. Paste it into any app.")')
     wait_clipboard('Hello Alex, your workspace is ready.')
     assert js('return document.querySelector(".detail-text").value') == 'Hello {{name}}, your workspace is ready.'
@@ -497,8 +511,7 @@ try:
     wait('return document.body.textContent.includes("Copied. Paste it into any app.")')
     wait_clipboard(expected_combined)
     js('Array.from(document.querySelectorAll(".selection-bar button")).find(b=>b.textContent.includes("Group in session")).click();')
-    command('alert/text', {'text': 'Research session'})
-    command('alert/accept', {})
+    submit_dialog_prompt('Research session')
     wait('return document.querySelector("h1").textContent', 'Research session')
     wait('return document.querySelectorAll(".clip-card").length', 2)
     record('Multi-item copying and grouping selected content in a session')
@@ -521,7 +534,7 @@ try:
     fill('input[placeholder="At least 10 characters"]', 'native test password 12345')
     fill('input[placeholder="Repeat the workspace password"]', 'native test password 12345')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Enable workspace encryption")).click();')
-    command('alert/accept', {})
+    accept_dialog()
     wait('return document.body.textContent.includes("Your local workspace is now password encrypted.")', timeout=25)
     fill('input[placeholder*="10+ characters"]', 'backup test password 12345')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Export backup")).click();')
@@ -569,7 +582,7 @@ try:
     record('Rich note text, formatting and embedded images survive encrypted desktop relaunch')
     js('Array.from(document.querySelectorAll(".sidebar .nav-item")).find(b=>b.textContent.includes("Settings")).click();')
     js('Array.from(document.querySelectorAll(".modal button")).find(b=>b.textContent.includes("Clear recent history")).click();')
-    command('alert/accept', {})
+    accept_dialog()
     click('[aria-label="Close dialog"]')
     wait('return document.querySelectorAll(".clip-card").length', 2)
     record('Clear history preserves favorites, snippets, grouped clips, and notes')
@@ -602,7 +615,7 @@ try:
         while remaining:
             click('.clip-card .clip-preview')
             js('Array.from(document.querySelectorAll(".detail-pane button")).find(b=>b.textContent.includes("Delete clip")).click();')
-            command('alert/accept', {})
+            accept_dialog()
             remaining -= 1
             wait('return document.querySelectorAll(".clip-card").length', remaining)
         if js('return document.documentElement.classList.contains("dark")'):
